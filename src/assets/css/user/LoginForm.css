@@ -1,0 +1,253 @@
+.div,
+.div * {
+  box-sizing: border-box;
+}
+.div {
+  background: #ffffff;
+  height: 667px;
+  position: relative;
+}
+.div .form {
+  width: 352px;
+  height: 410px;
+  position: static;
+}
+.div .div2 {
+  color: #000000;
+  text-align: center;
+  font-family: "Pretendard-Bold", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  position: absolute;
+  left: 15px;
+  top: 231px;
+  width: 40px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.div .rectangle-11 {
+  background: #ffffff;
+  border-radius: 8px;
+  border-style: solid;
+  border-color: #000000;
+  border-width: 1px;
+  opacity: 0.3;
+  width: 335px;
+  height: 48px;
+  position: absolute;
+  left: 15px;
+  top: 261px;
+}
+.div .example-google-com {
+  color: #000000;
+  text-align: left;
+  font-family: "Pretendard-Regular", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  opacity: 0.5;
+  position: absolute;
+  left: 31px;
+  top: 273px;
+  width: 303px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.div .div3 {
+  color: #000000;
+  text-align: center;
+  font-family: "Pretendard-Bold", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  position: absolute;
+  left: 12px;
+  top: 330px;
+  width: 54px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.div .div4 {
+  color: #000000;
+  text-align: center;
+  font-family: "Pretendard-Bold", sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+  position: absolute;
+  left: 156px;
+  top: 106px;
+  width: 54px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.div .div5 {
+  color: #000000;
+  text-align: center;
+  font-family: "Pretendard-Bold", sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+  position: absolute;
+  left: 70px;
+  top: 126px;
+  width: 236px;
+  height: 105px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.div .rectangle-13 {
+  background: #ffffff;
+  border-radius: 8px;
+  border-style: solid;
+  border-color: #000000;
+  border-width: 1px;
+  opacity: 0.3;
+  width: 335px;
+  height: 48px;
+  position: absolute;
+  left: 15px;
+  top: 359px;
+}
+.div .div6 {
+  color: #000000;
+  text-align: left;
+  font-family: "Pretendard-Regular", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  opacity: 0.5;
+  position: absolute;
+  left: 36px;
+  top: 371px;
+  width: 303px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.div .div7 {
+  color: #000000;
+  text-align: left;
+  font-family: "Pretendard-Regular", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  position: absolute;
+  left: 234px;
+  top: 415px;
+  width: 130px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.div .rectangle-17 {
+  background: #000000;
+  border-radius: 8px;
+  width: 335px;
+  height: 48px;
+  position: absolute;
+  left: 20px;
+  top: 468px;
+}
+.div .div8 {
+  color: #ffffff;
+  text-align: center;
+  font-family: "Pretendard-Bold", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  position: absolute;
+  left: 120px;
+  top: 480px;
+  width: 135px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.div .div9 {
+  color: #000000;
+  text-align: left;
+  font-family: "Pretendard-Regular", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  position: absolute;
+  left: 40px;
+  top: 415px;
+  width: 76px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.div .rectangle-15 {
+  background: #ffffff;
+  border-radius: 4px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.5);
+  border-width: 2px;
+  opacity: 0.3;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 20px;
+  top: 419px;
+}
+.div .div10 {
+  width: 335px;
+  height: 84px;
+  position: static;
+}
+.div ._89-a-68-d-1-e-3674-a-1 {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 168px;
+  top: 596px;
+  object-fit: cover;
+}
+.div .div11 {
+  color: rgba(0, 0, 0, 0.5);
+  text-align: left;
+  font-family: "Pretendard-Regular", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  position: absolute;
+  left: 175px;
+  top: 552px;
+  width: 26px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.div .line-1 {
+  margin-top: -1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.5);
+  border-width: 1px 0 0 0;
+  width: 142px;
+  height: 0px;
+  position: absolute;
+  left: 20px;
+  top: 564px;
+  transform-origin: 0 0;
+  transform: rotate(0deg) scale(1, 1);
+}
+.div .line-2 {
+  margin-top: -1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.5);
+  border-width: 1px 0 0 0;
+  width: 142px;
+  height: 0px;
+  position: absolute;
+  left: 213px;
+  top: 564px;
+  transform-origin: 0 0;
+  transform: rotate(0deg) scale(1, 1);
+}
