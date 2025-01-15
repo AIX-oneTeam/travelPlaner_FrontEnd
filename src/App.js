@@ -2,8 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // 전역 스타일 및 공통 레이아웃 컴포넌트
 import "./assets/css/All.css";
-import Header from "./pages/include/Header";
-import Footer from "./pages/include/Footer";
+import Header from "./component/header/Header";
+import Footer from "./component/footer/Footer";
 
 import WebTest from "./pages/main/WebTest"; // 메인화면면
 import LoginForm from "./pages/user/LoginForm"; // 로그인폼
