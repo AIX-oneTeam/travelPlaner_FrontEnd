@@ -1,253 +1,123 @@
-.div,
-.div * {
+#login-container, #login-container * {
   box-sizing: border-box;
-}
-.div {
+ }
+ 
+ #login-container {
+  width: 400px;
   background: #ffffff;
   height: 667px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
-}
-.div .form {
-  width: 352px;
-  height: 410px;
-  position: static;
-}
-.div .div2 {
-  color: #000000;
-  text-align: center;
-  font-family: "Pretendard-Bold", sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  position: absolute;
-  left: 15px;
-  top: 231px;
-  width: 40px;
-  height: 24px;
+ }
+ 
+ .login-form {
+  width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-}
-.div .rectangle-11 {
-  background: #ffffff;
-  border-radius: 8px;
-  border-style: solid;
-  border-color: #000000;
-  border-width: 1px;
-  opacity: 0.3;
-  width: 335px;
-  height: 48px;
-  position: absolute;
-  left: 15px;
-  top: 261px;
-}
-.div .example-google-com {
-  color: #000000;
-  text-align: left;
-  font-family: "Pretendard-Regular", sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  opacity: 0.5;
-  position: absolute;
-  left: 31px;
-  top: 273px;
-  width: 303px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-.div .div3 {
-  color: #000000;
-  text-align: center;
-  font-family: "Pretendard-Bold", sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  position: absolute;
-  left: 12px;
-  top: 330px;
-  width: 54px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.div .div4 {
+ }
+ 
+ .logo-placeholder {
   color: #000000;
   text-align: center;
   font-family: "Pretendard-Bold", sans-serif;
   font-size: 21px;
   font-weight: 700;
-  position: absolute;
-  left: 156px;
-  top: 106px;
-  width: 54px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.div .div5 {
+  margin-bottom: 20px;
+ }
+ 
+ .login-prompt {
   color: #000000;
   text-align: center;
   font-family: "Pretendard-Bold", sans-serif;
   font-size: 21px;
   font-weight: 700;
-  position: absolute;
-  left: 70px;
-  top: 126px;
-  width: 236px;
-  height: 105px;
+  margin-bottom: 40px;
+  line-height: 1.5;
+ }
+ 
+ .kakao-login-button,
+ .naver-login-button,
+ .google-login-button {
+  width: 250px;
+  height: 48px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+ }
+ 
+ /* 카카오 로그인 이미지 */
+ .kakao-login-button img {
+  width: 100%;
+  height: 48px;
+  cursor: pointer;
+  border-radius: 8px;
+ }
+ 
+ /* 네이버 로그인 버튼 */
+ .naver-login-button {
+  width: 100%;
+  height: 48px;
+  border-radius: 8px;
+  background-color: #03c75a;
+ }
+ 
+ .naver-login-button button {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.div .rectangle-13 {
-  background: #ffffff;
-  border-radius: 8px;
-  border-style: solid;
-  border-color: #000000;
-  border-width: 1px;
-  opacity: 0.3;
-  width: 335px;
+  width: 100%;
+  height: 100%;
+  background-color: #03c75a;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+ }
+ 
+ .naver-login-button img {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+ }
+ 
+ .naver-login-button span {
+  font-size: 17px;
+  color: white;
+  font-family: "Noto Sans KR", sans-serif;
+ }
+ 
+ /* 구글 로그인 버튼 */
+ .google-login-button {
+  width: 100%;
   height: 48px;
-  position: absolute;
-  left: 15px;
-  top: 359px;
-}
-.div .div6 {
-  color: #000000;
-  text-align: left;
-  font-family: "Pretendard-Regular", sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  opacity: 0.5;
-  position: absolute;
-  left: 36px;
-  top: 371px;
-  width: 303px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-.div .div7 {
-  color: #000000;
-  text-align: left;
-  font-family: "Pretendard-Regular", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  position: absolute;
-  left: 234px;
-  top: 415px;
-  width: 130px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-.div .rectangle-17 {
-  background: #000000;
-  border-radius: 8px;
-  width: 335px;
-  height: 48px;
-  position: absolute;
-  left: 20px;
-  top: 468px;
-}
-.div .div8 {
-  color: #ffffff;
-  text-align: center;
-  font-family: "Pretendard-Bold", sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  position: absolute;
-  left: 120px;
-  top: 480px;
-  width: 135px;
-  height: 24px;
+  border-radius: 24px;
+  border: 1px solid #dadce0;
+  background-color: white;
+ }
+ 
+ .google-login-button button {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.div .div9 {
-  color: #000000;
-  text-align: left;
-  font-family: "Pretendard-Regular", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  position: absolute;
-  left: 40px;
-  top: 415px;
-  width: 76px;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+ }
+ 
+ .google-login-button img {
+  width: 24px;
   height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-.div .rectangle-15 {
-  background: #ffffff;
-  border-radius: 4px;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, 0.5);
-  border-width: 2px;
-  opacity: 0.3;
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  left: 20px;
-  top: 419px;
-}
-.div .div10 {
-  width: 335px;
-  height: 84px;
-  position: static;
-}
-.div ._89-a-68-d-1-e-3674-a-1 {
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  left: 168px;
-  top: 596px;
-  object-fit: cover;
-}
-.div .div11 {
-  color: rgba(0, 0, 0, 0.5);
-  text-align: left;
-  font-family: "Pretendard-Regular", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  position: absolute;
-  left: 175px;
-  top: 552px;
-  width: 26px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-.div .line-1 {
-  margin-top: -1px;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, 0.5);
-  border-width: 1px 0 0 0;
-  width: 142px;
-  height: 0px;
-  position: absolute;
-  left: 20px;
-  top: 564px;
-  transform-origin: 0 0;
-  transform: rotate(0deg) scale(1, 1);
-}
-.div .line-2 {
-  margin-top: -1px;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, 0.5);
-  border-width: 1px 0 0 0;
-  width: 142px;
-  height: 0px;
-  position: absolute;
-  left: 213px;
-  top: 564px;
-  transform-origin: 0 0;
-  transform: rotate(0deg) scale(1, 1);
-}
+  margin-right: 8px;
+ }
+ 
+ .google-login-button span {
+  font-size: 17px;
+  color: #3c4043;
+  font-family: "Noto Sans KR", sans-serif;
+ }

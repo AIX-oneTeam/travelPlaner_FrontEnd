@@ -1,5 +1,5 @@
 import React from "react";
-import "../../assets/css/Header.css";
+import "./Header.css";
 
 const Header = () => {
   /*---라우터 관련-------------------------------*/

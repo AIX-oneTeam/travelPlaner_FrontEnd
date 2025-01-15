@@ -1,6 +1,6 @@
 //import 라이브러리
 import React from 'react';
-import "../../assets/css/Footer.css";
+import "./Footer.css";
 
 const Footer = () => {
 
