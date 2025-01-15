@@ -1,0 +1,9 @@
+.main-content {
+  width: 100%;
+  max-width: inherit; /* 부모의 max-width 상속 */
+  height: 1247px;
+  padding: 20px;
+  margin: 50px auto;
+  box-sizing: border-box;
+  background-color: #cacaca; /* 영역 확인때문에 추가함. 나중에 제거 필요 */
+}
