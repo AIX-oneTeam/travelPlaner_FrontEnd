@@ -30,7 +30,7 @@ const LoginForm = () => {
         </div>
 
         {/* 카카오 로그인 */}
-        <div className="kakao-login-button" id="kakaoIdLogin">
+        <div className="kakao-login-button">
           <img
             src="/images/kakao_login_btn.png"
             alt="카카오 로그인 버튼"
@@ -39,7 +39,7 @@ const LoginForm = () => {
         </div>
 
         {/* 네이버 로그인 */}
-        <div className="cta-button" id="naverIdLogin">
+        <div className="naver-login-button">
           <button onClick={handleNaverLogin}>
             <img src="/images/btnG_아이콘사각.png" alt="네이버" />
             <span>네이버 로그인</span>
@@ -47,7 +47,7 @@ const LoginForm = () => {
         </div>
 
         {/* 구글 로그인 */}
-        <div className="web-banner-image" id="googleIdLogin">
+        <div className="google-login-button">
           <button onClick={handleGoogleLogin}>
             <img src="/images/google-logo.png" alt="구글" />
             <span>Sign in with Google</span>
