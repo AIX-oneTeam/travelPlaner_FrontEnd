@@ -1,0 +1,67 @@
+@import url(/src/assets/css/common/reset.css);
+@import url(/src/assets/css/common/effect.css);
+
+:root {
+    /* background-colors */
+    --main-color-1: #76adec; /* 메인 컬러 1 */
+    --main-color-2: #f2a413; /* 메인 컬러 2 */
+    --sub-color-1: #dbecff; /* 서브 컬러 1 */
+    --sub-color-2: #ffe2ab; /* 서브 컬러 2 */
+    --black: #000000; 
+    --black-opacity-75: rgba(0, 0, 0, 0.75);
+    --black-opacity-50: rgba(0, 0, 0, 0.5);
+    --black-opacity-25: rgba(0, 0, 0, 0.25);
+    --black-opacity-10: rgba(0, 0, 0, 0.1);
+    --white: #ffffff; 
+    --grey-1: #b1b1b1; /* 회색 1 */
+    --grey-2: #434343; /* 회색 2 */
+
+    /* text-colors */
+    --text-main: #323a27;
+    --text-sub: #767676;
+    --text-no-active: #b2b2b2;
+    --text-icon: #ffffff;
+
+    /* font-family */
+    --font-family-1: Pretendard-Regular, sans-serif;
+
+    /* text-weight */
+    --extra-bold: 800;
+    --bold: 700;
+    --semi-bold: 600;
+    --medium: 500;
+    --regular: 400;
+    --light: 300;
+    --thin: 100;
+
+    /* font-size */
+    --text-size-1: 36px;
+    --text-size-2: 32px;
+    --text-size-3: 28px;
+    --text-size-4: 24px;
+    --text-size-5: 20px;
+    --text-size-6: 16px;
+    --text-size-7: 12px;
+    --text-size-8: 8px;
+
+    /* text-others */
+    --line-height-high: 160%;
+  --line-height-main: 140%;
+  --line-height-sub: 120%;
+
+  --letter-spacing-main: -2.5%;
+  --letter-spacing-sub: -2.5%;
+
+  --margin-left-main: 24px;
+  --margin-right-main: 24px;
+
+    /* border-radius */
+    --border-radius-1: 8px;
+    --border-radius-2: 16px;
+    --border-radius-3: 24px;
+    --border-radius-4: 32px;
+
+    /* shadows */
+    --shadow-basic: 0 4px 16px rgba(0, 0, 0, 0.25);
+    --shadow-active: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
