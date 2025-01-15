@@ -5,7 +5,7 @@ import "./assets/css/common/variables.css";
 import Header from "./components/header/Header.jsx";
 import Footer from "./components/footer/Footer.jsx";
 
-import WebTest from "./pages/main/WebTest"; // 메인화면면
+import WebTest from "./pages/main/WebTest"; // 메인화면
 import LoginForm from "./pages/user/LoginForm"; // 로그인폼
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/" element={<home />} />
+          <Route path="/" element={<WebTest />} />
           <Route path="/loginform" element={<LoginForm />} />
         </Routes>
         <Footer />

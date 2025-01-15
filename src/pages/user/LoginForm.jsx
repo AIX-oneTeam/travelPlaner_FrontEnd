@@ -1,69 +1,58 @@
-import React, { useState } from "react";
+import React from "react";
 import "./LoginForm.css";
 
 const LoginForm = () => {
-  // 상태 관리
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  
+  // 일반 메소드 (로그인 이벤트 핸들러)
+  const handleKakaoLogin = () => {
+    console.log("카카오 로그인 클릭");
+    // 카카오 로그인 로직 추가
+  };
 
-  // 로그인 버튼 클릭 이벤트
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log(
-      `Email: ${email}, Password: ${password}, Remember Me: ${rememberMe}`
-    );
+  const handleNaverLogin = () => {
+    console.log("네이버 로그인 클릭");
+    // 네이버 로그인 로직 추가
+  };
+
+  const handleGoogleLogin = () => {
+    console.log("Google 로그인 클릭");
+    // Google 로그인 로직 추가
   };
 
   return (
-    <div className="div">
-      {/* 로그인 폼 */}
-      <div className="form">
-        <div className="div2">이메일</div>
-        <input
-          type="email"
-          className="rectangle-11"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="example@google.com"
-        />
-        <div className="div3">비밀번호</div>
-        <input
-          type="password"
-          className="rectangle-13"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="*******"
-        />
-        <div className="div5">
+    <div id="login-container">
+      <div className="login-form">
+        <div className="logo-placeholder">예비로고</div>
+        <div className="login-prompt">
           로그인하고 나만의 여행을
           <br />
           시작해 보세요
         </div>
-        <div className="div7">아이디·비밀번호 찾기</div>
-        <label className="div9">
-          <input
-            type="checkbox"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
-          />
-          로그인 유지
-        </label>
-        <button className="rectangle-15" onClick={handleLogin}>
-          로그인
-        </button>
-      </div>
 
-      {/* 소셜 로그인 섹션 */}
-      <div className="div10">
-        <img
-          className="_89-a-68-d-1-e-3674-a-1"
-          src="_89-a-68-d-1-e-3674-a-10.png"
-          alt="소셜 로그인 아이콘"
-        />
-        <div className="div11">또는</div>
-        <div className="line-1"></div>
-        <div className="line-2"></div>
+        {/* 카카오 로그인 */}
+        <div className="kakao-login-button">
+          <img
+            src="/images/kakao_login_btn.png"
+            alt="카카오 로그인 버튼"
+            onClick={handleKakaoLogin}
+          />
+        </div>
+
+        {/* 네이버 로그인 */}
+        <div className="naver-login-button">
+          <button onClick={handleNaverLogin}>
+            <img src="/images/naver-logo.png" alt="네이버" />
+            <span>네이버 로그인</span>
+          </button>
+        </div>
+
+        {/* 구글 로그인 */}
+        <div className="google-login-button">
+          <button onClick={handleGoogleLogin}>
+            <img src="/images/google-logo.png" alt="구글" />
+            <span>Google 계정으로 로그인</span>
+          </button>
+        </div>
       </div>
     </div>
   );
