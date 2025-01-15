@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../assets/css/user/LoginForm.css";
+import "./LoginForm.css";
 
 const LoginForm = () => {
   // 상태 관리
@@ -10,7 +10,9 @@ const LoginForm = () => {
   // 로그인 버튼 클릭 이벤트
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log(`Email: ${email}, Password: ${password}, Remember Me: ${rememberMe}`);
+    console.log(
+      `Email: ${email}, Password: ${password}, Remember Me: ${rememberMe}`
+    );
   };
 
   return (
