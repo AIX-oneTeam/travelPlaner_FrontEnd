@@ -1,0 +1,6 @@
+.layout-container {
+    width: 100%;
+    max-width: var(--max-width);
+    height: 1392px;
+    margin: 0 auto;
+}
