@@ -2,14 +2,14 @@
     border-radius: var(--border-radius-2);
     border: 1px solid var(--grey-1);
     padding: 8px 12px;
-    font-size: var(--text-size-5);
+    font-size: var(--font-size-5);
     box-shadow: var(--shadow-1);
     outline: none;
     position: relative;
 }
 
 .searchInput-box::placeholder{
-    content: url(/public/images/icons/search.jpg);
+    content: url(/public/icons/search.jpg);
     opacity: 0.5;
     width: 10%;
 }
