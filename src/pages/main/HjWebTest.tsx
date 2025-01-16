@@ -4,7 +4,6 @@ import ShortBtn from "../../components/buttons/ShortBtn";
 import RadioBtn from "../../components/buttons/RadioBtn";
 import NormalInput from "../../components/input/NormalInput";
 import SearchInput from "../../components/input/SearchInput";
-import SideBar from "../../components/sideBar/SideBar";
 
 const Home: React.FC = () => {
   return (
@@ -14,7 +13,6 @@ const Home: React.FC = () => {
       <RadioBtn />
       <NormalInput />
       <SearchInput />
-      <SideBar />
     </div>
   );
 };

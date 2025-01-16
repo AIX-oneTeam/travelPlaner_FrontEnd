@@ -2,14 +2,32 @@ import React from "react";
 import "./SideBar.css";
 import { Link } from "react-router-dom";
 
-const SideBar = () => {
+interface SideBarProps {
+  closeSideBar: () => void;
+  isSideBarVisible: boolean;
+}
+
+const SideBar: React.FC<SideBarProps> = ({
+  isSideBarVisible,
+  closeSideBar,
+}) => {
+  // false면 렌더링 하지 않음
+  if (!isSideBarVisible) {
+    return null;
+  }
+
   return (
-    <nav id="sideBar-container">
+    <aside id="sideBar-container">
       <h2 className="none">sideBar</h2>
       <ul className="sideBar-contents">
         <li>
           <div className="sideBar-header">
-            <img src="/icons/close.jpg" alt="close"></img>
+            <img
+              className="close-btn"
+              src="/icons/close.jpg"
+              alt="close"
+              onClick={closeSideBar}
+            ></img>
           </div>
           <Link className="sideBar-1" to="/login">
             로그인<img src="/icons/arrow_forward.jpg" alt="login"></img>
@@ -47,7 +65,7 @@ const SideBar = () => {
           </div>
         </li>
       </ul>
-    </nav>
+    </aside>
   );
 };
 

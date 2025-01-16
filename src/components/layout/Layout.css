@@ -1,6 +1,9 @@
 .layout-container {
+    position:relative;
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
     width: 100%;
     max-width: var(--max-width);
-    height: 1392px;
-    margin: 0 auto;
+    overflow: hidden;
 }
