@@ -21,8 +21,9 @@
   object-fit: cover;
 }
 
-.logo2 {
+.side-menu-btn {
   width: 30px;
   height: 30px;
   object-fit: cover;
+  cursor: pointer;
 }
