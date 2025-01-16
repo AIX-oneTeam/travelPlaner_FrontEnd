@@ -29,7 +29,7 @@ const SideBar: React.FC<SideBarProps> = ({
               onClick={closeSideBar}
             ></img>
           </div>
-          <Link className="sideBar-1" to="/login">
+          <Link className="sideBar-1" to="/loginForm">
             로그인<img src="/icons/arrow_forward.jpg" alt="login"></img>
           </Link>
         </li>
