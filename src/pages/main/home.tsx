@@ -1,4 +1,5 @@
 import React from "react";
+import ShortBtn from "../../components/buttons/ShortBtn";
 import "./home.css";
 
 const Home: React.FC = () => {
@@ -6,18 +7,18 @@ const Home: React.FC = () => {
     <div className="travel-container">
       <img
         className="travel-main-video"
-        src="/images/main-video.png"
+        src="/images/main-video.jpg"
         alt="Main Video"
       />
       <div className="travel-main-text">
         <img
           className="travel-decor-rectangle-16"
-          src="/images/Rectangle 16.png"
+          src="/images/Rectangle 16.jpg"
           alt="Rectangle 16"
         />
         <img
           className="travel-decor-rectangle-17"
-          src="/images/Rectangle 17.png"
+          src="/images/Rectangle 17.jpg"
           alt="Rectangle 17"
         />
         <div className="travel-plan-title">
@@ -34,10 +35,10 @@ const Home: React.FC = () => {
       </div>
       <div className="travel-buttons">
         <div className="travel-plan-button">
-          <button>voice</button>
+          <ShortBtn content="voice" />
         </div>
         <div className="travel-plan-button">
-          <button>text</button>
+          <ShortBtn content="text" />
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@
   box-sizing: border-box;
 }
 .travel-container {
-  margin: auto;
+  margin: 0 auto;
   width: 400px;
   height: 500px;
   position: relative;
@@ -99,11 +99,6 @@
 .travel-plan-button button {
   width: 100%;
   height: 44px;
-  background: var(--main-color-1, #76adec);
-  border-radius: 10px;
-  border: 2px solid var(--main-color-1, #76adec);
   color: #ffffff;
   font-family: var(--font-family-1);
-  font-size: 18px;
-  font-weight: var(--bold);
 }
