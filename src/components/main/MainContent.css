@@ -1,7 +1,7 @@
 .main-content {
   width: 100%;
   max-width: inherit; /* 부모의 max-width 상속 */
-  height: 1247px;
+  height: auto;
   padding: 20px;
   margin: 50px auto;
   box-sizing: border-box;
