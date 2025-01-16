@@ -24,7 +24,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         closeSideBar={closeSideBar}
       />
       <Header openSideBar={openSideBar} />
-
       <MainContent>{children}</MainContent>
       <Footer />
     </div>

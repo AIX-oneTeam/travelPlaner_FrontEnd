@@ -1,15 +1,22 @@
-.searchInput-box{
+#searchTextArea-container{
+    width:100%;
+    label{
+        width:100%;
+    }
+}
+
+.searchTextArea-box{
     width: 100%;
     border-radius: var(--border-radius-2);
     border: 1px solid var(--grey-1);
     padding: 8px 12px;
-    font-size: var(--font-size-5);
+    font-size: var(--font-size-6);
     box-shadow: var(--shadow-1);
     outline: none;
     position: relative;
 }
 
-.searchInput-box::placeholder{
+.searchTextArea-box::placeholder{
     content: url(/public/icons/search.jpg);
     opacity: 0.5;
     width: 25px;
@@ -19,7 +26,7 @@
 
 }
 
-.searchInput-box:focus{
+.searchTextArea-box:focus{
     border: 1px solid var(--black-opacity-50);
 }
 

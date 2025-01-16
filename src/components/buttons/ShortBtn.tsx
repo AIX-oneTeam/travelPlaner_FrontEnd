@@ -6,6 +6,7 @@ interface ShortBtnProps {
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
   content?: string;
+  href?: string;
 }
 
 const ShortBtn: React.FC<ShortBtnProps> = ({
