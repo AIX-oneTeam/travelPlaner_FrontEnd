@@ -17,10 +17,10 @@ const Header = () => {
       <div id="header-container">
         <div className="header-area">
           <div className="logo-container">
-            <img className="logo" src="/images/logo.png" alt="로고" />
+            <img className="logo" src="/images/logo.jpg" alt="로고" />
           </div>
           <div className="text-container">
-            <img className="logo2" src="/images/logo2.png" alt="로고2" />
+            <img className="logo2" src="/images/menubar.jpg" alt="로고2" />
             {/* <button>로그인</button>
             <button>로그아웃</button> */}
           </div>
