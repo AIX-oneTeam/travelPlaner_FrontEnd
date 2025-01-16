@@ -84,3 +84,6 @@ input[type="radio"]{
     -webkit-appearance: none; /* 웹킷 브라우저 대응 */
     -moz-appearance: none; /* 파이어폭스 브라우저 대응 */
 }
+
+input[type="text"] {
+}

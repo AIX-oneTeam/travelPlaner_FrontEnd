@@ -2,7 +2,7 @@
     width: 100%;
     padding:12px 48px;
     border: none;
-    border-radius: var(--border-radius-1);
+    border-radius: var(--border-radius-2);
     background-color: var(--main-color-1);
     color: var(--white);
     font-size: var(--text-size-6);
