@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./assets/css/common/variables.css";
 import Layout from "./components/layout/Layout";
 
-import WebTest from "./pages/main/WebTest"; // 메인화면
+import Home from "./pages/main/home"; // 메인화면
 import LoginForm from "./pages/user/LoginForm"; // 로그인폼
 import HjWebTest from "./pages/main/HjWebTest";
 
@@ -15,7 +15,7 @@ function App() {
       <BrowserRouter>
         <Layout>
           <Routes>
-            <Route path="/" element={<WebTest />} />
+            <Route path="/" element={<Home />} />
             <Route path="/loginform" element={<LoginForm />} />
             <Route path="/hj" element={<HjWebTest />} />
           </Routes>

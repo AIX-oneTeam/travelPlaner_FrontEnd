@@ -2,9 +2,9 @@
   width: 100%;
   max-width: inherit; /* 상위 요소의 max-width를 상속 */
   height: 80px;
-  position: static;
-  border-bottom: 2px solid var(--main-color-1, #76adec); 
-  overflow: hidden; /* 내부 요소가 부모 영역을 넘지 않도록 설정 */
+  border-bottom: 2px solid var(--main-color-1, #76adec);
+  overflow: hidden;
+  flex-shrink: 0; /* Flexbox에서 헤더 크기가 줄어들지 않도록 설정 */
 }
 
 .header-area {
