@@ -1,9 +1,12 @@
 .main-content {
+  flex: 1; /* 남은 공간을 채움 */
   width: 100%;
-  max-width: inherit; /* 부모의 max-width 상속 */
-  height: auto;
-  padding: 20px;
-  margin: 50px auto;
+  max-width: inherit;
+  margin: 50px 0;
   box-sizing: border-box;
-  background-color: #cacaca; /* 영역 확인때문에 추가함. 나중에 제거 필요 */
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+ 
 }
+

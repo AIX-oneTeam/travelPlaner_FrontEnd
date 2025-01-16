@@ -1,6 +1,8 @@
 .layout-container {
-    width: 100%;
-    max-width: var(--max-width);
-    min-height: 1392px;
-    margin: 0 auto;
+  width: 100%;
+  max-width: var(--max-width);
+  height: 100vh; /* 화면 전체 높이 */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column; /* 자식 요소를 수직으로 정렬 */
 }
