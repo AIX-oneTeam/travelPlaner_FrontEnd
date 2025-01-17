@@ -1,37 +1,45 @@
 import React, { useState } from "react";
 import "./SearchTextArea.css";
 
-interface NormalInputProps {
+interface TextAreaInputProps {
   type?: "text" | "password" | "email" | "number" | "tel";
   placeholder?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-const SearchTextArea: React.FC<NormalInputProps> = ({
+const SearchTextArea: React.FC<TextAreaInputProps> = ({
   type = "text",
   placeholder = "입력해주세요",
-  onChange = () => {},
+  onChange,
 }) => {
   const [inputValue, setInputValue] = useState<string>("");
 
-  const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const inputHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
 
-  onChange = inputHandler;
+  if (onChange === undefined) {
+    onChange = inputHandler;
+  }
 
   return (
     <div id="searchTextArea-container">
-      <label htmlFor="input">
-        <input
+      <div className="textArea-box">
+        <textarea
           className="searchTextArea-box"
           name="prompt-input"
-          type={type}
           placeholder={placeholder}
           value={inputValue}
+          rows={5}
           onChange={onChange}
-        />
-      </label>
+        ></textarea>
+        <img
+          id="send-btn"
+          className={`prompt-send-btn ${inputValue === "" ? "none" : ""}`}
+          src="/icons/arrow_up_white.png"
+          alt="send"
+        ></img>
+      </div>
     </div>
   );
 };
