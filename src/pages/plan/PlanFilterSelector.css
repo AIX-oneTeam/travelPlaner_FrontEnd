@@ -1,6 +1,7 @@
 /* 공통 스타일 */
 .travel-plan-container {
   width: 70%;
+  padding: 50px 0px;
   box-sizing: border-box;
 }
 
@@ -26,11 +27,12 @@
 
 /* 지역 섹션 */
 .travel-region-section {
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 .region-input-container {
-  width: 100%;
+  width: 98%;
+  margin: 20px 0px 20px 15px;
 }
 
 .region-input {
@@ -56,13 +58,14 @@
 
 /* 일정 섹션 */
 .travel-schedule-section {
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 .custom-calendar {
   width: 100%;
   border: 1px solid #e0dede;
   border-radius: 10px;
+  /* margin: 20px 15px; */
   padding: 10px;
 }
 
@@ -74,13 +77,14 @@
 
 /* 나이 섹션 */
 .travel-age-section {
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 .age-selection-container {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  margin: 20px 0px 20px 15px;
 }
 
 .age-button {
@@ -102,13 +106,14 @@
 
 /* 일행 섹션 */
 .travel-companions-section {
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 .companions-selection-container {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin: 20px 0px 20px 15px;
 }
 
 .companion-group {
@@ -142,8 +147,8 @@
 }
 
 .companion-minus:hover {
-    background-color: var(--sub-color-2); /* 호버 시 하늘색에 가까운 배경 */
-  }
+  background-color: var(--sub-color-2); /* 호버 시 하늘색에 가까운 배경 */
+}
 
 .companion-plus:hover {
   background-color: var(--sub-color-1); /* 호버 시 하늘색에 가까운 배경 */
@@ -167,13 +172,14 @@
 
 /* 목적 섹션 */
 .travel-purpose-section {
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 .purpose-selection-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin: 20px 0px 20px 15px;
 }
 
 .purpose-button {
