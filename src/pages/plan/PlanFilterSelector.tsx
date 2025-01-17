@@ -5,6 +5,8 @@ import "./PlanFilterSelector.css";
 import LongBtn from "../../components/buttons/LongBtn";
 import SearchInput2 from "../../components/input/SearchInput2";
 
+import { Sun } from "lucide-react";
+
 interface Companion {
   label: string;
   count: number;
@@ -30,6 +32,34 @@ const purposes = [
   "고기 좋아",
   "역사 여행",
 ];
+
+// 간단한 날씨 알림 컴포넌트
+const WeatherAlert = () => {
+  return (
+    <div className="w-full max-w-md p-4">
+      <div className="flex items-start space-x-4">
+        <div className="flex-shrink-0">
+          <Sun className="w-8 h-8 text-yellow-500" />
+        </div>
+
+        <div className="flex-1">
+          <div className="mb-2">
+            <span className="font-medium">예상 날씨</span>
+            <span className="ml-2 text-gray-600">- 화창</span>
+          </div>
+
+          <div className="text-sm text-gray-500">
+            3일 전 알람으로 다시 알려드릴께요!
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4">
+        <div className="h-2 bg-gray-100 rounded-full"></div>
+      </div>
+    </div>
+  );
+};
 
 const PlanFilterSelector: React.FC = () => {
   const [selectedDateRange, setSelectedDateRange] = useState<
@@ -123,6 +153,8 @@ const PlanFilterSelector: React.FC = () => {
           </p>
         )}
       </div>
+
+      <WeatherAlert />
 
       {/* 나이 선택 */}
       <div className="travel-age-section">
