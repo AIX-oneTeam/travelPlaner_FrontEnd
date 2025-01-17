@@ -4,6 +4,7 @@ import ShortBtn from "../../components/buttons/ShortBtn";
 import RadioBtn from "../../components/buttons/RadioBtn";
 import NormalInput from "../../components/input/NormalInput";
 import SearchInput from "../../components/input/SearchInput";
+import PromptModal from "../../components/modal/PromptModal";
 
 const Home: React.FC = () => {
   return (
@@ -13,6 +14,10 @@ const Home: React.FC = () => {
       <RadioBtn />
       <NormalInput />
       <SearchInput />
+      <PromptModal
+        title={"숙소"}
+        message={"원하시는 숙소를 직접 검색하거나 예를 들어주세요."}
+      />
     </div>
   );
 };
