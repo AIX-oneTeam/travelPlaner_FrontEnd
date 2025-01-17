@@ -1,44 +1,26 @@
 import React from "react";
 import ShortBtn from "../../components/buttons/ShortBtn";
+import MainSlider from "./MainSlider";
 import "./home.css";
 
 const Home: React.FC = () => {
   return (
-    <div className="travel-container">
-      <img
-        className="travel-main-video"
-        src="/images/main-video.jpg"
-        alt="Main Video"
-      />
-      <div className="travel-main-text">
-        <img
-          className="travel-decor-rectangle-16"
-          src="/images/Rectangle 16.jpg"
-          alt="Rectangle 16"
-        />
-        <img
-          className="travel-decor-rectangle-17"
-          src="/images/Rectangle 17.jpg"
-          alt="Rectangle 17"
-        />
-        <div className="travel-plan-title">
-          <br />
-          맞춤 여행 계획
-        </div>
-        <div className="travel-plan-subtitle">만드는</div>
-        <div className="travel-plan-ai">
-          <span>
-            <span className="travel-plan-ai-highlight">AI</span>
-            <span className="travel-plan-ai-secondary">로</span>
-          </span>
-        </div>
+    <div className="home-container">
+      <div className="slider-container">
+        <MainSlider />
       </div>
-      <div className="travel-buttons">
-        <div className="travel-plan-button">
-          <ShortBtn content="voice" />
+      <div className="travel-container">
+        <div className="travel-main-text">
+          <h1>AI와 함께 떠나는 여행 계획</h1>
+          <p>EASY TRAVEL과 함께 맞춤형 일정을 작성해보세요! </p>
         </div>
-        <div className="travel-plan-button">
-          <ShortBtn content="text" />
+        <div className="travel-buttons">
+          <div className="travel-plan-button">
+            <ShortBtn content="음성으로 시작" />
+          </div>
+          <div className="travel-plan-button">
+            <ShortBtn content="텍스트로 시작" />
+          </div>
         </div>
       </div>
     </div>
