@@ -1,0 +1,183 @@
+/* 공통 스타일 */
+.travel-plan-container {
+  width: 70%;
+  box-sizing: border-box;
+}
+
+.travel-plan-header {
+  font-size: var(--text-size-3);
+  font-weight: var(--bold);
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.travel-plan-description {
+  font-size: var(--text-size-5);
+  color: #b1b1b1;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: var(--text-size-5);
+  font-weight: var(--bold);
+  color: #000;
+  margin-bottom: 10px;
+}
+
+/* 지역 섹션 */
+.travel-region-section {
+  margin-bottom: 30px;
+}
+
+.region-input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.region-input {
+  flex: 1;
+  height: 40px;
+  border: 1px solid #e0dede;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.region-search-button {
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border: 1px solid #e0dede;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* 일정 섹션 */
+.travel-schedule-section {
+  margin-bottom: 30px;
+}
+
+.custom-calendar {
+  width: 100%;
+  border: 1px solid #e0dede;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.selected-date {
+  margin-top: 10px;
+  font-size: var(--text-size-6);
+  color: #000;
+}
+
+/* 나이 섹션 */
+.travel-age-section {
+  margin-bottom: 30px;
+}
+
+.age-selection-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.age-button {
+  width: 60px;
+  height: 40px;
+  border: 1px solid #d9d9d9;
+  border-radius: var(--border-radius-2);
+  text-align: center;
+  line-height: 40px;
+  font-size: var(--text-size-6);
+  color: #000;
+  cursor: pointer;
+}
+
+.age-button.active {
+  background-color: #dbecff;
+  border-color: #76adec;
+}
+
+/* 일행 섹션 */
+.travel-companions-section {
+  margin-bottom: 30px;
+}
+
+.companions-selection-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.companion-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 좌우 정렬 */
+}
+
+.companion-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 버튼과 라벨 간 간격 */
+  flex-grow: 1; /* 가운데 공간을 확보 */
+}
+
+.companion-minus,
+.companion-plus {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #d9d9d9;
+  border-radius: var(--border-radius-4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: var(--text-size-6);
+  color: #000;
+  background-color: #fff; /* 버튼 배경색 */
+}
+
+.companion-label {
+  font-size: var(--text-size-6);
+  font-weight: var(--semi-bold);
+  color: #000;
+  text-align: center;
+  padding: 0 10px;
+}
+
+.companion-count {
+  font-size: var(--text-size-6);
+  color: #000;
+  margin-left: auto;
+  text-align: right;
+}
+
+/* 목적 섹션 */
+.travel-purpose-section {
+  margin-bottom: 30px;
+}
+
+.purpose-selection-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.purpose-button {
+  padding: 8px 12px;
+  font-size: var(--text-size-6);
+  font-weight: var(--bold);
+  border: 1px solid #d9d9d9;
+  border-radius: var(--border-radius-2);
+  color: #000;
+  cursor: pointer;
+}
+
+.purpose-button.active {
+  background-color: #ffe2ab;
+  border-color: #f2a413;
+}
