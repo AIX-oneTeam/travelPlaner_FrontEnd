@@ -1,10 +1,11 @@
 .short-btn{
+    width: 150px;
     padding:12px 16px;
     border: none;
     border-radius: var(--border-radius-2);
     background-color: var(--main-color-1);
     color: var(--white);
-    font-size: var(--text-size-6);
+    font-size: var(--font-size-6);
     font-weight: var(--bold);
     cursor: pointer;
     box-shadow: var(--shadow-basic);

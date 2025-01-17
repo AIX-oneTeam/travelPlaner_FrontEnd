@@ -29,23 +29,23 @@
   --font-family-1: Pretendard-Regular, sans-serif;
 
   /* text-weight */
-  --extra-bold: 800;
+  --extrabold: 800;
   --bold: 700;
-  --semi-bold: 600;
+  --semibold: 600;
   --medium: 500;
   --regular: 400;
   --light: 300;
   --thin: 100;
 
   /* font-size */
-  --text-size-1: 36px;
-  --text-size-2: 32px;
-  --text-size-3: 28px;
-  --text-size-4: 24px;
-  --text-size-5: 20px;
-  --text-size-6: 16px;
-  --text-size-7: 12px;
-  --text-size-8: 8px;
+  --font-size-1: 2.25em; /* 36px */
+  --font-size-2: 2em; /* 32px */
+  --font-size-3: 1.75em; /* 28px */
+  --font-size-4: 1.5em; /* 24px */
+  --font-size-5: 1.25em; /* 20px */
+  --font-size-6: 1em; /* 16px */
+  --font-size-7: 0.75em; /* 12px */
+  --font-size-8: 0.5em; /* 8px */
 
   /* text-others */
   --line-height-high: 160%;
