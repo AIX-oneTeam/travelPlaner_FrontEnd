@@ -1,87 +1,43 @@
+.home-container{
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  width: 100%;
+  position: relative;
+
+}
+.slider-container{
+  width: 100%;
+}
 .travel-container,
 .travel-container * {
   box-sizing: border-box;
 }
 .travel-container {
   margin: 0 auto;
-  width: 400px;
-  height: 500px;
   position: relative;
 }
-.travel-main-video {
-  width: 222.84px;
-  height: 161px;
-  position: absolute;
-  left: 28.47px;
-  top: 60px;
-  object-fit: cover;
-}
+
 .travel-main-text {
-  width: 375px;
-  height: 373px;
-  position: static;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  h1{
+    font-size: var(--font-size-1);
+    font-weight: var(--bold);
+  }
+
+  p{
+    width: 150%;
+    text-align: center;
+    font-size: var(--font-size-5);
+    font-weight: var(--regular);
+  }
 }
-.travel-decor-rectangle-16 {
-  width: 100px;
-  height: 60px;
-  position: absolute;
-  left: 211.73px;
-  top: 20px;
-  overflow: visible;
-}
-.travel-decor-rectangle-17 {
-  width: 370px;
-  height: 60px;
-  position: absolute;
-  left: 4px;
-  top: 315px;
-  overflow: visible;
-}
-.travel-plan-title {
-  color: #060000;
-  text-align: right;
-  font-family: "Pretendard-ExtraBold", sans-serif;
-  font-size: 50px;
-  font-weight: 800;
-  position: absolute;
-  left: 0px;
-  top: 246px;
-  width: 356.27px;
-  height: 127px;
-}
-.travel-plan-subtitle {
-  color: #000000;
-  text-align: right;
-  font-family: "Pretendard-ExtraBold", sans-serif;
-  font-size: 50px;
-  font-weight: 800;
-  position: absolute;
-  left: 162.87px;
-  top: 221px;
-  width: 190.35px;
-  height: 72px;
-}
-.travel-plan-ai {
-  color: #000000;
-  text-align: right;
-  position: absolute;
-  left: 192.39px;
-  top: 0px;
-  width: 156.76px;
-  height: 81px;
-}
-.travel-plan-ai-highlight {
-  color: #000000;
-  font-family: "Pretendard-ExtraBold", sans-serif;
-  font-size: 70px;
-  font-weight: 800;
-}
-.travel-plan-ai-secondary {
-  color: #000000;
-  font-family: "Pretendard-ExtraBold", sans-serif;
-  font-size: 50px;
-  font-weight: 800;
-}
+
+
+
 
 .travel-buttons {
   width: 100%;
@@ -91,6 +47,8 @@
   gap: 20px; /* 버튼 사이의 간격 설정 */
   margin-top: 80px;
 }
+
+
 
 
 
