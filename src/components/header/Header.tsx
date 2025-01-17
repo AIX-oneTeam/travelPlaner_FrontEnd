@@ -1,5 +1,6 @@
 import React from "react";
 import "./Header.css";
+import { Link } from "react-router-dom";
 
 interface HeaderProps {
   openSideBar: () => void;
@@ -9,6 +10,7 @@ const Header: React.FC<HeaderProps> = ({ openSideBar }) => {
   /*---라우터 관련-------------------------------*/
 
   /*---상태관리 변수들(값이 변화면 화면 랜더링 )---*/
+  const [username, setUsername] = React.useState("홍길동");
 
   /*---일반 변수--------------------------------*/
 
@@ -20,9 +22,17 @@ const Header: React.FC<HeaderProps> = ({ openSideBar }) => {
     <div id="header-container">
       <div className="header-area">
         <div className="logo-container">
-          <img className="logo" src="/images/logo.png" alt="로고" />
+          <Link to="/">
+            <img className="logo" src="/icons/Easy_Travel.png" alt="로고" />
+          </Link>
         </div>
+
         <div className="text-container">
+          <div className="member-profile"></div>
+          <p className="member-nickname">
+            {username}
+            <span>님</span>
+          </p>
           <img
             className="side-menu-btn"
             src="/icons/hamburger_menu.png"
