@@ -2,7 +2,6 @@ import React from "react";
 import "./LoginForm.css";
 
 const LoginForm = () => {
-  
   // 일반 메소드 (로그인 이벤트 핸들러)
   const handleKakaoLogin = () => {
     console.log("카카오 로그인 클릭");
@@ -22,13 +21,9 @@ const LoginForm = () => {
   return (
     <div id="login-container">
       <div className="login-form">
-        <div className="logo-placeholder">예비로고</div>
-        <div className="login-prompt">
-          로그인하고 나만의 여행을
-          <br />
-          시작해 보세요
+        <div className="logo-placeholder">
+          <img src="/icons/Easy_Travel.png" alt="로고" />
         </div>
-
         {/* 카카오 로그인 */}
         <div className="kakao-login-button">
           <img
