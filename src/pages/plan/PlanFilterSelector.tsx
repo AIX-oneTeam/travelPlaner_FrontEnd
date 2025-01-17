@@ -3,11 +3,14 @@ import Calendar, { CalendarProps } from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./PlanFilterSelector.css";
 import LongBtn from "../../components/buttons/LongBtn";
+import SearchInput2 from "../../components/input/SearchInput2";
 
 interface Companion {
   label: string;
   count: number;
 }
+
+const ages = ["10대", "20대", "30대", "40대", "50대", "60대", "70대", "80대"];
 
 const purposes = [
   "호캉스",
@@ -29,12 +32,9 @@ const purposes = [
 ];
 
 const PlanFilterSelector: React.FC = () => {
-  // 여행 시작일, 종료일 상태
   const [selectedDateRange, setSelectedDateRange] = useState<
     [Date, Date] | null
   >(null);
-
-  // 일행 종류, 인원 수
   const [companions, setCompanions] = useState<Companion[]>([
     { label: "성인", count: 0 },
     { label: "청소년", count: 0 },
@@ -43,17 +43,16 @@ const PlanFilterSelector: React.FC = () => {
     { label: "반려견", count: 0 },
   ]);
 
-  // 여행 목적(복수 선택 가능)
+  const [selectedAge, setSelectedAge] = useState<string | null>(null);
   const [selectedPurposes, setSelectedPurposes] = useState<string[]>([]);
+  const [activeButton, setActiveButton] = useState<string | null>(null);
 
-  // 날짜 선택
   const handleDateChange: CalendarProps["onChange"] = (value) => {
     if (Array.isArray(value) && value.length === 2) {
-      setSelectedDateRange(value as [Date, Date]); // 시작일과 종료일 설정
+      setSelectedDateRange(value as [Date, Date]);
     }
   };
 
-  // 일행 수 증가/감소
   const handleCompanionChange = (label: string, delta: number) => {
     setCompanions((prevCompanions) =>
       prevCompanions.map((companion) =>
@@ -62,15 +61,19 @@ const PlanFilterSelector: React.FC = () => {
           : companion
       )
     );
+
+    // Set active button
+    setActiveButton(`${label}-${delta > 0 ? "plus" : "minus"}`);
+
+    // Reset active button after 300ms
+    setTimeout(() => setActiveButton(null), 300);
   };
 
-  // 목적 선택 토글
   const togglePurpose = (purpose: string) => {
-    setSelectedPurposes(
-      (prevSelected) =>
-        prevSelected.includes(purpose)
-          ? prevSelected.filter((item) => item !== purpose) // 이미 선택된 경우 해제
-          : [...prevSelected, purpose] // 새로 선택된 경우 추가
+    setSelectedPurposes((prevSelected) =>
+      prevSelected.includes(purpose)
+        ? prevSelected.filter((item) => item !== purpose)
+        : [...prevSelected, purpose]
     );
   };
 
@@ -85,12 +88,13 @@ const PlanFilterSelector: React.FC = () => {
       <div className="travel-region-section">
         <h2 className="section-title">1. 지역</h2>
         <div className="region-input-container">
-          <input
+          <SearchInput2
             type="text"
-            className="region-input"
-            placeholder="지역을 입력하세요"
+            placeholder="지역을 입력해주세요"
+            onChange={(e) => {
+              console.log("지역 입력 값:", e.target.value);
+            }}
           />
-          <button className="region-search-button">🔍</button>
         </div>
       </div>
 
@@ -99,10 +103,10 @@ const PlanFilterSelector: React.FC = () => {
         <h2 className="section-title">2. 일정</h2>
         <Calendar
           onChange={handleDateChange}
-          selectRange // 날짜 범위 선택 활성화
+          selectRange
           className="custom-calendar"
           locale="ko-KR"
-          minDate={new Date()} // 오늘 이전 날짜 선택 불가
+          minDate={new Date()}
         />
         {selectedDateRange && (
           <p className="selected-date">
@@ -124,12 +128,13 @@ const PlanFilterSelector: React.FC = () => {
       <div className="travel-age-section">
         <h2 className="section-title">3. 나이</h2>
         <div className="age-selection-container">
-          {[10, 20, 30, 40, 50, 60, 70, 80].map((age) => (
+          {ages.map((age) => (
             <button
               key={age}
-              className={`age-button ${age === 20 ? "active" : ""}`}
+              className={`age-button ${selectedAge === age ? "active" : ""}`}
+              onClick={() => setSelectedAge(age)}
             >
-              {age}대
+              {age}
             </button>
           ))}
         </div>

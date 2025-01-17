@@ -5,20 +5,20 @@
 }
 
 .travel-plan-header {
-  font-size: var(--text-size-3);
+  font-size: var(--font-size-3);
   font-weight: var(--bold);
   color: #000;
   margin-bottom: 10px;
 }
 
 .travel-plan-description {
-  font-size: var(--text-size-5);
+  font-size: var(--font-size-5);
   color: #b1b1b1;
   margin-bottom: 20px;
 }
 
 .section-title {
-  font-size: var(--text-size-5);
+  font-size: var(--font-size-5);
   font-weight: var(--bold);
   color: #000;
   margin-bottom: 10px;
@@ -30,9 +30,7 @@
 }
 
 .region-input-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  width: 100%;
 }
 
 .region-input {
@@ -70,7 +68,7 @@
 
 .selected-date {
   margin-top: 10px;
-  font-size: var(--text-size-6);
+  font-size: var(--font-size-6);
   color: #000;
 }
 
@@ -92,13 +90,13 @@
   border-radius: var(--border-radius-2);
   text-align: center;
   line-height: 40px;
-  font-size: var(--text-size-6);
+  font-size: var(--font-size-6);
   color: #000;
   cursor: pointer;
 }
 
 .age-button.active {
-  background-color: #dbecff;
+  background-color: var(--sub-color-1);
   border-color: #76adec;
 }
 
@@ -122,7 +120,7 @@
 .companion-controls {
   display: flex;
   align-items: center;
-  gap: 10px; /* 버튼과 라벨 간 간격 */
+  gap: 10px;
   flex-grow: 1; /* 가운데 공간을 확보 */
 }
 
@@ -136,21 +134,32 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: var(--text-size-6);
+  font-size: var(--font-size-6);
   color: #000;
   background-color: #fff; /* 버튼 배경색 */
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease; /* 클릭 시 애니메이션 */
+}
+
+.companion-minus:hover {
+    background-color: var(--sub-color-2); /* 호버 시 하늘색에 가까운 배경 */
+  }
+
+.companion-plus:hover {
+  background-color: var(--sub-color-1); /* 호버 시 하늘색에 가까운 배경 */
 }
 
 .companion-label {
-  font-size: var(--text-size-6);
-  font-weight: var(--semi-bold);
+  font-size: var(--font-size-6);
+  font-weight: var(--semibold);
   color: #000;
   text-align: center;
   padding: 0 10px;
+  width: 70px; /* 고정 너비로 일관된 정렬 유지 */
 }
 
 .companion-count {
-  font-size: var(--text-size-6);
+  font-size: var(--font-size-6);
   color: #000;
   margin-left: auto;
   text-align: right;
@@ -169,7 +178,7 @@
 
 .purpose-button {
   padding: 8px 12px;
-  font-size: var(--text-size-6);
+  font-size: var(--font-size-6);
   font-weight: var(--bold);
   border: 1px solid #d9d9d9;
   border-radius: var(--border-radius-2);
