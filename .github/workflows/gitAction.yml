@@ -1,0 +1,43 @@
+name: CI/CD to AWS ECR and EC1
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Log in to AWS ECR
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # 3. Build and tag Docker image
+      - name: Build Docker image
+        run: |
+          docker build --cache-from -t ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest .
+
+      # 4. Push Docker image to ECR
+      - name: Push Docker image to ECR
+        run: |
+          docker push ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
+
+      # 5. Deploy to EC2
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            docker pull ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
+            docker stop frontend || true
+            docker rm frontend || true
+            docker run -d --name frontend -p 3000:3000 ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
