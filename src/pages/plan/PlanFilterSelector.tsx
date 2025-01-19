@@ -95,6 +95,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
             next2Label={null} // 내부 '>>' 버튼 제거
             prev2Label={null} // 내부 '<<' 버튼 제거
             formatDay={(locale, date) => date.getDate().toString()} // 날짜에서 "일" 제거
+            showFixedNumberOfWeeks={true}
           />
         </div>
 
