@@ -35,7 +35,6 @@ jobs:
         run: |
           docker push ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
 
-      # EC2에 배포
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -43,7 +42,17 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            # Check if the frontend container exists
+            if docker ps -a --filter "name=frontend" --format '{{.Names}}' | grep -w frontend; then
+              echo "Existing container found. Stopping and removing it..."
+              docker stop frontend
+              docker rm frontend
+            else
+              echo "No existing container found. Skipping stop and remove steps."
+            fi
+
+            # Pull the latest image
             docker pull ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
-            docker stop frontend || true
-            docker rm frontend || true
+
+            # Run the new container
             docker run -d --name frontend -p 3000:3000 ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
