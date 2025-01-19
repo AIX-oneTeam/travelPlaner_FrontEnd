@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Calendar, { CalendarProps } from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import "./PlanFilterSelector.css";
 import LongBtn from "../../components/buttons/LongBtn";
 import SearchInput2 from "../../components/input/SearchInput2";
+import { Cloud, Sun, CloudRain, AlertCircle } from "lucide-react";
 
-import { Sun } from "lucide-react";
+//css import
+import "react-calendar/dist/Calendar.css";
+import "./PlanFilterSelector.css";
 
 interface Companion {
   label: string;
@@ -33,29 +34,48 @@ const purposes = [
   "역사 여행",
 ];
 
+// 가능한 날씨 상태
+type WeatherType = "맑음" | "흐림" | "비";
+
+// 날씨 상태 인터페이스 (나중에 API 연동 시 사용할 error 옵션 포함)
+interface WeatherState {
+  type: WeatherType;
+  error?: boolean;
+}
+
 // 간단한 날씨 알림 컴포넌트
 const WeatherAlert = () => {
+  // 기본 날씨 상태 설정 (error, setWeatherState는 API 연동 전까지는 불필요)
+  const [weatherState, setWeatherState] = useState<WeatherState>({
+    type: "맑음",
+  });
+
+  // 날씨 상태에 따른 아이콘 선택 함수
+  const getWeatherIcon = (weatherType: WeatherType): JSX.Element => {
+    switch (weatherType) {
+      case "맑음":
+        return <Sun className="weather-icon" />;
+      case "흐림":
+        return <Cloud className="weather-icon" />;
+      case "비":
+        return <CloudRain className="weather-icon" />;
+      default:
+        return <AlertCircle className="weather-icon text-yellow-500" />;
+    }
+  };
+
   return (
-    <div className="w-full max-w-md p-4">
-      <div className="flex items-start space-x-4">
-        <div className="flex-shrink-0">
-          <Sun className="w-8 h-8 text-yellow-500" />
+    <div className="weather-container">
+      <div className="weather-alert-card">
+        <div className="weather-icon-wrapper">
+          {getWeatherIcon(weatherState.type)}
         </div>
-
-        <div className="flex-1">
-          <div className="mb-2">
-            <span className="font-medium">예상 날씨</span>
-            <span className="ml-2 text-gray-600">- 화창</span>
-          </div>
-
-          <div className="text-sm text-gray-500">
-            3일 전 알람으로 다시 알려드릴께요!
-          </div>
+        <div className="weather-content">
+          <h3 className="weather-title">예상 날씨 - {weatherState.type}</h3>
+          <p className="weather-update-time">
+            3일 전 알람으로 다시 알려드릴게요!
+          </p>
         </div>
-      </div>
-
-      <div className="mt-4">
-        <div className="h-2 bg-gray-100 rounded-full"></div>
       </div>
     </div>
   );
@@ -77,22 +97,30 @@ const PlanFilterSelector: React.FC = () => {
   const [selectedPurposes, setSelectedPurposes] = useState<string[]>([]);
   const [activeButton, setActiveButton] = useState<string | null>(null);
 
+  // 날짜 변경 이벤트 핸들러
   const handleDateChange: CalendarProps["onChange"] = (value) => {
+    // 선택된 값이 배열인지 확인하고, 배열의 길이가 2인 경우 (날짜 범위를 선택한 경우)만 처리
     if (Array.isArray(value) && value.length === 2) {
+      // 선택된 날짜 범위를 [시작 날짜, 종료 날짜] 형식으로 상태로 저장
       setSelectedDateRange(value as [Date, Date]);
     }
   };
 
+  // 동반자 수 변경 이벤트 핸들러
   const handleCompanionChange = (label: string, delta: number) => {
+    // 이전 동반자 상태를 기반으로 동반자 수를 업데이트
     setCompanions((prevCompanions) =>
-      prevCompanions.map((companion) =>
-        companion.label === label
-          ? { ...companion, count: Math.max(0, companion.count + delta) }
-          : companion
+      // 동반자 배열을 순회하며 특정 label에 해당하는 동반자의 count 값을 업데이트
+      prevCompanions.map(
+        (companion) =>
+          companion.label === label // label이 일치하는 동반자를 찾음
+            ? // 기존 동반자 정보는 그대로 유지하고 count를 delta만큼 변경하되 최소값은 0으로 제한
+              { ...companion, count: Math.max(0, companion.count + delta) }
+            : companion // label이 일치하지 않으면 기존 동반자 데이터를 그대로 반환
       )
     );
 
-    // Set active button
+    // +, - 버튼 active
     setActiveButton(`${label}-${delta > 0 ? "plus" : "minus"}`);
 
     // Reset active button after 300ms

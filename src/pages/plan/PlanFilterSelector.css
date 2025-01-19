@@ -58,7 +58,7 @@
 
 /* 일정 섹션 */
 .travel-schedule-section {
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 
 .custom-calendar {
@@ -95,13 +95,57 @@
   text-align: center;
   line-height: 40px;
   font-size: var(--font-size-6);
-  color: #000;
+  color: var(--text-main);
   cursor: pointer;
 }
 
 .age-button.active {
   background-color: var(--sub-color-1);
   border-color: #76adec;
+}
+
+/* 날씨 정보 */
+.weather-container {
+  max-width: 100%;
+  margin-bottom: 50px;
+}
+
+.weather-alert-card {
+  background-color: var(--white);
+  border-radius: var(--border-radius-2);
+  /* box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); */
+  box-shadow: var(--shadow-basic);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.weather-icon-wrapper {
+  flex-shrink: 0;
+}
+
+.weather-icon {
+  width: 2.5rem;
+  height: 1.8rem;
+  color: var(--text-sub);
+}
+
+.weather-content {
+  flex: 1;
+}
+
+.weather-title {
+  font-size: var(--font-size-6);
+  line-height: 1.5rem;
+  font-weight: var(--medium);
+  color: var(--text-main);
+}
+
+.weather-update-time {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text-sub);
 }
 
 /* 일행 섹션 */
@@ -157,7 +201,7 @@
 .companion-label {
   font-size: var(--font-size-6);
   font-weight: var(--semibold);
-  color: #000;
+  color: var(--text-main);
   text-align: center;
   padding: 0 10px;
   width: 70px; /* 고정 너비로 일관된 정렬 유지 */
@@ -165,7 +209,7 @@
 
 .companion-count {
   font-size: var(--font-size-6);
-  color: #000;
+  color: var(--text-main);
   margin-left: auto;
   text-align: right;
 }
@@ -188,7 +232,7 @@
   font-weight: var(--bold);
   border: 1px solid #d9d9d9;
   border-radius: var(--border-radius-2);
-  color: #000;
+  color: var(--text-main);
   cursor: pointer;
 }
 
@@ -196,4 +240,3 @@
   background-color: #ffe2ab;
   border-color: #f2a413;
 }
-
