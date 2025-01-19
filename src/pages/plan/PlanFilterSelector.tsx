@@ -153,7 +153,7 @@ const WeatherAlert = () => {
       case "비":
         return <CloudRain className="weather-icon" />;
       default:
-        return <AlertCircle className="weather-icon text-yellow-500" />;
+        return <AlertCircle className="weather-icon text-error" />;
     }
   };
 
@@ -187,9 +187,10 @@ const PlanFilterSelector: React.FC = () => {
     { label: "반려견", count: 0 },
   ]);
 
-  const [selectedAge, setSelectedAge] = useState<string | null>(null);
-  const [selectedPurposes, setSelectedPurposes] = useState<string[]>([]);
-  const [activeButton, setActiveButton] = useState<string | null>(null);
+  const [region, setRegion] = useState<string>(""); // 지역
+  const [selectedAge, setSelectedAge] = useState<string | null>(null); // 나이
+  const [selectedPurposes, setSelectedPurposes] = useState<string[]>([]); // 목적
+  // const [activeButton, setActiveButton] = useState<string | null>(null);
 
   // 동반자 수 변경 이벤트 핸들러
   const handleCompanionChange = (label: string, delta: number) => {
@@ -206,10 +207,10 @@ const PlanFilterSelector: React.FC = () => {
     );
 
     // +, - 버튼 active
-    setActiveButton(`${label}-${delta > 0 ? "plus" : "minus"}`);
+    // setActiveButton(`${label}-${delta > 0 ? "plus" : "minus"}`);
 
     // Reset active button after 300ms
-    setTimeout(() => setActiveButton(null), 300);
+    // setTimeout(() => setActiveButton(null), 300);
   };
 
   const togglePurpose = (purpose: string) => {
@@ -220,8 +221,15 @@ const PlanFilterSelector: React.FC = () => {
     );
   };
 
+  // 입력 데이터 전송 이벤트 핸들러
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault(); // 폼 기본 동작 방지
+
+    // API 통신 로직 추가
+  };
+
   return (
-    <div className="travel-plan-container">
+    <form className="travel-plan-container" onSubmit={handleSubmit}>
       <h1 className="travel-plan-header">이번 여행에 대해 알려주세요!</h1>
       <p className="travel-plan-description">
         맞춤 여행 플랜을 준비하고 있습니다.
@@ -233,10 +241,9 @@ const PlanFilterSelector: React.FC = () => {
         <div className="region-input-container">
           <SearchInput2
             type="text"
+            value={region}
             placeholder="지역을 입력해주세요"
-            onChange={(e) => {
-              console.log("지역 입력 값:", e.target.value);
-            }}
+            onChange={(e) => setRegion(e.target.value)}
           />
         </div>
       </div>
@@ -321,7 +328,7 @@ const PlanFilterSelector: React.FC = () => {
       <div className="travel-plan-complete-button">
         <LongBtn type="submit" content="완료" />
       </div>
-    </div>
+    </form>
   );
 };
 
