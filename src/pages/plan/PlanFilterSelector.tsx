@@ -34,6 +34,98 @@ const purposes = [
   "역사 여행",
 ];
 
+// 날짜 선택 컴포넌트
+interface DateSelectorProps {
+  selectedDateRange: [Date, Date] | null;
+  setSelectedDateRange: React.Dispatch<
+    React.SetStateAction<[Date, Date] | null>
+  >;
+}
+
+const DateSelector: React.FC<DateSelectorProps> = ({
+  selectedDateRange,
+  setSelectedDateRange,
+}) => {
+  const [activeStartDate, setActiveStartDate] = useState<Date>(new Date()); // 현재 활성화된 달 상태
+
+  // 날짜 변경 이벤트 처리
+  const handleDateChange: CalendarProps["onChange"] = (value) => {
+    if (Array.isArray(value) && value.length === 2) {
+      setSelectedDateRange(value as [Date, Date]);
+    }
+  };
+
+  // 이전 달로 이동
+  const handlePrevMonth = () => {
+    setActiveStartDate(
+      new Date(activeStartDate.getFullYear(), activeStartDate.getMonth() - 1, 1)
+    );
+  };
+
+  // 다음 달로 이동
+  const handleNextMonth = () => {
+    setActiveStartDate(
+      new Date(activeStartDate.getFullYear(), activeStartDate.getMonth() + 1, 1)
+    );
+  };
+
+  return (
+    <div className="travel-schedule-section">
+      <h2 className="section-title">2. 일정</h2>
+      <div className="calendar-container">
+        {/* 이전 달 버튼 */}
+        <button
+          className="calendar-nav-button prev-button"
+          onClick={handlePrevMonth}
+        >
+          {"<"}
+        </button>
+
+        {/* 달력 */}
+        <div className="calendar-wrapper">
+          <Calendar
+            onChange={handleDateChange}
+            selectRange
+            className="custom-calendar"
+            locale="ko-KR"
+            minDate={new Date()}
+            activeStartDate={activeStartDate} // 현재 활성화된 월
+            nextLabel={null} // 내부 '>' 버튼 제거
+            prevLabel={null} // 내부 '<' 버튼 제거
+            next2Label={null} // 내부 '>>' 버튼 제거
+            prev2Label={null} // 내부 '<<' 버튼 제거
+            formatDay={(locale, date) => date.getDate().toString()} // 날짜에서 "일" 제거
+          />
+        </div>
+
+        {/* 다음 달 버튼 */}
+        <button
+          className="calendar-nav-button next-button"
+          onClick={handleNextMonth}
+        >
+          {">"}
+        </button>
+      </div>
+
+      {/* 선택된 날짜 표시 */}
+      {selectedDateRange && (
+        <p className="selected-date">
+          선택된 날짜:{" "}
+          {`${selectedDateRange[0].toLocaleDateString("ko-KR", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })} ~ ${selectedDateRange[1].toLocaleDateString("ko-KR", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}`}
+        </p>
+      )}
+    </div>
+  );
+};
+
 // 가능한 날씨 상태
 type WeatherType = "맑음" | "흐림" | "비";
 
@@ -43,7 +135,7 @@ interface WeatherState {
   error?: boolean;
 }
 
-// 간단한 날씨 알림 컴포넌트
+// 날씨 정보 컴포넌트
 const WeatherAlert = () => {
   // 기본 날씨 상태 설정 (error, setWeatherState는 API 연동 전까지는 불필요)
   const [weatherState, setWeatherState] = useState<WeatherState>({
@@ -85,6 +177,7 @@ const PlanFilterSelector: React.FC = () => {
   const [selectedDateRange, setSelectedDateRange] = useState<
     [Date, Date] | null
   >(null);
+
   const [companions, setCompanions] = useState<Companion[]>([
     { label: "성인", count: 0 },
     { label: "청소년", count: 0 },
@@ -96,15 +189,6 @@ const PlanFilterSelector: React.FC = () => {
   const [selectedAge, setSelectedAge] = useState<string | null>(null);
   const [selectedPurposes, setSelectedPurposes] = useState<string[]>([]);
   const [activeButton, setActiveButton] = useState<string | null>(null);
-
-  // 날짜 변경 이벤트 핸들러
-  const handleDateChange: CalendarProps["onChange"] = (value) => {
-    // 선택된 값이 배열인지 확인하고, 배열의 길이가 2인 경우 (날짜 범위를 선택한 경우)만 처리
-    if (Array.isArray(value) && value.length === 2) {
-      // 선택된 날짜 범위를 [시작 날짜, 종료 날짜] 형식으로 상태로 저장
-      setSelectedDateRange(value as [Date, Date]);
-    }
-  };
 
   // 동반자 수 변경 이벤트 핸들러
   const handleCompanionChange = (label: string, delta: number) => {
@@ -157,31 +241,12 @@ const PlanFilterSelector: React.FC = () => {
       </div>
 
       {/* 날짜 선택 */}
-      <div className="travel-schedule-section">
-        <h2 className="section-title">2. 일정</h2>
-        <Calendar
-          onChange={handleDateChange}
-          selectRange
-          className="custom-calendar"
-          locale="ko-KR"
-          minDate={new Date()}
-        />
-        {selectedDateRange && (
-          <p className="selected-date">
-            선택된 날짜:{" "}
-            {`${selectedDateRange[0].toLocaleDateString("ko-KR", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })} ~ ${selectedDateRange[1].toLocaleDateString("ko-KR", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}`}
-          </p>
-        )}
-      </div>
+      <DateSelector
+        selectedDateRange={selectedDateRange}
+        setSelectedDateRange={setSelectedDateRange}
+      />
 
+      {/* 날씨 정보 */}
       <WeatherAlert />
 
       {/* 나이 선택 */}
