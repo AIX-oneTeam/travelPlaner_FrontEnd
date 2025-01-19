@@ -82,8 +82,8 @@
 
 /* 버튼 스타일 공통 */
 .calendar-nav-button {
-  background: #f0f0f0;
-  border: none;
+  background: var(--grey-3);
+  border: 1px solid var(--grey-1);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -107,7 +107,7 @@
 
 /* 버튼 hover 효과 */
 .calendar-nav-button:hover {
-  background-color: #d9d9d9;
+  background-color: var(--sub-color-1);
 }
 
 /* 달력 스타일 */
@@ -253,11 +253,12 @@
 .age-button {
   width: 60px;
   height: 40px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid var(--grey-1);
   border-radius: var(--border-radius-2);
   text-align: center;
   line-height: 40px;
   font-size: var(--font-size-6);
+  background-color: var(--grey-3);
   color: var(--text-main);
   cursor: pointer;
 }
@@ -296,7 +297,7 @@
 .companion-plus {
   width: 30px;
   height: 30px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid var(--grey-1);
   border-radius: var(--border-radius-4);
   display: flex;
   justify-content: center;
@@ -349,9 +350,10 @@
   padding: 8px 12px;
   font-size: var(--font-size-6);
   font-weight: var(--bold);
-  border: 1px solid #d9d9d9;
+  border: 1px solid var(--grey-1);
   border-radius: var(--border-radius-2);
   color: var(--text-main);
+  background-color: var(--grey-3);
   cursor: pointer;
 }
 
