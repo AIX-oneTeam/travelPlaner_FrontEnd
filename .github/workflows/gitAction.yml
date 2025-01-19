@@ -28,7 +28,7 @@ jobs:
       # Docker 이미지 빌드
       - name: Build Docker image
         run: |
-          docker build --cache-from -t ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest .
+          docker build -t ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest .
 
       # Docker 이미지 푸시
       - name: Push Docker image to ECR
