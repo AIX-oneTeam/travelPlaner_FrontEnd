@@ -42,6 +42,10 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            # Login to ECR
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} \
+            | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY_URI }}
+
             # Check if the frontend container exists
             if docker ps -a --filter "name=frontend" --format '{{.Names}}' | grep -w frontend; then
               echo "Existing container found. Stopping and removing it..."
