@@ -1,0 +1,366 @@
+/* 공통 스타일 */
+.travel-plan-container {
+  width: 70%;
+  padding: 50px 0px;
+  box-sizing: border-box;
+}
+
+.travel-plan-header {
+  font-size: var(--font-size-3);
+  font-weight: var(--bold);
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.travel-plan-description {
+  font-size: var(--font-size-5);
+  color: #b1b1b1;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: var(--font-size-5);
+  font-weight: var(--bold);
+  color: #000;
+  margin-bottom: 10px;
+}
+
+/* 지역 섹션 */
+.travel-region-section {
+  margin-bottom: 50px;
+}
+
+.region-input-container {
+  width: 98%;
+  margin: 20px 0px 20px 15px;
+}
+
+.region-input {
+  flex: 1;
+  height: 40px;
+  border: 1px solid #e0dede;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.region-search-button {
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border: 1px solid #e0dede;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* 일정 섹션 */
+.travel-schedule-section {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+  height: 390px; /* 일정 높이 고정 */
+}
+
+/* 달력 컨테이너 */
+.calendar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 390px; /* 일정 높이 고정 */
+  position: relative;
+}
+
+/* 달력 */
+.calendar-wrapper {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 366px; /* wrapper의 높이 고정 */
+}
+
+/* react-calendar */
+.custom-calendar {
+  padding: 10px 10px;
+  height: 366px; /* react-calendar 높이 고정 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 버튼 스타일 공통 */
+.calendar-nav-button {
+  background: var(--grey-3);
+  border: 1px solid var(--grey-1);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  font-size: var(--font-size-5);
+}
+
+/* 왼쪽 버튼 */
+.prev-button {
+  margin-right: 10px;
+}
+
+/* 오른쪽 버튼 */
+.next-button {
+  margin-left: 10px;
+}
+
+/* 버튼 hover 효과 */
+.calendar-nav-button:hover {
+  background-color: var(--sub-color-1);
+}
+
+/* react-calendar 커스텀 스타일 */
+.react-calendar__navigation__label__labelText {
+  font-size: var(--font-size-5);
+  font-weight: var(--semibold);
+  color: var(--text-main);
+}
+
+.custom-calendar .react-calendar__tile {
+  aspect-ratio: 1;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.react-calendar__tile:disabled {
+  background-color: transparent;
+  color: var(--text-no-active);
+}
+
+.react-calendar__tile:disabled:hover {
+  color: var(--text-no-active) !important;
+}
+
+/* 현재 날짜 */
+.custom-calendar .react-calendar__tile--now {
+  background-color: var(--sub-color-2);
+  border-radius: 50%;
+}
+
+.custom-calendar .react-calendar__tile:hover {
+  background-color: transparent;
+  color: var(--text-main);
+}
+
+.custom-calendar .react-calendar__tile--active {
+  background-color: var(--sub-color-1);
+  color: #006edc;
+}
+
+/* 범위 시작 날짜 */
+.custom-calendar .react-calendar__tile--rangeStart {
+  background-color: #006edc !important;
+  color: var(--white);
+  border-radius: 50%;
+  font-weight: var(--bold);
+}
+
+/* 범위 종료 날짜 */
+.custom-calendar .react-calendar__tile--rangeEnd {
+  background-color: #006edc !important;
+  color: var(--white);
+  border-radius: 50%;
+  font-weight: var(--bold);
+}
+
+/* range 선택 중 hover 상태 배경색 제거 */
+.react-calendar--selectRange .react-calendar__tile--hover {
+  background-color: transparent;
+}
+
+/* 이전달, 다음달 날짜 색 */
+.react-calendar__month-view__days__day--neighboringMonth,
+.react-calendar__decade-view__years__year--neighboringDecade,
+.react-calendar__century-view__decades__decade--neighboringCentury {
+  color: var(--grey-1);
+}
+
+/* 선택된 날짜 */
+.selected-date {
+  margin-top: 10px;
+  font-size: var(--font-size-6);
+  text-align: center;
+}
+
+/* 날씨 정보 */
+.weather-container {
+  max-width: 49%;
+  margin: 50px auto 50px auto;
+}
+
+.weather-alert-card {
+  background-color: var(--white);
+  border-radius: var(--border-radius-2);
+  box-shadow: var(--shadow-basic);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.weather-icon-wrapper {
+  flex-shrink: 0;
+}
+
+.weather-icon {
+  width: 2.5rem;
+  height: 1.8rem;
+  color: var(--text-sub);
+}
+
+.weather-content {
+  flex: 1;
+}
+
+.weather-title {
+  font-size: var(--font-size-6);
+  line-height: 1.5rem;
+  font-weight: var(--medium);
+  color: var(--text-main);
+}
+
+.weather-update-time {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text-sub);
+}
+
+/* 나이 섹션 */
+.travel-age-section {
+  margin-bottom: 50px;
+}
+
+.age-selection-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px 0px 20px 15px;
+}
+
+.age-button {
+  width: 60px;
+  height: 40px;
+  border: 1px solid var(--grey-1);
+  border-radius: var(--border-radius-2);
+  text-align: center;
+  line-height: 40px;
+  font-size: var(--font-size-6);
+  background-color: var(--grey-3);
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.age-button.active {
+  background-color: var(--sub-color-1);
+  border-color: #76adec;
+}
+
+/* 일행 섹션 */
+.travel-companions-section {
+  margin-bottom: 50px;
+}
+
+.companions-selection-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px 0px 20px 15px;
+}
+
+.companion-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 좌우 정렬 */
+}
+
+.companion-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1; /* 가운데 공간을 확보 */
+}
+
+.companion-minus,
+.companion-plus {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--grey-1);
+  border-radius: var(--border-radius-4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: var(--font-size-6);
+  color: #000;
+  background-color: #fff; /* 버튼 배경색 */
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease; /* 클릭 시 애니메이션 */
+}
+
+.companion-minus:hover {
+  background-color: var(--sub-color-2); /* 호버 시 하늘색에 가까운 배경 */
+}
+
+.companion-plus:hover {
+  background-color: var(--sub-color-1); /* 호버 시 하늘색에 가까운 배경 */
+}
+
+.companion-label {
+  font-size: var(--font-size-6);
+  font-weight: var(--semibold);
+  color: var(--text-main);
+  text-align: center;
+  padding: 0 10px;
+  width: 70px; /* 고정 너비로 일관된 정렬 유지 */
+}
+
+.companion-count {
+  font-size: var(--font-size-6);
+  color: var(--text-main);
+  margin-left: auto;
+  text-align: right;
+}
+
+/* 목적 섹션 */
+.travel-purpose-section {
+  margin-bottom: 50px;
+}
+
+.purpose-selection-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0px 20px 15px;
+}
+
+.purpose-button {
+  padding: 8px 12px;
+  font-size: var(--font-size-6);
+  font-weight: var(--bold);
+  border: 1px solid var(--grey-1);
+  border-radius: var(--border-radius-2);
+  color: var(--text-main);
+  background-color: var(--grey-3);
+  cursor: pointer;
+}
+
+.purpose-button.active {
+  background-color: #ffe2ab;
+  border-color: #f2a413;
+}

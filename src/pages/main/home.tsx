@@ -1,9 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import ShortBtn from "../../components/buttons/ShortBtn";
 import MainSlider from "./MainSlider";
 import "./home.css";
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="home-container">
       <div className="slider-container">
@@ -19,7 +22,10 @@ const Home: React.FC = () => {
             <ShortBtn content="음성으로 시작" />
           </div>
           <div className="travel-plan-button">
-            <ShortBtn content="텍스트로 시작" />
+            <ShortBtn
+              content="텍스트로 시작"
+              onClick={() => navigate("/plan/filter/selector")}
+            />
           </div>
         </div>
       </div>
