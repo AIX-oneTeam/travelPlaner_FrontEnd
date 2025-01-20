@@ -8,7 +8,6 @@
   background-color: var(--grey-3);
 }
 
-/* 목적지 가운데 정렬 */
 .travel-plan-list-header {
   width: 100%;
   display: flex;
