@@ -82,7 +82,7 @@ jobs:
               echo "'frontend' 컨테이너가 존재하지 않습니다. 중지 및 제거 단계를 건너뜁니다."
 
             echo "기존 Docker 이미지를 정리 중입니다..."
-            existing_images=$(docker images --filter "reference=public.ecr.aws/${{ secrets.ECR_REPOSITORY_URL }}/frontend:latest" --format "{{.ID}}")
+            existing_images=$(docker images --filter "reference=${{ secrets.ECR_REPOSITORY_URL }}/frontend:latest" --format "{{.ID}}")
             if [ ! -z "$existing_images" ]; then
               echo "기존 이미지를 삭제합니다..."
               docker rmi -f $existing_images
@@ -92,9 +92,9 @@ jobs:
 
             fi
             echo "Amazon ECR에서 최신 이미지를 가져오는 중입니다..."
-            docker pull public.ecr.aws/${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
+            docker pull ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
             echo "새 컨테이너를 시작합니다..."
-            docker run -d --name frontend -p 3000:3000 public.ecr.aws/${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
+            docker run -d --name frontend -p 3000:3000 ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
             echo "배포가 성공적으로 완료되었습니다."
   # discord_alarm:
   #   name: Discord Alarm
