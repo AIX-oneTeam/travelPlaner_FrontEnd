@@ -91,7 +91,7 @@ const PlanList: React.FC = () => {
             <img src="/icons/memo.jpg" alt="Icon" />
           </div>
           <div className="travel-plan-list-dates-wrapper">
-            <Slider {...sliderSettings}>
+            <Slider {...sliderSettings} arrows={false}>
               {days.map(({ day, date }) => (
                 <div
                   key={day}

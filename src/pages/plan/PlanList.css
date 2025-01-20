@@ -35,15 +35,23 @@
 }
 
 .travel-plan-list-icon {
-  width: 35px;
-  height: 35px;
+  position: relative; /* 부모 요소에 상대 위치 설정 */
+  width: 45px;
+  height: 40px;
   cursor: pointer;
+  background-color: var(--grey-3);
+  border-radius: 50%;
+  overflow: hidden;
 }
 
 .travel-plan-list-icon img {
-  width: 100%;
-  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  width: 70%;
 }
+
 
 .travel-plan-list-dates-wrapper {
   width: calc(100% - 60px);
@@ -102,7 +110,6 @@
 /* 일정 카드 컨테이너 */
 .travel-plan-card-container {
   width: 100%;
-  /* max-width: 680px; */
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
