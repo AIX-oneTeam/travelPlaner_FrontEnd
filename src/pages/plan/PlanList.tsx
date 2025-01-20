@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
+import ShortBtn from "../../components/buttons/ShortBtn";
 import "./PlanList.css";
 
 const PlanList: React.FC = () => {
+  const navigate = useNavigate();
+
   // 테스트 데이터
   const days = [
     { day: "DAY 1", date: "02월18일" },
@@ -12,7 +16,38 @@ const PlanList: React.FC = () => {
     { day: "DAY 5", date: "02월22일" },
   ];
 
-  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  // 테스트 데이터
+  const travelPlans = [
+    {
+      day: "DAY 1",
+      time: "오후 1시",
+      drivingTime: "30분",
+      image: "/images/jeju.jpg",
+      title: "금릉해변",
+      description:
+        "바닥이 훤히 비치는 투명한 물빛과 얕은 수심으로 아이들과 물놀이하기 좋은 금능해수욕장",
+    },
+    {
+      day: "DAY 1",
+      time: "오후 2시",
+      drivingTime: "15분",
+      image: "/images/jeju.jpg",
+      title: "협재해변",
+      description:
+        "협재해변은 제주도의 대표적인 맑은 물과 아름다운 풍경을 자랑합니다.",
+    },
+    {
+      day: "DAY 2",
+      time: "오후 3시",
+      drivingTime: "20분",
+      image: "/images/jeju.jpg",
+      title: "한라산",
+      description:
+        "한라산은 제주도의 대표적인 산으로 트레킹 코스로 유명합니다.",
+    },
+  ];
+
+  const [selectedDay, setSelectedDay] = useState<string>("DAY 1"); // 초기값을 "DAY 1"로 설정
 
   const handleDayClick = (day: string) => {
     setSelectedDay(day);
@@ -40,8 +75,15 @@ const PlanList: React.FC = () => {
     ],
   };
 
+  // 일정 저장 이벤트 핸들러
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault(); // 폼 기본 동작 방지
+
+    // API 통신 로직 추가
+  };
+
   return (
-    <div className="travel-plan-list-container">
+    <form className="travel-plan-list-container" onSubmit={handleSubmit}>
       <div className="travel-plan-list-header">
         <div className="travel-plan-list-destination">제주도</div>
         <div className="travel-plan-list-content">
@@ -66,7 +108,49 @@ const PlanList: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+
+      {/* 일정 요소 list */}
+      {travelPlans
+        .filter((plan) => plan.day === selectedDay) // 필터링 추가
+        .map((plan, index) => (
+          <div className="travel-plan-card-section" key={index}>
+            <div className="travel-plan-card-container">
+              <div className="timeline-indicator">
+                <div className="circle"></div>
+                <div className="line"></div>
+                <div className="driving-time">
+                  <img src="/icons/car.jpg" alt="운전 아이콘" />
+                  <p>{plan.drivingTime}</p>
+                </div>
+              </div>
+              <div className="travel-time-container">
+                <div className="travel-time">{plan.time}</div>
+              </div>
+              <div className="travle-image-container">
+                <div className="travle-image">
+                  <img src={plan.image} alt={plan.title} />
+                </div>
+                <div className="place-description">
+                  <h2>{plan.title}</h2>
+                  <p>{plan.description}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+
+      <div className="form-actions-btns">
+        <div className="travle-save-btn">
+          <ShortBtn type="submit" content="저장하기" />
+        </div>
+        <div className="travle-modify-btn">
+          <ShortBtn
+            content="변경하기"
+            onClick={() => navigate("/plan/filter/selector")}
+          />
+        </div>
+      </div>
+    </form>
   );
 };
 
