@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
-import ShortBtn from "../../components/buttons/ShortBtn";
+import LongBtn from "../../components/buttons/LongBtn";
 import "./PlanList.css";
 
 const PlanList: React.FC = () => {
@@ -25,7 +25,7 @@ const PlanList: React.FC = () => {
       image: "/images/jeju.jpg",
       title: "금릉해변",
       description:
-        "바닥이 훤히 비치는 투명한 물빛과 얕은 수심으로 아이들과 물놀이하기 좋은 금능해수욕장",
+        "바닥이 훤히 비치는 투명한 물빛과 얕은 수심으로 아이들과 물놀이하기 좋은 금능해수욕장입니다.",
     },
     {
       day: "DAY 1",
@@ -141,10 +141,10 @@ const PlanList: React.FC = () => {
 
       <div className="form-actions-btns">
         <div className="travle-save-btn">
-          <ShortBtn type="submit" content="저장하기" />
+          <LongBtn type="submit" content="저장하기" />
         </div>
         <div className="travle-modify-btn">
-          <ShortBtn
+          <LongBtn
             content="변경하기"
             onClick={() => navigate("/plan/filter/selector")}
           />
