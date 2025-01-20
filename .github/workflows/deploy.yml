@@ -63,6 +63,11 @@ jobs:
           script: |
             set -e  # 스크립트 실패 시 중단
 
+            # 환경 변수 디버깅
+            echo "AWS_REGION=$AWS_REGION"
+            echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
+            echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
+
             echo "Amazon ECR에 로그인 중입니다..."
             aws ecr get-login-password --region $AWS_REGION \
               | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY_URI }}
