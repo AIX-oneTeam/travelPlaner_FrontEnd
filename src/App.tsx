@@ -8,6 +8,7 @@ import Layout from "./components/layout/Layout";
 import Home from "./pages/main/home"; // 메인화면
 import LoginForm from "./pages/user/LoginForm"; // 로그인폼
 import HjWebTest from "./pages/main/HjWebTest";
+import MyPage from "./pages/member/MyPage"; 
 
 
 import PlanFilterSelector from "./pages/plan/PlanFilterSelector"; // 계획 필터 입력
@@ -22,6 +23,7 @@ function App() {
             <Route path="/loginform" element={<LoginForm />} />
             <Route path="/hj" element={<HjWebTest />} />
             <Route path="/plan/filter/selector" element={<PlanFilterSelector />} />
+            <Route path="/MyPage" element={<MyPage/>}/>
           </Routes>
         </Layout>
       </BrowserRouter>

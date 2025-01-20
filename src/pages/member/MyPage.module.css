@@ -1,0 +1,9 @@
+.mypage_contianer{
+    width: 400px;
+    max-height: 100%; /* 부모 높이를 초과하지 않도록 제한 */
+    background: #ffffff;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
