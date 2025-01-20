@@ -57,6 +57,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: 22
           # appleboy 원격 쉘에 github runner환경의 환경변수 전달
           envs: AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
           script: |
@@ -83,3 +84,12 @@ jobs:
             echo "새 컨테이너를 시작합니다..."
             docker run -d --name frontend -p 3000:3000 ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
             echo "배포가 성공적으로 완료되었습니다."
+  discord_alarm:
+    name: Discord Alarm
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord message
+        uses: Ilshidur/action-discord@v2.1.0
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEB_HOOK_URL }}
+          content: "😊 프론트엔드 배포가 완료되었습니다."
