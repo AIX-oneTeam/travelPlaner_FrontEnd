@@ -37,11 +37,11 @@ jobs:
       # Docker 이미지 빌드
       - name: Build Docker image
         run: |
-          docker build -t public.ecr.aws/${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest .
+          docker build -t ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest .
       # Docker 이미지 푸시
       - name: Push Docker image to ECR
         run: |
-          docker push public.ecr.aws/${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
+          docker push ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
 
   deploy:
     name: Deploy to EC2
