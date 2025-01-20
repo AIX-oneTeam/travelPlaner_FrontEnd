@@ -29,11 +29,10 @@ jobs:
       # AWS ECR 퍼블릭 로그인
       - name: Login to Amazon ECR Public
         env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          aws ecr-public get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin public.ecr.aws
+          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
 
       # Docker 이미지 빌드
       - name: Build Docker image
@@ -67,12 +66,12 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           port: 22
           # appleboy 원격 쉘에 github runner환경의 환경변수 전달
-          envs: AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+          envs: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
           script: |
             set -e  # 스크립트 실패 시 중단
 
             echo "Amazon ECR 퍼블릭에 로그인 중입니다..."
-            aws ecr-public get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin public.ecr.aws
+            aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
 
             echo "'frontend' 컨테이너가 존재하는지 확인 중입니다..."
             if docker ps -a --filter "name=frontend" --format '{{.Names}}' | grep -w frontend; then
