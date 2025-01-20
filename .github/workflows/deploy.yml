@@ -17,21 +17,17 @@ jobs:
       - name: Set up environment variables
         run: |
           echo "환경 변수를 설정합니다..."
-
           echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
-
           # 현재 step에서 즉시 사용할 수 있도록 export
           export AWS_REGION="${{ secrets.AWS_REGION }}"
           export AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}"
           export AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-
           # 환경 변수 디버깅
           echo "AWS_REGION=$AWS_REGION"
           echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
           echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
-
       # 체크아웃 / 리포지 상위 디렉토리로 자동 이동됨.
       - name: Checkout code
         uses: actions/checkout@v3
@@ -48,12 +44,10 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest .
-
       # Docker 이미지 푸시
       - name: Push Docker image to ECR
         run: |
           docker push ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
-
       # EC2로 배포
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.7 # ssh를 이용하는 오픈소스
@@ -66,16 +60,13 @@ jobs:
           envs: AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
           script: |
             set -e  # 스크립트 실패 시 중단
-
             # 환경 변수 디버깅
             echo "AWS_REGION=$AWS_REGION"
             echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
             echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
-
             echo "Amazon ECR에 로그인 중입니다..."
             aws ecr get-login-password --region $AWS_REGION \
               | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY_URI }}
-
             echo "'frontend' 컨테이너가 존재하는지 확인 중입니다..."
             if docker ps -a --filter "name=frontend" --format '{{.Names}}' | grep -w frontend; then
               echo "'frontend' 컨테이너가 실행 중입니다. 중지 및 제거합니다..."
@@ -84,11 +75,8 @@ jobs:
             else
               echo "'frontend' 컨테이너가 존재하지 않습니다. 중지 및 제거 단계를 건너뜁니다."
             fi
-
             echo "Amazon ECR에서 최신 이미지를 가져오는 중입니다..."
             docker pull ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
-
             echo "새 컨테이너를 시작합니다..."
             docker run -d --name frontend -p 3000:3000 ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
-
             echo "배포가 성공적으로 완료되었습니다."
