@@ -16,20 +16,12 @@ jobs:
       # GitHub Actions 변수들을 환경 변수로 등록
       - name: Set up environment variables
         run: |
-          echo "환경 변수를 설정합니다..."
+          echo "환경 변수를 설정합니다."
           echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "환경 변수 설정완료."
 
-          # 현재 step에서 즉시 사용할 수 있도록 export
-          export AWS_REGION="${{ secrets.AWS_REGION }}"
-          export AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}"
-          export AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-
-          # 환경 변수 디버깅
-          echo "AWS_REGION=$AWS_REGION"
-          echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
-          echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
       # 체크아웃 / 리포지 상위 디렉토리로 자동 이동됨.
       - name: Checkout code
         uses: actions/checkout@v3
@@ -59,10 +51,11 @@ jobs:
     steps:
       - name: Set up environment variables
         run: |
-          echo "환경 변수를 설정합니다..."
+          echo "환경 변수를 설정합니다."
           echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "환경 변수 설정완료."
 
       # EC2로 배포
       - name: Deploy to EC2
@@ -112,5 +105,5 @@ jobs:
   #     - name: Send Discord message
   #       uses: tsickert/discord-webhook@v5.3.0
   #       with:
-  #         url: ${{ secrets.DISCORD_WEB_HOOK_URL }}
+  # url: ${{ secrets.DISCORD_WEB_HOOK_URL }}
   #         content: "😊 프론트엔드 배포가 완료되었습니다."
