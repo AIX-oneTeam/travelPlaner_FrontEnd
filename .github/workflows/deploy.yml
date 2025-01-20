@@ -26,22 +26,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # AWS ECR 로그인
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
-        env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      # AWS ECR 퍼블릭 로그인
+      - name: Login to Amazon ECR Public
+        run: |
+          aws ecr-public get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin public.ecr.aws
 
       # Docker 이미지 빌드
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest .
+          docker build -t public.ecr.aws/${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest .
       # Docker 이미지 푸시
       - name: Push Docker image to ECR
         run: |
-          docker push ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
+          docker push public.ecr.aws/${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
 
   deploy:
     name: Deploy to EC2
@@ -70,10 +67,9 @@ jobs:
           script: |
             set -e  # 스크립트 실패 시 중단
 
-            echo "Amazon ECR에 로그인 중입니다..."
+            echo "Amazon ECR 퍼블릭에 로그인 중입니다..."
+            aws ecr-public get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin public.ecr.aws
 
-            aws ecr get-login-password --region $AWS_REGION \
-              | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY_URI }}
             echo "'frontend' 컨테이너가 존재하는지 확인 중입니다..."
             if docker ps -a --filter "name=frontend" --format '{{.Names}}' | grep -w frontend; then
               echo "'frontend' 컨테이너가 실행 중입니다. 중지 및 제거합니다..."
@@ -83,7 +79,7 @@ jobs:
               echo "'frontend' 컨테이너가 존재하지 않습니다. 중지 및 제거 단계를 건너뜁니다."
 
             echo "기존 Docker 이미지를 정리 중입니다..."
-            existing_images=$(docker images --filter "reference=${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest" --format "{{.ID}}")
+            existing_images=$(docker images --filter "reference=public.ecr.aws/${{ secrets.ECR_REPOSITORY_URL }}/frontend:latest" --format "{{.ID}}")
             if [ ! -z "$existing_images" ]; then
               echo "기존 이미지를 삭제합니다..."
               docker rmi -f $existing_images
@@ -93,9 +89,9 @@ jobs:
 
             fi
             echo "Amazon ECR에서 최신 이미지를 가져오는 중입니다..."
-            docker pull ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
+            docker pull public.ecr.aws/${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
             echo "새 컨테이너를 시작합니다..."
-            docker run -d --name frontend -p 3000:3000 ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
+            docker run -d --name frontend -p 3000:3000 public.ecr.aws/${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
             echo "배포가 성공적으로 완료되었습니다."
   # discord_alarm:
   #   name: Discord Alarm
