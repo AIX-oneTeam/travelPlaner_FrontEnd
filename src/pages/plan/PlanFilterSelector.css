@@ -364,3 +364,15 @@
   background-color: #ffe2ab;
   border-color: #f2a413;
 }
+
+.travel-plan-complete-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.travel-plan-complete-button > * {
+  max-width: 50%;
+  width: 100%;
+}

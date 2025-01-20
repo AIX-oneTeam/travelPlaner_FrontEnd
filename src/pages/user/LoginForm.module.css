@@ -1,9 +1,9 @@
-#login-container,
-#login-container * {
+#login_container,
+#login_container * {
   box-sizing: border-box;
 }
 
-#login-container {
+#login_container {
   width: 400px;
   max-height: 100%; /* 부모 높이를 초과하지 않도록 제한 */
   background: #ffffff;
@@ -13,15 +13,16 @@
   align-items: center;
 }
 
-.login-form {
+.login_form {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  margin: 80px 0px;
 }
 
-.logo-placeholder {
+.logo_placeholder {
   color: #000000;
   text-align: center;
   font-family: "Pretendard-Bold", sans-serif;
@@ -30,7 +31,7 @@
   margin-bottom: 50px;
 }
 
-.login-prompt {
+.login_prompt {
   color: #000000;
   text-align: center;
   font-family: "Pretendard-Bold", sans-serif;
@@ -41,16 +42,16 @@
 }
 
 /* 공통 버튼 스타일 */
-.kakao-login-button,
-.naver-login-button,
-.google-login-button {
+.kakao_login_button,
+.naver_login_button,
+.google_login_button {
   width: 90%;
   height: 55px;
   margin-bottom: 12px;
 }
 
 /* 카카오 로그인 */
-.kakao-login-button img {
+.kakao_login_button img {
   width: 100%;
   height: 100%;
   cursor: pointer;
@@ -58,7 +59,7 @@
 }
 
 /* 네이버 로그인 */
-.naver-login-button button {
+.naver_login_button button {
   width: 100%;
   height: 100%;
   display: flex;
@@ -71,12 +72,12 @@
   position: relative; /* 자식 요소 배치를 위한 기준점 */
 }
 
-.naver-login-button img {
+.naver_login_button img {
   width: 45px;
   height: 45px;
 }
 
-.naver-login-button span {
+.naver_login_button span {
   position: absolute; /* 절대 위치로 설정 */
   width: 100%; /* 전체 너비 사용 */
   left: 0; /* 왼쪽에서 시작 */
@@ -88,7 +89,7 @@
 }
 
 /* 구글 로그인 */
-.google-login-button button {
+.google_login_button button {
   width: 100%;
   height: 100%;
   display: flex;
@@ -101,12 +102,12 @@
   position: relative; /* 자식 요소 배치를 위한 기준점 */
 }
 
-.google-login-button img {
+.google_login_button img {
   width: 35px;
   height: 35px;
 }
 
-.google-login-button span {
+.google_login_button span {
   position: absolute; /* 절대 위치로 설정 */
   width: 100%; /* 전체 너비 사용 */
   left: 0; /* 왼쪽에서 시작 */
@@ -119,83 +120,83 @@
 
 /* 반응형 */
 @media (max-width: 768px) {
-  #login-container {
+  #login_container {
     width: 90%; /* 화면 너비에 맞게 조정 */
     height: auto; /* 높이를 유연하게 설정 */
     margin: 20px auto;
     padding: 20px 10px; /* 내부 여백 추가 */
   }
 
-  .login-form {
+  .login_form {
     width: 100%;
     padding: 0 10px; /* 양쪽 패딩 추가 */
   }
 
-  .logo-placeholder {
+  .logo_placeholder {
     font-size: 18px; /* 작은 화면에 맞게 폰트 크기 축소 */
     margin-bottom: 15px;
   }
 
-  .login-prompt {
+  .login_prompt {
     font-size: 18px; /* 안내 문구 폰트 크기 축소 */
     margin-bottom: 30px;
     line-height: 1.4;
   }
 
-  .kakao-login-button,
-  .naver-login-button,
-  .google-login-button {
+  .kakao_login_button,
+  .naver_login_button,
+  .google_login_button {
     width: 100%; /* 버튼 너비를 화면에 맞게 조정 */
     height: 50px; /* 버튼 높이 축소 */
     margin-bottom: 10px;
   }
 
-  .naver-login-button img,
-  .google-login-button img {
+  .naver_login_button img,
+  .google_login_button img {
     width: 30px; /* 아이콘 크기 축소 */
     height: 30px;
   }
 
-  .naver-login-button span,
-  .google-login-button span {
+  .naver_login_button span,
+  .google_login_button span {
     font-size: 15px; /* 텍스트 크기 축소 */
   }
 }
 
 @media (max-width: 480px) {
-  #login-container {
+  #login_container {
     padding: 15px; /* 더 작은 화면을 위한 여백 조정 */
   }
 
-  .logo-placeholder {
+  .logo_placeholder {
     font-size: 16px; /* 로고 폰트 크기 축소 */
     margin-bottom: 10px;
   }
 
-  .login-prompt {
+  .login_prompt {
     font-size: 16px; /* 안내 문구 폰트 크기 축소 */
     margin-bottom: 20px;
   }
 
-  .kakao-login-button,
-  .naver-login-button,
-  .google-login-button {
+  .kakao_login_button,
+  .naver_login_button,
+  .google_login_button {
     height: 45px;
     margin-bottom: 8px;
   }
 
-  .naver-login-button img {
+  .naver_login_button img {
     width: 32px;
     height: 32px;
   }
 
-  .google-login-button img {
+  .google_login_button img {
     width: 24px;
     height: 24px;
   }
 
-  .naver-login-button span,
-  .google-login-button span {
+  .naver_login_button span,
+  .google_login_button span {
     font-size: 14px;
   }
 }

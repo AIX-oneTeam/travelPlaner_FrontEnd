@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import LongBtn from "../../components/buttons/LongBtn";
 import ConfirmModal from "../../components/modal/ConfirmModal"; // 모달 컴포넌트
-import "./PlanList.css";
+import styles from "./PlanList.module.css";
 
 const PlanList: React.FC = () => {
   const navigate = useNavigate();
@@ -95,25 +95,27 @@ const PlanList: React.FC = () => {
 
   return (
     <>
-      <form className="travel-plan-list-container">
-        <div className="travel-plan-list-header">
-          <div className="travel-plan-list-destination">제주도</div>
-          <div className="travel-plan-list-content">
-            <div className="travel-plan-list-icon">
+      <form className={styles.travel_plan_list_container}>
+        <div className={styles.travel_plan_list_header}>
+          <div className={styles.travel_plan_list_destination}>제주도</div>
+          <div className={styles.travel_plan_list_content}>
+            <div className={styles.travel_plan_list_icon}>
               <img src="/icons/memo.jpg" alt="Icon" />
             </div>
-            <div className="travel-plan-list-dates-wrapper">
+            <div className={styles.travel_plan_list_dates_wrapper}>
               <Slider {...sliderSettings} arrows={false}>
                 {days.map(({ day, date }) => (
                   <div
                     key={day}
-                    className={`travel-plan-list-date ${
-                      selectedDay === day ? "selected" : ""
+                    className={`${styles.travel_plan_list_date} ${
+                      selectedDay === day ? styles.selected : ""
                     }`}
                     onClick={() => handleDayClick(day)}
                   >
-                    <div className="travel-plan-list-day">{day}</div>
-                    <div className="travel-plan-list-date-text">{date}</div>
+                    <div className={styles.travel_plan_list_day}>{day}</div>
+                    <div className={styles.travel_plan_list_date_text}>
+                      {date}
+                    </div>
                   </div>
                 ))}
               </Slider>
@@ -125,24 +127,24 @@ const PlanList: React.FC = () => {
         {travelPlans
           .filter((plan) => plan.day === selectedDay)
           .map((plan, index) => (
-            <div className="travel-plan-card-section" key={index}>
-              <div className="travel-plan-card-container">
-                <div className="timeline-indicator">
-                  <div className="circle"></div>
-                  <div className="line"></div>
-                  <div className="driving-time">
+            <div className={styles.travel_plan_card_section} key={index}>
+              <div className={styles.travel_plan_card_container}>
+                <div className={styles.timeline_indicator}>
+                  <div className={styles.circle}></div>
+                  <div className={styles.line}></div>
+                  <div className={styles.driving_time}>
                     <img src="/icons/car.jpg" alt="운전 아이콘" />
                     <p>{plan.drivingTime}</p>
                   </div>
                 </div>
-                <div className="travel-time-container">
-                  <div className="travel-time">{plan.time}</div>
+                <div className={styles.travel_time_container}>
+                  <div className={styles.travel_time}>{plan.time}</div>
                 </div>
-                <div className="travle-image-container">
-                  <div className="travle-image">
+                <div className={styles.travle_image_container}>
+                  <div className={styles.travle_image}>
                     <img src={plan.image} alt={plan.title} />
                   </div>
-                  <div className="place-description">
+                  <div className={styles.place_description}>
                     <h2>{plan.title}</h2>
                     <p>{plan.description}</p>
                   </div>
@@ -151,15 +153,15 @@ const PlanList: React.FC = () => {
             </div>
           ))}
 
-        <div className="form-actions-btns">
-          <div className="travle-save-btn">
+        <div className={styles.form_actions_btns}>
+          <div className={styles.travle_save_btn}>
             <LongBtn
               type="button"
               content="저장하기"
               onClick={handleSaveClick}
             />
           </div>
-          <div className="travle-modify-btn">
+          <div className={styles.travle_modify_btn}>
             <LongBtn
               content="변경하기"
               onClick={() => navigate("/plan/filter/selector")}

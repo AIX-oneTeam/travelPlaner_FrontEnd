@@ -1,4 +1,4 @@
-.travel-plan-list-container {
+.travel_plan_list_container {
   width: 100%;
   margin-top: 50px;
   display: flex;
@@ -8,7 +8,7 @@
   background-color: var(--grey-3);
 }
 
-.travel-plan-list-header {
+.travel_plan_list_header {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -18,14 +18,14 @@
   background-color: var(--white);
 }
 
-.travel-plan-list-destination {
+.travel_plan_list_destination {
   font-size: var(--font-size-1);
   font-weight: var(--bold);
   color: var(--text-main);
   text-align: left;
 }
 
-.travel-plan-list-content {
+.travel_plan_list_content {
   display: flex;
   align-items: center;
   gap: 20px;
@@ -33,7 +33,7 @@
   padding: 0px 20px;
 }
 
-.travel-plan-list-icon {
+.travel_plan_list_icon {
   position: relative; /* 부모 요소에 상대 위치 설정 */
   width: 45px;
   height: 40px;
@@ -43,7 +43,7 @@
   overflow: hidden;
 }
 
-.travel-plan-list-icon img {
+.travel_plan_list_icon img {
   position: absolute;
   top: 50%;
   left: 60%;
@@ -51,12 +51,11 @@
   width: 70%;
 }
 
-
-.travel-plan-list-dates-wrapper {
+.travel_plan_list_dates_wrapper {
   width: calc(100% - 60px);
 }
 
-.travel-plan-list-date {
+.travel_plan_list_date {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,49 +64,48 @@
   cursor: pointer;
 }
 
-.travel-plan-list-date.selected {
+.travel_plan_list_date.selected {
   border-bottom: 5px solid var(--main-color-1);
 }
 
-.travel-plan-list-day {
+.travel_plan_list_day {
   font-size: var(--font-size-5);
   font-weight: var(--semibold);
   color: var(--grey-1);
   margin-bottom: 5px;
 }
 
-.travel-plan-list-date-text {
+.travel_plan_list_date_text {
   font-size: var(--font-size-5);
   font-weight: var(--semibold);
   color: var(--text-main);
 }
 
 /* react-slick 스타일 조정 */
-.slick-slide {
+.slick_slide {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.slick-track {
+.slick_track {
   display: flex;
   gap: 20px;
 }
 
 /* 일정 카드 섹션 */
-.travel-plan-card-section {
+.travel_plan_card_section {
   width: 100%;
   height: auto;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* 수정: 상단 정렬로 변경 */
-  /* margin: 30px 20px; */
+  align-items: flex-start;
   box-sizing: border-box;
   gap: 10px;
 }
 
 /* 일정 카드 컨테이너 */
-.travel-plan-card-container {
+.travel_plan_card_container {
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -118,7 +116,7 @@
 }
 
 /* 타임라인 인디케이터 */
-.timeline-indicator {
+.timeline_indicator {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -126,7 +124,7 @@
 }
 
 /* 타임라인: 원 */
-.timeline-indicator .circle {
+.timeline_indicator .circle {
   width: 35px;
   height: 35px;
   background-color: var(--sub-color-2);
@@ -134,25 +132,25 @@
 }
 
 /* 타임라인: 선 */
-.timeline-indicator .line {
+.timeline_indicator .line {
   width: 4px;
   height: 290px;
   background-color: var(--grey-1);
 }
 
 /* 이동 시간 */
-.driving-time {
+.driving_time {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 5px;
 }
 
-.driving-time p {
+.driving_time p {
   color: var(--text-sub);
 }
 
-.driving-time img {
+.driving_time img {
   width: 35px;
   height: 35px;
   background-color: var(--grey-1);
@@ -160,7 +158,7 @@
 }
 
 /* 시간 표시 컨테이너 */
-.travel-time-container {
+.travel_time_container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -170,7 +168,7 @@
 }
 
 /* 시간 표시 텍스트 */
-.travel-time {
+.travel_time {
   text-align: center;
   font-size: var(--font-size-5);
   font-weight: var(--semibold);
@@ -178,7 +176,7 @@
 }
 
 /* 여행지 이미지 컨테이너 */
-.travle-image-container {
+.travle_image_container {
   flex: 1;
   max-width: 500px;
   display: flex;
@@ -189,7 +187,7 @@
 }
 
 /* 이미지 */
-.travle-image {
+.travle_image {
   width: 100%;
   height: 300px;
   overflow: hidden;
@@ -197,7 +195,7 @@
   box-shadow: var(--shadow-1);
 }
 
-.travle-image img {
+.travle_image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -205,26 +203,26 @@
 }
 
 /* 장소 설명 */
-.place-description {
+.place_description {
   width: 100%;
   text-align: left;
 }
 
-.place-description h2 {
+.place_description h2 {
   font-size: var(--font-size-4);
   font-weight: var(--bold);
   color: var(--text-main);
   margin-bottom: 5px;
 }
 
-.place-description p {
+.place_description p {
   font-size: var(--font-size-5);
   color: var(--text-sub);
   line-height: 1.5;
 }
 
 /* 버튼 컨테이너 */
-.form-actions-btns {
+.form_actions_btns {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -233,7 +231,7 @@
   padding: 50px 0px;
 }
 
-.travle-save-btn,
-.travle-modify-btn {
+.travle_save_btn,
+.travle_modify_btn {
   width: 370px;
 }
