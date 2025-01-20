@@ -1,5 +1,5 @@
 .main-content {
-  flex: 1; /* 남은 공간을 채움 */
+  flex: 0 1;
   width: 100%;
   max-width: inherit;
   box-sizing: border-box;
