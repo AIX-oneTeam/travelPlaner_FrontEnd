@@ -12,16 +12,13 @@ const SideBar: React.FC<SideBarProps> = ({
   isSideBarVisible,
   closeSideBar,
 }) => {
-  const initLocalStorage = MemberStore((state: any) =>
-    state.initLocalStorage()
-  );
   // const initStore = MemberStore((state: any) => state.initStore());
   const isAnonymous = MemberStore((state: any) => state.isAnonymous);
 
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
+  //로그아웃 처리
   const handleLogout = () => {
-    initLocalStorage();
     // initStore();
   };
 

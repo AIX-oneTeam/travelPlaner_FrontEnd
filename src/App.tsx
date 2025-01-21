@@ -11,7 +11,6 @@ import HjWebTest from "./pages/main/HjWebTest";
 
 import PlanFilterSelector from "./pages/plan/PlanFilterSelector"; // 계획 필터 입력
 import PlanList from "./pages/plan/PlanList"; // 일정 리스트
-import LoginSuccess from "./pages/user/loginSuccess";
 
 function App() {
   return (
@@ -27,7 +26,6 @@ function App() {
               element={<PlanFilterSelector />}
             />
             <Route path="/plan/list" element={<PlanList />} />
-            <Route path="/auth/login-success" element={<LoginSuccess />} />
           </Routes>
         </Layout>
       </BrowserRouter>

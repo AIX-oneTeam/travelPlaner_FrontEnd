@@ -5,7 +5,12 @@ import {
   GOOGLE_CLIENT_ID,
   NAVER_CLIENT_ID,
   KAKAO_CLIENT_ID,
+  CLIENT_CALLBACK_URL,
 } from "../../config"; // config.ts에서 API_BASE_URL을 임포트
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
+import MemberStore from "../../stores/MemberStore";
 
 // Authorization Code Flow
 // 1. 프론트는 각 인증서버에 API키를 이용해 인증 코드를 받고 이를 백엔드로 전송
@@ -15,10 +20,58 @@ import {
 // 5. 백엔드는 JWT토큰을 검증해 사용자 인증(상태는 저장하지 않음)
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const authCode = urlParams.get("code");
+    const domain = urlParams.get("domain");
+
+    if (authCode) {
+      console.log(authCode);
+      axios
+        .post(`${API_BASE_URL}/auth/${domain}/callback?code=${authCode}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: {
+            code: authCode,
+          },
+        })
+        .then((response) => {
+          //후처리
+          console.log(response.data); // 토큰 정보 출력
+          const setAuth = MemberStore((state: any) => state.setAuth);
+          const setLocalStorage = MemberStore(
+            (state: any) => state.setLocalStorage
+          );
+
+          console.log("로그인 성공");
+
+          //zustand 스토어에 저장
+          setAuth({
+            nickname: response.data.nickname,
+            email: response.data.email,
+            profile_url: response.data.profile_url,
+            roles: response.data.roles,
+          });
+
+          //로컬 스토리지에 저장
+          setLocalStorage();
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      console.log("인증코드가 없습니다.");
+    }
+  });
+
   // 일반 메소드 (로그인 이벤트 핸들러)
   const handleKakaoLogin = () => {
     const kakaoClientId: string = KAKAO_CLIENT_ID;
-    const kakaoRedirectUrl = `${API_BASE_URL}/auth/kakao/callback`;
+    const kakaoRedirectUrl = `${CLIENT_CALLBACK_URL}?domain=kakao`;
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUrl}&response_type=code`;
 
     window.location.href = kakaoAuthUrl;
@@ -27,7 +80,7 @@ const LoginForm = () => {
   // 네이버 로그인 로직
   const handleNaverLogin = async () => {
     const naverClientId: string = NAVER_CLIENT_ID;
-    const redirectUri = `${API_BASE_URL}/auth/naver/callback`;
+    const redirectUri = `${CLIENT_CALLBACK_URL}?domain=naver`;
     const state = uuidv4();
     const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&redirect_uri=${redirectUri}&response_type=code&state=${state}`;
 
@@ -36,7 +89,7 @@ const LoginForm = () => {
 
   const handleGoogleLogin = async () => {
     const googleClientId: string = GOOGLE_CLIENT_ID;
-    const googleRedirectUrl: string = `${API_BASE_URL}/auth/google/callback`;
+    const googleRedirectUrl: string = `${CLIENT_CALLBACK_URL}?domain=google`;
     const googleScope = "openid email profile";
     const googleResponseType = "code"; // 1회용 코드 요청
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${googleRedirectUrl}&scope=${googleScope}&response_type=${googleResponseType}`;

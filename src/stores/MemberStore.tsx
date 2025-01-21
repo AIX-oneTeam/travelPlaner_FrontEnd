@@ -2,37 +2,39 @@ import jwtDecode from "jwt-decode";
 import { create } from "zustand";
 
 // 디코드된 토큰 interface
-interface AuthToken {
+interface MemberInfo {
   nickname: string;
   email: string;
   profile_url?: string;
   roles?: string[];
-  accessToken: string;
-  refreshToken: string;
 }
 
 // 스토어 객체 interface
 interface MemberStore {
-  authToken: AuthToken | null;
+  memberInfo: MemberInfo;
   // 디코드된 토큰 세터
-  setAuth: (decodedToken: AuthToken) => void;
+  setAuth: (memberInfo: MemberInfo) => void;
   // 토큰 저장
-  decodeToken: (accessToken: string) => AuthToken;
+  decodeToken: (accessToken: string) => MemberInfo;
   // 스토어 객체 초기화(로그아웃)
   initStore: () => void;
-  // initLocalStorage: () => void;
   // 익명 사용자 여부 확인
   isAnonymous: () => boolean;
   // 관리자 여부 확인
   isAdmin: () => boolean;
   //   로컬 스토리지 세터
-  setLocalStorage: (decodedToken: AuthToken) => void;
   //  로컬 스토리지 게터
-  getLocalStorage: () => AuthToken | null;
+  getLocalStorage: () => MemberInfo | null;
 }
 
-const useMemberStore: any = create<MemberStore>((set) => ({
-  authToken: null,
+const useMemberStore: any = create<MemberStore>((set, get) => ({
+  //초깃값
+  memberInfo: {
+    nickname: "익명의 사용자",
+    email: "",
+    profile_url: "",
+    roles: [],
+  },
 
   decodeToken: (accessToken: string): any => {
     if (!accessToken || typeof accessToken !== "string") {
@@ -41,7 +43,7 @@ const useMemberStore: any = create<MemberStore>((set) => ({
     }
 
     try {
-      const decodedToken = jwtDecode<AuthToken>(accessToken);
+      const decodedToken = jwtDecode<MemberInfo>(accessToken);
       console.log(decodedToken);
       return decodedToken;
     } catch (error) {
@@ -50,35 +52,39 @@ const useMemberStore: any = create<MemberStore>((set) => ({
     }
   },
 
-  setAuth: (decodedToken: AuthToken) => {
-    set({ authToken: decodedToken });
+  setAuth: (newMemberInfo: MemberInfo) => {
+    set({
+      memberInfo: newMemberInfo,
+    });
+    localStorage.setItem("memberInfo", JSON.stringify(newMemberInfo));
   },
 
-  initStore: () => set({ authToken: null }),
-
-  initLocalStorage: () => {
-    localStorage.removeItem("accessToken");
+  initStore: () => {
+    set({
+      memberInfo: {
+        nickname: "익명의 사용자",
+        email: "",
+        profile_url: "",
+        roles: [],
+      },
+    });
+    localStorage.removeItem("memberInfo");
   },
 
   isAnonymous: () => {
-    return !useMemberStore.getState().authToken?.nickname;
+    const state = get();
+    return state.memberInfo?.nickname === "익명의 사용자" || false;
   },
 
   isAdmin: () => {
-    return (
-      useMemberStore.getState().authToken?.roles?.includes("ROLE_ADMIN") ??
-      false
-    );
-  },
-
-  setLocalStorage: (decodedToken: any) => {
-    localStorage.setItem("accessToken", decodedToken);
+    const state = get();
+    return state.memberInfo?.roles?.includes("ROLE_ADMIN") || false;
   },
 
   getLocalStorage: () => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      return JSON.parse(accessToken) as AuthToken;
+    const memberInfo = localStorage.getItem("memberInfo");
+    if (memberInfo) {
+      return JSON.parse(memberInfo);
     }
     return null;
   },
