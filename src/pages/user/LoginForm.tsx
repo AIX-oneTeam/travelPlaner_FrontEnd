@@ -8,6 +8,8 @@ import {
   KAKAO_CLIENT_ID,
 } from "../../config"; // config.ts에서 API_BASE_URL을 임포트
 import { useLocation } from "react-router-dom";
+import MemberStore from "../../stores/MemberStore";
+import { Cookie } from "lucide-react";
 
 // Authorization Code Flow
 // 1. 프론트는 각 인증서버에 API키를 이용해 인증 코드를 받고 이를 백엔드로 전송
@@ -19,12 +21,18 @@ import { useLocation } from "react-router-dom";
 const LoginForm = () => {
   // 사용자가 이동한 URL을 이용해 로그인 상태 감지
   const location = useLocation();
+  // 사용자 정보 저장 위한 스토어
+  const setAuth = MemberStore((state: any) => state.setAuth);
 
   useEffect(() => {
     // 이동한 경로에 따라 작업 수행
     if (location.pathname === "/auth/login-success") {
       console.log("로그인 성공");
       // 후처리 작업
+      // 쿠키에서 토큰 추출
+      const accessToken = document.cookie.split("jwt_token=")[1];
+      //zustand 스토어에 저장
+      setAuth(accessToken);
     } else if (location.pathname === "/auth/login-failure") {
       console.log("로그인 실패");
     }

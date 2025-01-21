@@ -32,11 +32,14 @@ interface MemberStore {
 const useMemberStore: any = create<MemberStore>((set) => ({
   authToken: null,
 
-  setAuth: (decodedToken) => set({ authToken: decodedToken }),
-
   decodeToken: (accessToken) => {
     const decodedToken = JSON.parse(atob(accessToken.split(".")[1]));
     return decodedToken;
+  },
+
+  setAuth: (accessToken) => {
+    const decodedToken = useMemberStore.getState().decodeToken(accessToken);
+    set({ authToken: decodedToken });
   },
 
   initStore: () => set({ authToken: null }),
@@ -61,3 +64,5 @@ const useMemberStore: any = create<MemberStore>((set) => ({
     return null;
   },
 }));
+
+export default useMemberStore;
