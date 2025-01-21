@@ -1,70 +1,75 @@
 import React from "react";
-import styles from "./LoginForm.module.css";
-import API_BASE_URL from "../../config"; // config.ts에서 API_BASE_URL을 임포트
+import "./LoginForm.css";
+import { v4 as uuidv4 } from "uuid";
+import {
+  API_BASE_URL,
+  GOOGLE_CLIENT_ID,
+  NAVER_CLIENT_ID,
+  KAKAO_CLIENT_ID,
+} from "../../config"; // config.ts에서 API_BASE_URL을 임포트
+
+// Authorization Code Flow
+// 1. 프론트는 각 인증서버에 API키를 이용해 인증 코드를 받고 이를 백엔드로 전송
+// 2. 백엔드는 인증 코드를 사용해 액세스 토큰을 요청
+// 3. 백엔드는 액세스 토큰을 통해 ID토큰을 받고, JWT토큰을 발행해 프론트에 전송
+// 4. 프론트는 JWT토큰을 저장해 인증된 사용자임을 유지
+// 5. 백엔드는 JWT토큰을 검증해 사용자 인증(상태는 저장하지 않음)
 
 const LoginForm = () => {
   // 일반 메소드 (로그인 이벤트 핸들러)
   const handleKakaoLogin = () => {
-    console.log("카카오 로그인 클릭");
-    // 카카오 로그인 로직 추가
+    const kakaoClientId: string = KAKAO_CLIENT_ID;
+    const kakaoRedirectUrl = `${API_BASE_URL}/auth/kakao/callback`;
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUrl}&response_type=code`;
+
+    window.open(kakaoAuthUrl, "_blank", "width=500,height=600");
   };
 
-  // 네이버 로그인 로직 (백엔드 API 호출)
-
+  // 네이버 로그인 로직
   const handleNaverLogin = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/naver/login`, {
-        method: "GET",
-        credentials: "include", // 쿠키를 전송하도록 설정
-      });
-      const data = await response.json();
+    const naverClientId: string = NAVER_CLIENT_ID;
+    const redirectUri = `${API_BASE_URL}/auth/naver/callback`;
+    const state = uuidv4();
+    const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&redirect_uri=${redirectUri}&response_type=code&state=${state}`;
 
-      console.log("네이버 로그인 데이터:", data); // 서버에서 받은 데이터 출력
-
-      if (data.naver_auth_url) {
-        localStorage.setItem("state", data.state); // state 값 저장 (옵션)
-        window.location.href = data.naver_auth_url; // 네이버 로그인 URL로 리디렉션
-      } else {
-        alert("네이버 로그인 URL을 가져오지 못했습니다.");
-      }
-    } catch (error) {
-      console.error("네이버 로그인 API 호출 오류:", error);
-      alert("네이버 로그인 API 호출에 실패했습니다.");
-    }
+    window.open(naverAuthUrl, "_blank", "width=1000,height=600");
   };
 
-  const handleGoogleLogin = () => {
-    console.log("Google 로그인 클릭");
-    // Google 로그인 로직 추가
+  const handleGoogleLogin = async () => {
+    const googleClientId: string = GOOGLE_CLIENT_ID;
+    const googleRedirectUrl: string = `${API_BASE_URL}/auth/google/callback`;
+    const googleScope = "openid email profile";
+    const googleResponseType = "code"; // 1회용 코드 요청
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${googleRedirectUrl}&scope=${googleScope}&response_type=${googleResponseType}`;
+
+    window.open(googleAuthUrl, "_blank", "width=500,height=600");
   };
 
   return (
-    <div id={styles.login_container}>
-      <div className={styles.login_form}>
-        <div className={styles.logo_placeholder}>
+    <div id="login-container">
+      <div className="login-form">
+        <div className="logo-placeholder">
           <img src="/icons/Easy_Travel.png" alt="로고" />
         </div>
         {/* 카카오 로그인 */}
-        <div className={styles.kakao_login_button}>
-          <img
-            src="/images/kakao_login_btn.jpg"
-            alt="카카오 로그인 버튼"
-            onClick={handleKakaoLogin}
-          />
+        <div className="kakao-login-button">
+          <button onClick={handleKakaoLogin}>
+            <img src="/images/kakao_login_btn.jpg" alt="카카오 로그인 버튼" />
+          </button>
         </div>
 
         {/* 네이버 로그인 */}
-        <div className={styles.naver_login_button}>
+        <div className="naver-login-button">
           <button onClick={handleNaverLogin}>
-            <img src="/images/naver_logo.jpg" alt="네이버" />
+            <img src="/images/naver-logo.jpg" alt="네이버" />
             <span>네이버 로그인</span>
           </button>
         </div>
 
         {/* 구글 로그인 */}
-        <div className={styles.google_login_button}>
+        <div className="google-login-button">
           <button onClick={handleGoogleLogin}>
-            <img src="/images/google_logo.jpg" alt="구글" />
+            <img src="/images/google-logo.jpg" alt="구글" />
             <span>Google 계정으로 로그인</span>
           </button>
         </div>
