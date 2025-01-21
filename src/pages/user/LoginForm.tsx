@@ -1,8 +1,12 @@
 import React from "react";
 import "./LoginForm.css";
 import { v4 as uuidv4 } from "uuid";
-import API_BASE_URL from "../../config"; // config.ts에서 API_BASE_URL을 임포트
-import axios from "axios";
+import {
+  API_BASE_URL,
+  GOOGLE_CLIENT_ID,
+  NAVER_CLIENT_ID,
+  KAKAO_CLIENT_ID,
+} from "../../config"; // config.ts에서 API_BASE_URL을 임포트
 
 // Authorization Code Flow
 // 1. 프론트는 각 인증서버에 API키를 이용해 인증 코드를 받고 이를 백엔드로 전송
@@ -14,32 +18,31 @@ import axios from "axios";
 const LoginForm = () => {
   // 일반 메소드 (로그인 이벤트 핸들러)
   const handleKakaoLogin = () => {
-    const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID || "";
-    const kakaoRedirectUrl = process.env.REACT_APP_KAKAO_REDIRECT_URL || "";
+    const kakaoClientId: string = KAKAO_CLIENT_ID;
+    const kakaoRedirectUrl = `${API_BASE_URL}/auth/kakao/callback`;
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUrl}&response_type=code`;
 
-    window.location.href = kakaoAuthUrl;
+    window.open(kakaoAuthUrl, "_blank", "width=500,height=600");
   };
 
   // 네이버 로그인 로직
   const handleNaverLogin = async () => {
-    const naverClientId = process.env.REACT_APP_NAVER_CLIENT_ID || "";
-    const redirectUri = process.env.REACT_APP_NAVER_REDIRECT_URL || "";
+    const naverClientId: string = NAVER_CLIENT_ID;
+    const redirectUri = `${API_BASE_URL}/auth/naver/callback`;
     const state = uuidv4();
     const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&redirect_uri=${redirectUri}&response_type=code&state=${state}`;
 
-    window.location.href = naverAuthUrl;
+    window.open(naverAuthUrl, "_blank", "width=1000,height=600");
   };
 
   const handleGoogleLogin = async () => {
-    const googleClientId: string = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
-    const googleRedirectUrl: string =
-      process.env.REACT_APP_GOOGLE_REDIRECT_URL || "";
+    const googleClientId: string = GOOGLE_CLIENT_ID;
+    const googleRedirectUrl: string = `${API_BASE_URL}/auth/google/callback`;
     const googleScope = "openid email profile";
     const googleResponseType = "code"; // 1회용 코드 요청
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${googleRedirectUrl}&scope=${googleScope}&response_type=${googleResponseType}`;
 
-    window.location.href = googleAuthUrl;
+    window.open(googleAuthUrl, "_blank", "width=500,height=600");
   };
 
   return (
