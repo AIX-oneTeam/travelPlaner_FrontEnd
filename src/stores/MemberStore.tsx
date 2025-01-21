@@ -1,3 +1,4 @@
+import jwtDecode from "jwt-decode";
 import { create } from "zustand";
 
 // 디코드된 토큰 interface
@@ -19,6 +20,7 @@ interface MemberStore {
   decodeToken: (accessToken: string) => AuthToken;
   // 스토어 객체 초기화(로그아웃)
   initStore: () => void;
+  // initLocalStorage: () => void;
   // 익명 사용자 여부 확인
   isAnonymous: () => boolean;
   // 관리자 여부 확인
@@ -32,33 +34,51 @@ interface MemberStore {
 const useMemberStore: any = create<MemberStore>((set) => ({
   authToken: null,
 
-  decodeToken: (accessToken) => {
-    const decodedToken = JSON.parse(atob(accessToken.split(".")[1]));
-    return decodedToken;
+  decodeToken: (accessToken: string): any => {
+    if (!accessToken || typeof accessToken !== "string") {
+      console.log("올바른 토큰이 아닙니다.");
+      return null;
+    }
+
+    try {
+      const decodedToken = jwtDecode<AuthToken>(accessToken);
+      console.log(decodedToken);
+      return decodedToken;
+    } catch (error) {
+      console.log("토큰 디코딩 에러");
+      return null;
+    }
   },
 
-  setAuth: (decodedToken) => {
+  setAuth: (decodedToken: AuthToken) => {
     set({ authToken: decodedToken });
   },
 
   initStore: () => set({ authToken: null }),
 
+  initLocalStorage: () => {
+    localStorage.removeItem("accessToken");
+  },
+
   isAnonymous: () => {
-    return !localStorage.getItem("accessToken");
+    return !useMemberStore.getState().authToken?.nickname;
   },
 
   isAdmin: () => {
-    return useMemberStore.getState().authToken?.roles.includes("ROLE_ADMIN");
+    return (
+      useMemberStore.getState().authToken?.roles?.includes("ROLE_ADMIN") ??
+      false
+    );
   },
 
-  setLocalStorage: (decodedToken) => {
-    localStorage.setItem("accessToken", JSON.stringify(decodedToken));
+  setLocalStorage: (decodedToken: any) => {
+    localStorage.setItem("accessToken", decodedToken);
   },
 
   getLocalStorage: () => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      return JSON.parse(accessToken);
+      return JSON.parse(accessToken) as AuthToken;
     }
     return null;
   },

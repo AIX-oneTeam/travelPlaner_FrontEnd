@@ -12,15 +12,24 @@ const SideBar: React.FC<SideBarProps> = ({
   isSideBarVisible,
   closeSideBar,
 }) => {
-  const isAnonymous = MemberStore((state: any) => state.isAnonymous());
+  const initLocalStorage = MemberStore((state: any) =>
+    state.initLocalStorage()
+  );
+  // const initStore = MemberStore((state: any) => state.initStore());
+  const isAnonymous = MemberStore((state: any) => state.isAnonymous);
 
-  const [isLogin, setIsLogin] = useState<string>("로그인");
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+
+  const handleLogout = () => {
+    initLocalStorage();
+    // initStore();
+  };
 
   useEffect(() => {
     if (!isAnonymous) {
-      setIsLogin("로그아웃");
+      setIsLogin(true);
     } else {
-      setIsLogin("로그인");
+      setIsLogin(false);
     }
   }, [isAnonymous]);
 
@@ -42,10 +51,17 @@ const SideBar: React.FC<SideBarProps> = ({
               onClick={closeSideBar}
             ></img>
           </div>
-          <Link className="sideBar-1" to="/loginForm">
-            {isLogin}
-            <img src="/icons/arrow_forward.jpg" alt="login"></img>
-          </Link>
+          {isLogin ? (
+            <div className="sideBar-1" onClick={handleLogout}>
+              로그아웃
+              <img src="/icons/arrow_forward.jpg" alt="login"></img>
+            </div>
+          ) : (
+            <Link className="sideBar-1" to="/loginForm">
+              로그인
+              <img src="/icons/arrow_forward.jpg" alt="login"></img>
+            </Link>
+          )}
         </li>
         <li>
           <div className="sideBar-2 border-yellow">
