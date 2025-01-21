@@ -1,6 +1,7 @@
 import React from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
+import MemberStore from "../../stores/MemberStore";
 
 interface HeaderProps {
   openSideBar: () => void;
@@ -10,7 +11,13 @@ const Header: React.FC<HeaderProps> = ({ openSideBar }) => {
   /*---라우터 관련-------------------------------*/
 
   /*---상태관리 변수들(값이 변화면 화면 랜더링 )---*/
-  const [username, setUsername] = React.useState("홍길동");
+  const [username, setUsername] = React.useState<string>(
+    MemberStore((state: any) => state.authToken?.nickname)
+  );
+
+  if (username === null || username === undefined) {
+    setUsername("익명의 사용자");
+  }
 
   /*---일반 변수--------------------------------*/
 
