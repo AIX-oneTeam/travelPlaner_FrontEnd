@@ -1,7 +1,7 @@
 import React from "react";
 import "./LoginForm.css";
+import { v4 as uuidv4 } from "uuid";
 import API_BASE_URL from "../../config"; // config.ts에서 API_BASE_URL을 임포트
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import axios from "axios";
 
 // Authorization Code Flow
@@ -11,65 +11,35 @@ import axios from "axios";
 // 4. 프론트는 JWT토큰을 저장해 인증된 사용자임을 유지
 // 5. 백엔드는 JWT토큰을 검증해 사용자 인증(상태는 저장하지 않음)
 
-const googleClientId: string = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
-if (!googleClientId) {
-  throw new Error("REACT_APP_GOOGLE_CLIENT_ID is not defined");
-}
-
 const LoginForm = () => {
-  // CSRF 방지를 위해 랜덤 문자열 생성
-  const generateRandomString = (length: number) => {
-    return Math.random().toString(36).substring(2, 11);
-  };
-
   // 일반 메소드 (로그인 이벤트 핸들러)
   const handleKakaoLogin = () => {
-    console.log("카카오 로그인 클릭");
-    // 카카오 로그인 로직 추가
+    const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID || "";
+    const kakaoRedirectUrl = process.env.REACT_APP_KAKAO_REDIRECT_URL || "";
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUrl}&response_type=code`;
+
+    window.location.href = kakaoAuthUrl;
   };
 
-  // 네이버 로그인 로직 (백엔드 API 호출)
-
+  // 네이버 로그인 로직
   const handleNaverLogin = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/naver/login`, {
-        method: "GET",
-        credentials: "include", // 쿠키를 전송하도록 설정
-      });
-      const data = await response.json();
+    const naverClientId = process.env.REACT_APP_NAVER_CLIENT_ID || "";
+    const redirectUri = process.env.REACT_APP_NAVER_REDIRECT_URL || "";
+    const state = uuidv4();
+    const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&redirect_uri=${redirectUri}&response_type=code&state=${state}`;
 
-      console.log("네이버 로그인 데이터:", data); // 서버에서 받은 데이터 출력
-
-      if (data.naver_auth_url) {
-        localStorage.setItem("state", data.state); // state 값 저장 (옵션)
-        window.location.href = data.naver_auth_url; // 네이버 로그인 URL로 리디렉션
-      } else {
-        alert("네이버 로그인 URL을 가져오지 못했습니다.");
-      }
-    } catch (error) {
-      console.error("네이버 로그인 API 호출 오류:", error);
-      alert("네이버 로그인 API 호출에 실패했습니다.");
-    }
+    window.location.href = naverAuthUrl;
   };
 
-  const handleGoogleLogin = async (credentialResponse: any) => {
-    try {
-      // google 로그인 백엔드로 요청
-      const response = await axios.post(
-        `${API_BASE_URL}/api/auth/google/login`,
-        {
-          token: credentialResponse.credential,
-        }
-      );
-      console.log("구글 로그인 데이터:", response.data);
+  const handleGoogleLogin = async () => {
+    const googleClientId: string = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
+    const googleRedirectUrl: string =
+      process.env.REACT_APP_GOOGLE_REDIRECT_URL || "";
+    const googleScope = "openid email profile";
+    const googleResponseType = "code"; // 1회용 코드 요청
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${googleRedirectUrl}&scope=${googleScope}&response_type=${googleResponseType}`;
 
-      if (response.data.redirectUrl) {
-        window.location.href = response.data.redirectUrl;
-      }
-    } catch (error) {
-      console.error("구글 로그인 API 호출 오류:", error);
-      alert("구글 로그인 API 호출에 실패했습니다.");
-    }
+    window.location.href = googleAuthUrl;
   };
 
   return (
@@ -80,11 +50,9 @@ const LoginForm = () => {
         </div>
         {/* 카카오 로그인 */}
         <div className="kakao-login-button">
-          <img
-            src="/images/kakao_login_btn.jpg"
-            alt="카카오 로그인 버튼"
-            onClick={handleKakaoLogin}
-          />
+          <button onClick={handleKakaoLogin}>
+            <img src="/images/kakao_login_btn.jpg" alt="카카오 로그인 버튼" />
+          </button>
         </div>
 
         {/* 네이버 로그인 */}
@@ -97,9 +65,10 @@ const LoginForm = () => {
 
         {/* 구글 로그인 */}
         <div className="google-login-button">
-          <GoogleOAuthProvider clientId={googleClientId}>
-            <GoogleLogin onSuccess={handleGoogleLogin} />
-          </GoogleOAuthProvider>
+          <button onClick={handleGoogleLogin}>
+            <img src="/images/google-logo.jpg" alt="구글" />
+            <span>Google 계정으로 로그인</span>
+          </button>
         </div>
       </div>
     </div>
