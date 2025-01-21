@@ -133,7 +133,7 @@ const PlanList: React.FC = () => {
         </div>
       </form>
 
-      {/* 모달 추가 */}
+      {/* 저장 확인 모달 */}
       <ConfirmModal
         isOpen={isModalOpen}
         content={"해당 플랜을 저장할까요?"}

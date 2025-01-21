@@ -16,10 +16,10 @@ const Home: React.FC = () => {
       <NormalInput />
       <SearchInput />
       <SearchInput2 />
-      <PromptModal
+      {/* <PromptModal
         title={"숙소"}
         message={"원하시는 숙소를 직접 검색하거나 예를 들어주세요."}
-      />
+      /> */}
     </div>
   );
 };

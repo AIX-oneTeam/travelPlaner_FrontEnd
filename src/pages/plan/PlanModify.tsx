@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 import PlanHeader from "./include/PlanHeader"; // 일정 날짜 헤더 컴포넌트
+
+// 모달 컴포넌트
+import ConfirmModal from "../../components/modal/ConfirmModal";
+import PromptModal from "../../components/modal/PromptModal";
+
+// css
 import styles from "./PlanModify.module.css";
 
 const PlanModify: React.FC = () => {
@@ -48,6 +54,8 @@ const PlanModify: React.FC = () => {
 
   const [selectedDay, setSelectedDay] = useState<string>("DAY 1");
   const [selectedPlans, setSelectedPlans] = useState<number[]>([]); // 선택된 일정 관리
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [isPromptOpen, setPromptOpen] = useState<boolean>(false); // PromptModal 상태 추가
 
   const handleDayClick = (day: string) => {
     setSelectedDay(day);
@@ -79,59 +87,115 @@ const PlanModify: React.FC = () => {
     }
   };
 
-  // 일정요소 삭제
+  // 삭제 버튼 클릭 시 모달 열기
   const handleDelete = () => {
-    setSelectedPlans([]);
+    setModalOpen(true);
+  };
 
+  // 모달 안에서 저장 버튼 클릭했을때
+  const handleModalConfirm = () => {
+    setModalOpen(false);
+    setSelectedPlans([]);
     // 삭제 로직 추가
   };
 
+  // 모달 닫기
+  const handleModalCancel = () => {
+    setModalOpen(false);
+  };
+
+  // OpenModal 클릭 시 PromptModal 열기
+  const handleOpenModalClick = () => {
+    setPromptOpen(true);
+  };
+
+  // PromptModal 닫기
+  const handlePromptClose = () => {
+    setPromptOpen(false);
+  };
+
   return (
-    <div className={styles.travel_plan_list_container}>
-      {/* PlanHeader 컴포넌트 */}
-      <PlanHeader
-        destination={destination}
-        days={days} // days 배열 전달
-        selectedDay={selectedDay}
-        onDayClick={handleDayClick} // DAY 변경 핸들러 전달
-      />
+    <>
+      <div className={styles.travel_plan_list_container}>
+        {/* PlanHeader 컴포넌트 */}
+        <PlanHeader
+          destination={destination}
+          days={days} // days 배열 전달
+          selectedDay={selectedDay}
+          onDayClick={handleDayClick} // DAY 변경 핸들러 전달
+        />
 
-      <div className={styles.travel_plan_controls} style={{ textAlign: "right" }}>
-        <span onClick={handleSelectAll} style={{ cursor: "pointer" }}>
-          전체선택
-        </span>
-        <span>&nbsp;|&nbsp;</span>
-        <span onClick={handleDelete} style={{ cursor: "pointer" }}>
-          삭제
-        </span>
-      </div>
+        <div
+          className={styles.travel_plan_controls}
+          style={{ textAlign: "right" }}
+        >
+          <span onClick={handleSelectAll} style={{ cursor: "pointer" }}>
+            전체선택
+          </span>
+          <span>&nbsp;|&nbsp;</span>
+          <span onClick={handleDelete} style={{ cursor: "pointer" }}>
+            삭제
+          </span>
+        </div>
 
-      {/* 일정 요소 list */}
-      {travelPlans
-        .filter((plan) => plan.day === selectedDay)
-        .map((plan, index) => (
-          <div className={styles.travel_plan_card_section} key={index}>
-            <div className={styles.travel_plan_card_container}>
-              <div className={styles.teavel_plan_check}>
-                <input
-                  type="checkbox"
-                  checked={selectedPlans.includes(index)}
-                  onChange={() => handleCheckboxChange(index)}
-                />
-              </div>
-              <div className={styles.travle_image_container}>
-                <div className={styles.travle_image}>
-                  <img src={plan.image} alt={plan.title} />
+        {/* 일정 요소 list */}
+        {travelPlans
+          .filter((plan) => plan.day === selectedDay)
+          .map((plan, index) => (
+            <div className={styles.travel_plan_card_section} key={index}>
+              <div className={styles.travel_plan_card_container}>
+                <div className={styles.teavel_plan_check}>
+                  <input
+                    type="checkbox"
+                    checked={selectedPlans.includes(index)}
+                    onChange={() => handleCheckboxChange(index)}
+                  />
                 </div>
-                <div className={styles.place_description}>
-                  <h2>{plan.title}</h2>
-                  <p>{plan.description}</p>
+                <div className={styles.travle_image_container}>
+                  <div className={styles.travle_image}>
+                    <img src={plan.image} alt={plan.title} />
+                  </div>
+                  <div className={styles.place_description}>
+                    <h2>{plan.title}</h2>
+                    <p>{plan.description}</p>
+                  </div>
                 </div>
               </div>
             </div>
+          ))}
+
+        {/* 모달 열기 */}
+        {!isPromptOpen && (
+          <div
+            className={styles.open_modal_cotanier}
+            onClick={handleOpenModalClick}
+          >
+            <div className={styles.top_btn}>
+              <img src="/icons/arrow-top-white.png" alt="open"></img>
+            </div>
           </div>
-        ))}
-    </div>
+        )}
+
+        {/* 프롬프트 모달 */}
+        {isPromptOpen && (
+          <PromptModal
+            title="장소"
+            message="원하시는 장소를 직접 검색하거나 예를 들어주세요. AI가 찾아서 추천해드려요!"
+            onClose={handlePromptClose}
+          />
+        )}
+      </div>
+
+      {/* 삭제 확인 모달 */}
+      <ConfirmModal
+        isOpen={isModalOpen}
+        content={"선택하신 일정들을 삭제할까요?"}
+        confirmText={"삭제"}
+        cancelText="취소"
+        onConfirm={handleModalConfirm}
+        onCancel={handleModalCancel}
+      />
+    </>
   );
 };
 

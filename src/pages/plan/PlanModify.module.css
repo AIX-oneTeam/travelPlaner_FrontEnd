@@ -7,6 +7,7 @@
   box-sizing: border-box;
   background-color: var(--grey-3);
   min-height: 100vh;
+  position: relative;
 }
 
 .travel_plan_controls {
@@ -101,3 +102,27 @@
   color: var(--text-sub);
   line-height: 1.5;
 }
+
+/* 모달 열기 */
+.open_modal_cotanier {
+  width: 100%;
+  margin-top: 50px;
+  position: absolute;
+  bottom: 0;
+}
+
+.top_btn {
+  padding: 5px;
+  background-color: var(--black);
+  display: flex;
+  justify-content: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  cursor: pointer;
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
