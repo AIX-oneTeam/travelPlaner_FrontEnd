@@ -33,6 +33,7 @@ const LoginForm = () => {
       const accessToken = document.cookie.split("jwt_token=")[1];
       //zustand 스토어에 저장
       setAuth(accessToken);
+      //로컬 스토리지에 저장
     } else if (location.pathname === "/auth/login-failure") {
       console.log("로그인 실패");
     }
@@ -44,7 +45,7 @@ const LoginForm = () => {
     const kakaoRedirectUrl = `${API_BASE_URL}/auth/kakao/callback`;
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUrl}&response_type=code`;
 
-    window.open(kakaoAuthUrl, "_blank", "width=500,height=600");
+    window.location.href = kakaoAuthUrl;
   };
 
   // 네이버 로그인 로직
@@ -54,7 +55,7 @@ const LoginForm = () => {
     const state = uuidv4();
     const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&redirect_uri=${redirectUri}&response_type=code&state=${state}`;
 
-    window.open(naverAuthUrl, "_blank", "width=1000,height=600");
+    window.location.href = naverAuthUrl;
   };
 
   const handleGoogleLogin = async () => {
@@ -64,7 +65,7 @@ const LoginForm = () => {
     const googleResponseType = "code"; // 1회용 코드 요청
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${googleRedirectUrl}&scope=${googleScope}&response_type=${googleResponseType}`;
 
-    window.open(googleAuthUrl, "_blank", "width=500,height=600");
+    window.location.href = googleAuthUrl;
   };
 
   return (
