@@ -12,6 +12,7 @@ import HjWebTest from "./pages/main/HjWebTest";
 
 import PlanFilterSelector from "./pages/plan/PlanFilterSelector"; // 계획 필터 입력
 import PlanList from "./pages/plan/PlanList"; // 일정 리스트
+import PlanModify from "./pages/plan/PlanModify"; // 일정 수정
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/hj" element={<HjWebTest />} />
             <Route path="/plan/filter/selector" element={<PlanFilterSelector />} />
             <Route path="/plan/list" element={<PlanList />} />
+            <Route path="/plan/modify" element={<PlanModify />} />
           </Routes>
         </Layout>
       </BrowserRouter>
