@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./LoginForm.css";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -7,6 +7,7 @@ import {
   NAVER_CLIENT_ID,
   KAKAO_CLIENT_ID,
 } from "../../config"; // config.ts에서 API_BASE_URL을 임포트
+import { useLocation } from "react-router-dom";
 
 // Authorization Code Flow
 // 1. 프론트는 각 인증서버에 API키를 이용해 인증 코드를 받고 이를 백엔드로 전송
@@ -16,6 +17,19 @@ import {
 // 5. 백엔드는 JWT토큰을 검증해 사용자 인증(상태는 저장하지 않음)
 
 const LoginForm = () => {
+  // 사용자가 이동한 URL을 이용해 로그인 상태 감지
+  const location = useLocation();
+
+  useEffect(() => {
+    // 이동한 경로에 따라 작업 수행
+    if (location.pathname === "/auth/login-success") {
+      console.log("로그인 성공");
+      // 후처리 작업
+    } else if (location.pathname === "/auth/login-failure") {
+      console.log("로그인 실패");
+    }
+  }, [location.pathname]);
+
   // 일반 메소드 (로그인 이벤트 핸들러)
   const handleKakaoLogin = () => {
     const kakaoClientId: string = KAKAO_CLIENT_ID;
