@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // 전역 스타일 및 공통 레이아웃 컴포넌트

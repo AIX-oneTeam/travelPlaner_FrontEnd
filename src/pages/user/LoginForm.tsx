@@ -21,7 +21,8 @@ import MemberStore from "../../stores/MemberStore";
 
 const LoginForm = () => {
   const navigate = useNavigate();
-
+  const setAuth = MemberStore((state: any) => state.setAuth);
+  const memberInfo = MemberStore((state: any) => state.memberInfo);
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get("code");
@@ -30,7 +31,8 @@ const LoginForm = () => {
     if (authCode) {
       console.log(authCode);
       axios
-        .post(`${API_BASE_URL}/auth/${domain}/callback?code=${authCode}`, {
+        .get(`${API_BASE_URL}/auth/${domain}/callback?code=${authCode}`, {
+          withCredentials: true,
           headers: {
             "Content-Type": "application/json",
           },
@@ -40,11 +42,7 @@ const LoginForm = () => {
         })
         .then((response) => {
           //후처리
-          console.log(response.data); // 토큰 정보 출력
-          const setAuth = MemberStore((state: any) => state.setAuth);
-          const setLocalStorage = MemberStore(
-            (state: any) => state.setLocalStorage
-          );
+          console.log("response: ", response); // 토큰 정보 출력
 
           console.log("로그인 성공");
 
@@ -56,8 +54,6 @@ const LoginForm = () => {
             roles: response.data.roles,
           });
 
-          //로컬 스토리지에 저장
-          setLocalStorage();
           navigate("/");
         })
         .catch((error) => {

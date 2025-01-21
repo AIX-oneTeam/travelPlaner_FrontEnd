@@ -53,20 +53,22 @@ const useMemberStore: any = create<MemberStore>((set, get) => ({
   },
 
   setAuth: (newMemberInfo: MemberInfo) => {
+    const state = get();
     set({
-      memberInfo: newMemberInfo,
+      memberInfo: (state.memberInfo = newMemberInfo),
     });
     localStorage.setItem("memberInfo", JSON.stringify(newMemberInfo));
   },
 
   initStore: () => {
+    const state = get();
     set({
-      memberInfo: {
+      memberInfo: (state.memberInfo = {
         nickname: "익명의 사용자",
         email: "",
         profile_url: "",
         roles: [],
-      },
+      }),
     });
     localStorage.removeItem("memberInfo");
   },
