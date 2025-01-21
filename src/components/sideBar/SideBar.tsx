@@ -12,12 +12,13 @@ const SideBar: React.FC<SideBarProps> = ({
   isSideBarVisible,
   closeSideBar,
 }) => {
-  // const initStore = MemberStore((state: any) => state.initStore());
   const isAnonymous = MemberStore((state: any) => state.isAnonymous);
+  const initMemberInfo = MemberStore((state: any) => state.initMemberInfo);
 
   //로그아웃 처리
   const handleLogout = () => {
-    // initStore();
+    initMemberInfo();
+    closeSideBar();
   };
 
   // false면 렌더링 하지 않음

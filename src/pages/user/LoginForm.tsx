@@ -21,7 +21,7 @@ import MemberStore from "../../stores/MemberStore";
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const setAuth = MemberStore((state: any) => state.setAuth);
+  const setMemberInfo = MemberStore((state: any) => state.setMemberInfo);
   const memberInfo = MemberStore((state: any) => state.memberInfo);
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -47,12 +47,7 @@ const LoginForm = () => {
           console.log("로그인 성공");
 
           //zustand 스토어에 저장
-          setAuth({
-            nickname: response.data.nickname,
-            email: response.data.email,
-            profile_url: response.data.profile_url,
-            roles: response.data.roles,
-          });
+          setMemberInfo(response.data);
 
           navigate("/");
         })
