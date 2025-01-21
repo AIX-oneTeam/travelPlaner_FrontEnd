@@ -26,11 +26,16 @@
 }
 
 .sideBar-1{
+    
     display: flex;
     justify-content: space-between;
     font-size: var(--font-size-4);
     font-weight: var(--bold);
     position: relative;
+    cursor: pointer;
+
+    
+
 
     img{
         width: 20px;

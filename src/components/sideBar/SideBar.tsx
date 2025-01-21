@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./SideBar.css";
 import { Link } from "react-router-dom";
 import MemberStore from "../../stores/MemberStore";
@@ -12,17 +12,14 @@ const SideBar: React.FC<SideBarProps> = ({
   isSideBarVisible,
   closeSideBar,
 }) => {
-  const isAnonymous = MemberStore((state: any) => state.isAnonymous());
+  const isAnonymous = MemberStore((state: any) => state.isAnonymous);
+  const initMemberInfo = MemberStore((state: any) => state.initMemberInfo);
 
-  const [isLogin, setIsLogin] = useState<string>("로그인");
-
-  useEffect(() => {
-    if (!isAnonymous) {
-      setIsLogin("로그아웃");
-    } else {
-      setIsLogin("로그인");
-    }
-  }, [isAnonymous]);
+  //로그아웃 처리
+  const handleLogout = () => {
+    initMemberInfo();
+    closeSideBar();
+  };
 
   // false면 렌더링 하지 않음
   if (!isSideBarVisible) {
@@ -42,10 +39,17 @@ const SideBar: React.FC<SideBarProps> = ({
               onClick={closeSideBar}
             ></img>
           </div>
-          <Link className="sideBar-1" to="/loginForm">
-            {isLogin}
-            <img src="/icons/arrow_forward.jpg" alt="login"></img>
-          </Link>
+          {isAnonymous() ? (
+            <Link className="sideBar-1" to="/loginForm">
+              로그인
+              <img src="/icons/arrow_forward.jpg" alt="login"></img>
+            </Link>
+          ) : (
+            <div className="sideBar-1" onClick={handleLogout}>
+              로그아웃
+              <img src="/icons/arrow_forward.jpg" alt="login"></img>
+            </div>
+          )}
         </li>
         <li>
           <div className="sideBar-2 border-yellow">

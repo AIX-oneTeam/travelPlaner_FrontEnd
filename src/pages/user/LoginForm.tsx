@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import "./LoginForm.css";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -6,8 +5,11 @@ import {
   GOOGLE_CLIENT_ID,
   NAVER_CLIENT_ID,
   KAKAO_CLIENT_ID,
+  CLIENT_CALLBACK_URL,
 } from "../../config"; // config.ts에서 API_BASE_URL을 임포트
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 import MemberStore from "../../stores/MemberStore";
 
 // Authorization Code Flow
@@ -18,53 +20,49 @@ import MemberStore from "../../stores/MemberStore";
 // 5. 백엔드는 JWT토큰을 검증해 사용자 인증(상태는 저장하지 않음)
 
 const LoginForm = () => {
-  // 사용자가 이동한 URL을 이용해 로그인 상태 감지
-  const location = useLocation();
-  // 사용자 정보 저장 위한 스토어
-  const setAuth = MemberStore((state: any) => state.setAuth);
-  const decodedToken = MemberStore((state: any) => state.decodeToken);
-  const setLocalStorage = MemberStore((state: any) => state.setLocalStorage);
-
+  const navigate = useNavigate();
+  const setMemberInfo = MemberStore((state: any) => state.setMemberInfo);
+  const memberInfo = MemberStore((state: any) => state.memberInfo);
   useEffect(() => {
-    // 이동한 경로에 따라 작업 수행
-    if (location.pathname === "/auth/login-success") {
-      console.log("로그인 성공");
-      // 후처리 작업
-      // 쿠키에서 토큰 추출
-      const accessToken = document.cookie.split("jwt_token=")[1];
-      if (!accessToken) {
-        console.log("토큰이 없습니다.");
-        return;
-      }
+    const urlParams = new URLSearchParams(window.location.search);
+    const authCode = urlParams.get("code");
+    const domain = urlParams.get("domain");
 
-      const refreshToken = document.cookie.split("refresh_token=")[1];
+    if (authCode) {
+      console.log(authCode);
+      axios
+        .get(`${API_BASE_URL}/auth/${domain}/callback?code=${authCode}`, {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: {
+            code: authCode,
+          },
+        })
+        .then((response) => {
+          //후처리
+          console.log("response: ", response); // 토큰 정보 출력
 
-      //zustand 스토어에 저장
-      const tokenData = decodedToken(accessToken);
+          console.log("로그인 성공");
 
-      setAuth({
-        ...tokenData,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      });
-      //로컬 스토리지에 저장
-      setLocalStorage(tokenData);
-    } else if (location.pathname === "/auth/login-failure") {
-      console.log("로그인 실패");
+          //zustand 스토어에 저장
+          setMemberInfo(response.data);
+
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      console.log("인증코드가 없습니다.");
     }
-
-    if (
-      location.pathname === "/auth/login-success" ||
-      location.pathname === "/auth/login-failure"
-    ) {
-      window.location.href = "/";
-    }
-  }, [location.pathname, setAuth, decodedToken, setLocalStorage]);
+  });
 
   // 일반 메소드 (로그인 이벤트 핸들러)
   const handleKakaoLogin = () => {
     const kakaoClientId: string = KAKAO_CLIENT_ID;
-    const kakaoRedirectUrl = `${API_BASE_URL}/auth/kakao/callback`;
+    const kakaoRedirectUrl = `${CLIENT_CALLBACK_URL}?domain=kakao`;
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUrl}&response_type=code`;
 
     window.location.href = kakaoAuthUrl;
@@ -73,7 +71,7 @@ const LoginForm = () => {
   // 네이버 로그인 로직
   const handleNaverLogin = async () => {
     const naverClientId: string = NAVER_CLIENT_ID;
-    const redirectUri = `${API_BASE_URL}/auth/naver/callback`;
+    const redirectUri = `${CLIENT_CALLBACK_URL}?domain=naver`;
     const state = uuidv4();
     const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&redirect_uri=${redirectUri}&response_type=code&state=${state}`;
 
@@ -82,7 +80,7 @@ const LoginForm = () => {
 
   const handleGoogleLogin = async () => {
     const googleClientId: string = GOOGLE_CLIENT_ID;
-    const googleRedirectUrl: string = `${API_BASE_URL}/auth/google/callback`;
+    const googleRedirectUrl: string = `${CLIENT_CALLBACK_URL}?domain=google`;
     const googleScope = "openid email profile";
     const googleResponseType = "code"; // 1회용 코드 요청
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${googleRedirectUrl}&scope=${googleScope}&response_type=${googleResponseType}`;
