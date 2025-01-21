@@ -6,6 +6,8 @@ interface AuthToken {
   email: string;
   profile_url: string;
   roles: string[];
+  accessToken: string;
+  refreshToken: string;
 }
 
 // 스토어 객체 interface
@@ -27,7 +29,7 @@ interface MemberStore {
   getLocalStorage: () => AuthToken | null;
 }
 
-const useMemberStore = create<MemberStore>((set) => ({
+const useMemberStore: any = create<MemberStore>((set) => ({
   authToken: null,
 
   setAuth: (decodedToken) => set({ authToken: decodedToken }),
