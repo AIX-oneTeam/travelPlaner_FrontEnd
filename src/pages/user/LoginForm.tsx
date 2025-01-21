@@ -9,7 +9,6 @@ import {
 } from "../../config"; // config.ts에서 API_BASE_URL을 임포트
 import { useLocation } from "react-router-dom";
 import MemberStore from "../../stores/MemberStore";
-import { Cookie } from "lucide-react";
 
 // Authorization Code Flow
 // 1. 프론트는 각 인증서버에 API키를 이용해 인증 코드를 받고 이를 백엔드로 전송
@@ -23,6 +22,8 @@ const LoginForm = () => {
   const location = useLocation();
   // 사용자 정보 저장 위한 스토어
   const setAuth = MemberStore((state: any) => state.setAuth);
+  const decodedToken = MemberStore((state: any) => state.decodeToken);
+  const setLocalStorage = MemberStore((state: any) => state.setLocalStorage);
 
   useEffect(() => {
     // 이동한 경로에 따라 작업 수행
@@ -31,13 +32,34 @@ const LoginForm = () => {
       // 후처리 작업
       // 쿠키에서 토큰 추출
       const accessToken = document.cookie.split("jwt_token=")[1];
+      if (!accessToken) {
+        console.log("토큰이 없습니다.");
+        return;
+      }
+
+      const refreshToken = document.cookie.split("refresh_token=")[1];
+
       //zustand 스토어에 저장
-      setAuth(accessToken);
+      const tokenData = decodedToken(accessToken);
+
+      setAuth({
+        ...tokenData,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      });
       //로컬 스토리지에 저장
+      setLocalStorage(tokenData);
     } else if (location.pathname === "/auth/login-failure") {
       console.log("로그인 실패");
     }
-  }, [location.pathname]);
+
+    if (
+      location.pathname === "/auth/login-success" ||
+      location.pathname === "/auth/login-failure"
+    ) {
+      window.location.href = "/";
+    }
+  }, [location.pathname, setAuth, decodedToken, setLocalStorage]);
 
   // 일반 메소드 (로그인 이벤트 핸들러)
   const handleKakaoLogin = () => {

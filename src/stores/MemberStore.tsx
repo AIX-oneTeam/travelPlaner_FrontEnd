@@ -4,8 +4,8 @@ import { create } from "zustand";
 interface AuthToken {
   nickname: string;
   email: string;
-  profile_url: string;
-  roles: string[];
+  profile_url?: string;
+  roles?: string[];
   accessToken: string;
   refreshToken: string;
 }
@@ -37,8 +37,7 @@ const useMemberStore: any = create<MemberStore>((set) => ({
     return decodedToken;
   },
 
-  setAuth: (accessToken) => {
-    const decodedToken = useMemberStore.getState().decodeToken(accessToken);
+  setAuth: (decodedToken) => {
     set({ authToken: decodedToken });
   },
 
