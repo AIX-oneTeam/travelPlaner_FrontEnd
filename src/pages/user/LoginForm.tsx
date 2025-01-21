@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./LoginForm.css";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -7,6 +7,9 @@ import {
   NAVER_CLIENT_ID,
   KAKAO_CLIENT_ID,
 } from "../../config"; // config.ts에서 API_BASE_URL을 임포트
+import { useLocation } from "react-router-dom";
+import MemberStore from "../../stores/MemberStore";
+import { Cookie } from "lucide-react";
 
 // Authorization Code Flow
 // 1. 프론트는 각 인증서버에 API키를 이용해 인증 코드를 받고 이를 백엔드로 전송
@@ -16,13 +19,33 @@ import {
 // 5. 백엔드는 JWT토큰을 검증해 사용자 인증(상태는 저장하지 않음)
 
 const LoginForm = () => {
+  // 사용자가 이동한 URL을 이용해 로그인 상태 감지
+  const location = useLocation();
+  // 사용자 정보 저장 위한 스토어
+  const setAuth = MemberStore((state: any) => state.setAuth);
+
+  useEffect(() => {
+    // 이동한 경로에 따라 작업 수행
+    if (location.pathname === "/auth/login-success") {
+      console.log("로그인 성공");
+      // 후처리 작업
+      // 쿠키에서 토큰 추출
+      const accessToken = document.cookie.split("jwt_token=")[1];
+      //zustand 스토어에 저장
+      setAuth(accessToken);
+      //로컬 스토리지에 저장
+    } else if (location.pathname === "/auth/login-failure") {
+      console.log("로그인 실패");
+    }
+  }, [location.pathname]);
+
   // 일반 메소드 (로그인 이벤트 핸들러)
   const handleKakaoLogin = () => {
     const kakaoClientId: string = KAKAO_CLIENT_ID;
     const kakaoRedirectUrl = `${API_BASE_URL}/auth/kakao/callback`;
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUrl}&response_type=code`;
 
-    window.open(kakaoAuthUrl, "_blank", "width=500,height=600");
+    window.location.href = kakaoAuthUrl;
   };
 
   // 네이버 로그인 로직
@@ -32,7 +55,7 @@ const LoginForm = () => {
     const state = uuidv4();
     const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&redirect_uri=${redirectUri}&response_type=code&state=${state}`;
 
-    window.open(naverAuthUrl, "_blank", "width=1000,height=600");
+    window.location.href = naverAuthUrl;
   };
 
   const handleGoogleLogin = async () => {
@@ -42,7 +65,7 @@ const LoginForm = () => {
     const googleResponseType = "code"; // 1회용 코드 요청
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${googleRedirectUrl}&scope=${googleScope}&response_type=${googleResponseType}`;
 
-    window.open(googleAuthUrl, "_blank", "width=500,height=600");
+    window.location.href = googleAuthUrl;
   };
 
   return (
