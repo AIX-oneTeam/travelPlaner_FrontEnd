@@ -32,7 +32,7 @@ const LoginForm = () => {
     const state = uuidv4();
     const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&redirect_uri=${redirectUri}&response_type=code&state=${state}`;
 
-    window.open(naverAuthUrl, "_blank", "width=1000,height=600");
+    window.location.href = naverAuthUrl;
   };
 
   const handleGoogleLogin = async () => {
