@@ -321,6 +321,7 @@ const PlanFilterSelector: React.FC = () => {
           {purposes.map((purpose) => (
             <button
               key={purpose}
+              type="button"
               className={`${styles.purpose_button} ${
                 selectedPurposes.includes(purpose) ? styles.active : ""
               }`}
