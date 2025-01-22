@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Calendar, { CalendarProps } from "react-calendar";
 import LongBtn from "../../components/buttons/LongBtn";
 import SearchInput2 from "../../components/input/SearchInput2";
@@ -181,6 +182,8 @@ const WeatherAlert = () => {
 };
 
 const PlanFilterSelector: React.FC = () => {
+  const navigate = useNavigate();
+
   const [selectedDateRange, setSelectedDateRange] = useState<
     [Date, Date] | null
   >(null);
@@ -226,6 +229,7 @@ const PlanFilterSelector: React.FC = () => {
     event.preventDefault(); // 폼 기본 동작 방지
 
     // API 통신 로직 추가
+    navigate("/plan/list");
   };
 
   return (
@@ -261,7 +265,7 @@ const PlanFilterSelector: React.FC = () => {
 
       {/* 나이 선택 */}
       <div className={styles.travel_age_section}>
-        <h2 className={styles.section_title}>3. 나이</h2>
+        <h2 className={styles.section_title}>3. 연령대</h2>
         <div className={styles.age_selection_container}>
           {ages.map((age) => (
             <button
@@ -301,7 +305,7 @@ const PlanFilterSelector: React.FC = () => {
                   {label === "반려견"
                     ? `총 ${count} 마리`
                     : index === 0
-                    ? `(본인 제외) 총 ${count}명`
+                    ? `(본인 포함) 총 ${count}명`
                     : `총 ${count}명`}
                 </span>
               </div>

@@ -105,10 +105,12 @@
 
 /* 모달 열기 */
 .open_modal_cotanier {
-  width: 100%;
-  margin-top: 50px;
-  position: absolute;
+  position: fixed;
   bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(70%);
+  margin: 0; /* margin-top 제거 */
 }
 
 .top_btn {
@@ -126,3 +128,25 @@
   }
 }
 
+.with_padding_bottom {
+  padding-bottom: 80px;
+}
+
+/* 반응형 처리 */
+@media screen and (max-width: 1024px) {
+  .open_modal_cotanier {
+    width: calc(100% - 0px);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .open_modal_cotanier {
+    width: calc(100% - 0px);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .open_modal_cotanier {
+    width: calc(100% - 0px);
+  }
+}

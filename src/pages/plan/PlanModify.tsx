@@ -116,7 +116,7 @@ const PlanModify: React.FC = () => {
 
   return (
     <>
-      <div className={styles.travel_plan_list_container}>
+      <div className={`${styles.travel_plan_list_container} ${!isPromptOpen ? styles.with_padding_bottom : ''}`}>
         {/* PlanHeader 컴포넌트 */}
         <PlanHeader
           destination={destination}
