@@ -22,7 +22,8 @@ import MemberStore from "../../stores/MemberStore";
 const LoginForm = () => {
   const navigate = useNavigate();
   const setMemberInfo = MemberStore((state: any) => state.setMemberInfo);
-  const memberInfo = MemberStore((state: any) => state.memberInfo);
+  const state = uuidv4();
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get("code");
@@ -31,15 +32,18 @@ const LoginForm = () => {
     if (authCode) {
       console.log(authCode);
       axios
-        .get(`${API_BASE_URL}/auth/${domain}/callback?code=${authCode}`, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-          data: {
-            code: authCode,
-          },
-        })
+        .get(
+          `${API_BASE_URL}/oauths/${domain}/callback?code=${authCode}&state=${state}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+            data: {
+              code: authCode,
+            },
+          }
+        )
         .then((response) => {
           //후처리
           console.log("response: ", response); // 토큰 정보 출력
@@ -63,7 +67,7 @@ const LoginForm = () => {
   const handleKakaoLogin = () => {
     const kakaoClientId: string = KAKAO_CLIENT_ID;
     const kakaoRedirectUrl = `${CLIENT_CALLBACK_URL}?domain=kakao`;
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUrl}&response_type=code`;
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUrl}&response_type=code&state=${state}`;
 
     window.location.href = kakaoAuthUrl;
   };
@@ -72,7 +76,6 @@ const LoginForm = () => {
   const handleNaverLogin = async () => {
     const naverClientId: string = NAVER_CLIENT_ID;
     const redirectUri = `${CLIENT_CALLBACK_URL}?domain=naver`;
-    const state = uuidv4();
     const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&redirect_uri=${redirectUri}&response_type=code&state=${state}`;
 
     window.location.href = naverAuthUrl;
@@ -82,8 +85,7 @@ const LoginForm = () => {
     const googleClientId: string = GOOGLE_CLIENT_ID;
     const googleRedirectUrl: string = `${CLIENT_CALLBACK_URL}?domain=google`;
     const googleScope = "openid email profile";
-    const googleResponseType = "code"; // 1회용 코드 요청
-    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${googleRedirectUrl}&scope=${googleScope}&response_type=${googleResponseType}`;
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${googleRedirectUrl}&scope=${googleScope}&response_type=code&state=${state}`;
 
     window.location.href = googleAuthUrl;
   };

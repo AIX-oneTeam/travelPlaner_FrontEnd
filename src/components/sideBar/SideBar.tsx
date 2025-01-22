@@ -2,6 +2,8 @@ import React from "react";
 import "./SideBar.css";
 import { Link } from "react-router-dom";
 import MemberStore from "../../stores/MemberStore";
+import { API_BASE_URL } from "../../config";
+import axios from "axios";
 
 interface SideBarProps {
   closeSideBar: () => void;
@@ -16,8 +18,10 @@ const SideBar: React.FC<SideBarProps> = ({
   const initMemberInfo = MemberStore((state: any) => state.initMemberInfo);
 
   //로그아웃 처리
+  // TODO: 서버에 요청보내서 쿠키까지 지우는 로직 필요
   const handleLogout = () => {
     initMemberInfo();
+    axios.get(`${API_BASE_URL}/members/logout`, { withCredentials: true });
     closeSideBar();
   };
 
