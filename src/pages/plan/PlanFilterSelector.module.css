@@ -1,24 +1,25 @@
 /* 공통 스타일 */
-.travel-plan-container {
+.travel_plan_container {
   width: 100%;
   padding: 50px 0px;
   box-sizing: border-box;
+  min-height: 100vh;
 }
 
-.travel-plan-header {
+.travel_plan_header {
   font-size: var(--font-size-3);
   font-weight: var(--bold);
   color: #000;
   margin-bottom: 10px;
 }
 
-.travel-plan-description {
+.travel_plan_description {
   font-size: var(--font-size-5);
   color: #b1b1b1;
   margin-bottom: 20px;
 }
 
-.section-title {
+.section_title {
   font-size: var(--font-size-5);
   font-weight: var(--bold);
   color: #000;
@@ -26,16 +27,16 @@
 }
 
 /* 지역 섹션 */
-.travel-region-section {
+.travel_region_section {
   margin-bottom: 50px;
 }
 
-.region-input-container {
+.region_input_container {
   width: 98%;
   margin: 20px 0px 20px 15px;
 }
 
-.region-input {
+.region_input {
   flex: 1;
   height: 40px;
   border: 1px solid #e0dede;
@@ -44,7 +45,7 @@
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 }
 
-.region-search-button {
+.region_search_button {
   width: 40px;
   height: 40px;
   background-color: #fff;
@@ -57,7 +58,7 @@
 }
 
 /* 일정 섹션 */
-.travel-schedule-section {
+.travel_schedule_section {
   display: flex;
   flex-direction: column;
   margin: 20px 0;
@@ -65,7 +66,7 @@
 }
 
 /* 달력 컨테이너 */
-.calendar-container {
+.calendar_container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -75,7 +76,7 @@
 }
 
 /* 달력 */
-.calendar-wrapper {
+.calendar_wrapper {
   flex-grow: 1;
   display: flex;
   justify-content: center;
@@ -84,7 +85,7 @@
 }
 
 /* react-calendar */
-.custom-calendar {
+.custom_calendar {
   padding: 10px 10px;
   height: 366px; /* react-calendar 높이 고정 */
   display: flex;
@@ -93,7 +94,7 @@
 }
 
 /* 버튼 스타일 공통 */
-.calendar-nav-button {
+.calendar_nav_button {
   background: var(--grey-3);
   border: 1px solid var(--grey-1);
   border-radius: 50%;
@@ -108,17 +109,17 @@
 }
 
 /* 왼쪽 버튼 */
-.prev-button {
+.prev_button {
   margin-right: 10px;
 }
 
 /* 오른쪽 버튼 */
-.next-button {
+.next_button {
   margin-left: 10px;
 }
 
 /* 버튼 hover 효과 */
-.calendar-nav-button:hover {
+.calendar_nav_button:hover {
   background-color: var(--sub-color-1);
 }
 
@@ -192,19 +193,19 @@
 }
 
 /* 선택된 날짜 */
-.selected-date {
+.selected_date {
   margin-top: 10px;
   font-size: var(--font-size-6);
   text-align: center;
 }
 
 /* 날씨 정보 */
-.weather-container {
+.weather_container {
   max-width: 49%;
   margin: 50px auto 50px auto;
 }
 
-.weather-alert-card {
+.weather_alert_card {
   background-color: var(--white);
   border-radius: var(--border-radius-2);
   box-shadow: var(--shadow-basic);
@@ -214,46 +215,46 @@
   gap: 0.75rem;
 }
 
-.weather-icon-wrapper {
+.weather_icon_wrapper {
   flex-shrink: 0;
 }
 
-.weather-icon {
+.weather_icon {
   width: 2.5rem;
   height: 1.8rem;
   color: var(--text-sub);
 }
 
-.weather-content {
+.weather_content {
   flex: 1;
 }
 
-.weather-title {
+.weather_title {
   font-size: var(--font-size-6);
   line-height: 1.5rem;
   font-weight: var(--medium);
   color: var(--text-main);
 }
 
-.weather-update-time {
+.weather_update_time {
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: var(--text-sub);
 }
 
 /* 나이 섹션 */
-.travel-age-section {
+.travel_age_section {
   margin-bottom: 50px;
 }
 
-.age-selection-container {
+.age_selection_container {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   margin: 20px 0px 20px 15px;
 }
 
-.age-button {
+.age_button {
   width: 60px;
   height: 40px;
   border: 1px solid var(--grey-1);
@@ -266,38 +267,38 @@
   cursor: pointer;
 }
 
-.age-button.active {
+.age_button.active {
   background-color: var(--sub-color-1);
   border-color: #76adec;
 }
 
 /* 일행 섹션 */
-.travel-companions-section {
+.travel_companions_section {
   margin-bottom: 50px;
 }
 
-.companions-selection-container {
+.companions_selection_container {
   display: flex;
   flex-direction: column;
   gap: 15px;
   margin: 20px 0px 20px 15px;
 }
 
-.companion-group {
+.companion_group {
   display: flex;
   align-items: center;
   justify-content: space-between; /* 좌우 정렬 */
 }
 
-.companion-controls {
+.companion_controls {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-grow: 1; /* 가운데 공간을 확보 */
 }
 
-.companion-minus,
-.companion-plus {
+.companion_minus,
+.companion_plus {
   width: 30px;
   height: 30px;
   border: 1px solid var(--grey-1);
@@ -313,15 +314,15 @@
     color 0.2s ease; /* 클릭 시 애니메이션 */
 }
 
-.companion-minus:hover {
+.companion_minus:hover {
   background-color: var(--sub-color-2); /* 호버 시 하늘색에 가까운 배경 */
 }
 
-.companion-plus:hover {
+.companion_plus:hover {
   background-color: var(--sub-color-1); /* 호버 시 하늘색에 가까운 배경 */
 }
 
-.companion-label {
+.companion_label {
   font-size: var(--font-size-6);
   font-weight: var(--semibold);
   color: var(--text-main);
@@ -330,7 +331,7 @@
   width: 70px; /* 고정 너비로 일관된 정렬 유지 */
 }
 
-.companion-count {
+.companion_count {
   font-size: var(--font-size-6);
   color: var(--text-main);
   margin-left: auto;
@@ -338,18 +339,18 @@
 }
 
 /* 목적 섹션 */
-.travel-purpose-section {
+.travel_purpose_section {
   margin-bottom: 50px;
 }
 
-.purpose-selection-container {
+.purpose_selection_container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin: 20px 0px 20px 15px;
 }
 
-.purpose-button {
+.purpose_button {
   padding: 8px 12px;
   font-size: var(--font-size-6);
   font-weight: var(--bold);
@@ -360,7 +361,19 @@
   cursor: pointer;
 }
 
-.purpose-button.active {
+.purpose_button.active {
   background-color: #ffe2ab;
   border-color: #f2a413;
+}
+
+.travel_plan_complete_button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.travel_plan_complete_button > * {
+  max-width: 50%;
+  width: 100%;
 }

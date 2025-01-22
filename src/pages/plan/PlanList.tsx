@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Slider from "react-slick";
 import LongBtn from "../../components/buttons/LongBtn";
 import ConfirmModal from "../../components/modal/ConfirmModal"; // 모달 컴포넌트
-import "./PlanList.css";
+import PlanHeader from "./include/PlanHeader"; // 일정 날짜 헤더 컴포넌트
+import styles from "./PlanList.module.css";
 
 const PlanList: React.FC = () => {
   const navigate = useNavigate();
@@ -16,6 +16,9 @@ const PlanList: React.FC = () => {
     { day: "DAY 4", date: "02월21일" },
     { day: "DAY 5", date: "02월22일" },
   ];
+
+  // 테스트 데이터(여행 지역)
+  const destination = "제주도";
 
   // 테스트 데이터
   const travelPlans = [
@@ -51,30 +54,9 @@ const PlanList: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState<string>("DAY 1");
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
+  // 헤더 날짜 선택
   const handleDayClick = (day: string) => {
     setSelectedDay(day);
-  };
-
-  const sliderSettings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 768, // 화면 크기 768px 이하
-        settings: {
-          slidesToShow: 2, // 작은 화면에서는 2개씩 보여줌
-        },
-      },
-      {
-        breakpoint: 480, // 화면 크기 480px 이하
-        settings: {
-          slidesToShow: 1, // 더 작은 화면에서는 1개씩 보여줌
-        },
-      },
-    ],
   };
 
   // 모달 열기
@@ -95,54 +77,37 @@ const PlanList: React.FC = () => {
 
   return (
     <>
-      <form className="travel-plan-list-container">
-        <div className="travel-plan-list-header">
-          <div className="travel-plan-list-destination">제주도</div>
-          <div className="travel-plan-list-content">
-            <div className="travel-plan-list-icon">
-              <img src="/icons/memo.jpg" alt="Icon" />
-            </div>
-            <div className="travel-plan-list-dates-wrapper">
-              <Slider {...sliderSettings} arrows={false}>
-                {days.map(({ day, date }) => (
-                  <div
-                    key={day}
-                    className={`travel-plan-list-date ${
-                      selectedDay === day ? "selected" : ""
-                    }`}
-                    onClick={() => handleDayClick(day)}
-                  >
-                    <div className="travel-plan-list-day">{day}</div>
-                    <div className="travel-plan-list-date-text">{date}</div>
-                  </div>
-                ))}
-              </Slider>
-            </div>
-          </div>
-        </div>
+      <form className={styles.travel_plan_list_container}>
+        {/* PlanHeader 컴포넌트 */}
+        <PlanHeader
+          destination={destination}
+          days={days} // days 배열 전달
+          selectedDay={selectedDay}
+          onDayClick={handleDayClick} // DAY 변경 핸들러 전달
+        />
 
         {/* 일정 요소 list */}
         {travelPlans
           .filter((plan) => plan.day === selectedDay)
           .map((plan, index) => (
-            <div className="travel-plan-card-section" key={index}>
-              <div className="travel-plan-card-container">
-                <div className="timeline-indicator">
-                  <div className="circle"></div>
-                  <div className="line"></div>
-                  <div className="driving-time">
+            <div className={styles.travel_plan_card_section} key={index}>
+              <div className={styles.travel_plan_card_container}>
+                <div className={styles.timeline_indicator}>
+                  <div className={styles.circle}></div>
+                  <div className={styles.line}></div>
+                  <div className={styles.driving_time}>
                     <img src="/icons/car.jpg" alt="운전 아이콘" />
                     <p>{plan.drivingTime}</p>
                   </div>
                 </div>
-                <div className="travel-time-container">
-                  <div className="travel-time">{plan.time}</div>
+                <div className={styles.travel_time_container}>
+                  <div className={styles.travel_time}>{plan.time}</div>
                 </div>
-                <div className="travle-image-container">
-                  <div className="travle-image">
+                <div className={styles.travle_image_container}>
+                  <div className={styles.travle_image}>
                     <img src={plan.image} alt={plan.title} />
                   </div>
-                  <div className="place-description">
+                  <div className={styles.place_description}>
                     <h2>{plan.title}</h2>
                     <p>{plan.description}</p>
                   </div>
@@ -151,24 +116,24 @@ const PlanList: React.FC = () => {
             </div>
           ))}
 
-        <div className="form-actions-btns">
-          <div className="travle-save-btn">
+        <div className={styles.form_actions_btns}>
+          <div className={styles.travle_save_btn}>
             <LongBtn
               type="button"
               content="저장하기"
               onClick={handleSaveClick}
             />
           </div>
-          <div className="travle-modify-btn">
+          <div className={styles.travle_modify_btn}>
             <LongBtn
               content="변경하기"
-              onClick={() => navigate("/plan/filter/selector")}
+              onClick={() => navigate("/plan/modify")}
             />
           </div>
         </div>
       </form>
 
-      {/* 모달 추가 */}
+      {/* 저장 확인 모달 */}
       <ConfirmModal
         isOpen={isModalOpen}
         content={"해당 플랜을 저장할까요?"}
