@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Calendar, { CalendarProps } from "react-calendar";
 import LongBtn from "../../components/buttons/LongBtn";
 import SearchInput2 from "../../components/input/SearchInput2";
@@ -6,7 +7,7 @@ import { Cloud, Sun, CloudRain, AlertCircle } from "lucide-react";
 
 //css import
 import "react-calendar/dist/Calendar.css";
-import "./PlanFilterSelector.css";
+import styles from "./PlanFilterSelector.module.css";
 
 interface Companion {
   label: string;
@@ -70,23 +71,23 @@ const DateSelector: React.FC<DateSelectorProps> = ({
   };
 
   return (
-    <div className="travel-schedule-section">
-      <h2 className="section-title">2. 일정</h2>
-      <div className="calendar-container">
+    <div className={styles.travel_schedule_section}>
+      <h2 className={styles.section_title}>2. 일정</h2>
+      <div className={styles.calendar_container}>
         {/* 이전 달 버튼 */}
         <button
-          className="calendar-nav-button prev-button"
+          className={`${styles.calendar_nav_button} ${styles.prev_button}`}
           onClick={handlePrevMonth}
         >
           {"<"}
         </button>
 
         {/* 달력 */}
-        <div className="calendar-wrapper">
+        <div className={styles.calendar_wrapper}>
           <Calendar
             onChange={handleDateChange}
             selectRange
-            className="custom-calendar"
+            className={styles.custom_calendar}
             locale="ko-KR"
             minDate={new Date()}
             activeStartDate={activeStartDate} // 현재 활성화된 월
@@ -101,7 +102,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
 
         {/* 다음 달 버튼 */}
         <button
-          className="calendar-nav-button next-button"
+          className={`${styles.calendar_nav_button} ${styles.next_button}`}
           onClick={handleNextMonth}
         >
           {">"}
@@ -110,7 +111,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
 
       {/* 선택된 날짜 표시 */}
       {selectedDateRange && (
-        <p className="selected-date">
+        <p className={styles.selected_date}>
           선택된 날짜:{" "}
           {`${selectedDateRange[0].toLocaleDateString("ko-KR", {
             year: "numeric",
@@ -147,25 +148,31 @@ const WeatherAlert = () => {
   const getWeatherIcon = (weatherType: WeatherType): JSX.Element => {
     switch (weatherType) {
       case "맑음":
-        return <Sun className="weather-icon" />;
+        return <Sun className={styles.weather_icon} />;
       case "흐림":
-        return <Cloud className="weather-icon" />;
+        return <Cloud className={styles.weather_icon} />;
       case "비":
-        return <CloudRain className="weather-icon" />;
+        return <CloudRain className={styles.weather_icon} />;
       default:
-        return <AlertCircle className="weather-icon text-error" />;
+        return (
+          <AlertCircle
+            className={`${styles.weather_icon} ${styles.text_error}`}
+          />
+        );
     }
   };
 
   return (
-    <div className="weather-container">
-      <div className="weather-alert-card">
-        <div className="weather-icon-wrapper">
+    <div className={styles.weather_container}>
+      <div className={styles.weather_alert_card}>
+        <div className={styles.weather_icon_wrapper}>
           {getWeatherIcon(weatherState.type)}
         </div>
-        <div className="weather-content">
-          <h3 className="weather-title">예상 날씨 - {weatherState.type}</h3>
-          <p className="weather-update-time">
+        <div className={styles.weather_content}>
+          <h3 className={styles.weather_title}>
+            예상 날씨 - {weatherState.type}
+          </h3>
+          <p className={styles.weather_update_time}>
             3일 전 알람으로 다시 알려드릴게요!
           </p>
         </div>
@@ -175,6 +182,8 @@ const WeatherAlert = () => {
 };
 
 const PlanFilterSelector: React.FC = () => {
+  const navigate = useNavigate();
+
   const [selectedDateRange, setSelectedDateRange] = useState<
     [Date, Date] | null
   >(null);
@@ -205,12 +214,6 @@ const PlanFilterSelector: React.FC = () => {
             : companion // label이 일치하지 않으면 기존 동반자 데이터를 그대로 반환
       )
     );
-
-    // +, - 버튼 active
-    // setActiveButton(`${label}-${delta > 0 ? "plus" : "minus"}`);
-
-    // Reset active button after 300ms
-    // setTimeout(() => setActiveButton(null), 300);
   };
 
   const togglePurpose = (purpose: string) => {
@@ -226,19 +229,22 @@ const PlanFilterSelector: React.FC = () => {
     event.preventDefault(); // 폼 기본 동작 방지
 
     // API 통신 로직 추가
+    navigate("/plan/list");
   };
 
   return (
-    <form className="travel-plan-container" onSubmit={handleSubmit}>
-      <h1 className="travel-plan-header">이번 여행에 대해 알려주세요!</h1>
-      <p className="travel-plan-description">
+    <form className={styles.travel_plan_container} onSubmit={handleSubmit}>
+      <h1 className={styles.travel_plan_header}>
+        이번 여행에 대해 알려주세요!
+      </h1>
+      <p className={styles.travel_plan_description}>
         맞춤 여행 플랜을 준비하고 있습니다.
       </p>
 
       {/* 지역 선택 */}
-      <div className="travel-region-section">
-        <h2 className="section-title">1. 지역</h2>
-        <div className="region-input-container">
+      <div className={styles.travel_region_section}>
+        <h2 className={styles.section_title}>1. 지역</h2>
+        <div className={styles.region_input_container}>
           <SearchInput2
             type="text"
             value={region}
@@ -258,13 +264,15 @@ const PlanFilterSelector: React.FC = () => {
       <WeatherAlert />
 
       {/* 나이 선택 */}
-      <div className="travel-age-section">
-        <h2 className="section-title">3. 나이</h2>
-        <div className="age-selection-container">
+      <div className={styles.travel_age_section}>
+        <h2 className={styles.section_title}>3. 연령대</h2>
+        <div className={styles.age_selection_container}>
           {ages.map((age) => (
             <button
               key={age}
-              className={`age-button ${selectedAge === age ? "active" : ""}`}
+              className={`${styles.age_button} ${
+                selectedAge === age ? styles.active : ""
+              }`}
               onClick={() => setSelectedAge(age)}
             >
               {age}
@@ -274,30 +282,30 @@ const PlanFilterSelector: React.FC = () => {
       </div>
 
       {/* 일행 선택 */}
-      <div className="travel-companions-section">
-        <h2 className="section-title">4. 일행</h2>
-        <div className="companions-selection-container">
+      <div className={styles.travel_companions_section}>
+        <h2 className={styles.section_title}>4. 일행</h2>
+        <div className={styles.companions_selection_container}>
           {companions.map(({ label, count }, index) => (
-            <div key={label} className="companion-group">
-              <div className="companion-controls">
+            <div key={label} className={styles.companion_group}>
+              <div className={styles.companion_controls}>
                 <button
-                  className="companion-minus"
+                  className={styles.companion_minus}
                   onClick={() => handleCompanionChange(label, -1)}
                 >
                   -
                 </button>
-                <span className="companion-label">{label}</span>
+                <span className={styles.companion_label}>{label}</span>
                 <button
-                  className="companion-plus"
+                  className={styles.companion_plus}
                   onClick={() => handleCompanionChange(label, 1)}
                 >
                   +
                 </button>
-                <span className="companion-count">
+                <span className={styles.companion_count}>
                   {label === "반려견"
                     ? `총 ${count} 마리`
                     : index === 0
-                    ? `(본인 제외) 총 ${count}명`
+                    ? `(본인 포함) 총 ${count}명`
                     : `총 ${count}명`}
                 </span>
               </div>
@@ -307,14 +315,14 @@ const PlanFilterSelector: React.FC = () => {
       </div>
 
       {/* 목적 선택 */}
-      <div className="travel-purpose-section">
-        <h2 className="section-title">5. 목적</h2>
-        <div className="purpose-selection-container">
+      <div className={styles.travel_purpose_section}>
+        <h2 className={styles.section_title}>5. 목적</h2>
+        <div className={styles.purpose_selection_container}>
           {purposes.map((purpose) => (
             <button
               key={purpose}
-              className={`purpose-button ${
-                selectedPurposes.includes(purpose) ? "active" : ""
+              className={`${styles.purpose_button} ${
+                selectedPurposes.includes(purpose) ? styles.active : ""
               }`}
               onClick={() => togglePurpose(purpose)}
             >
@@ -325,7 +333,7 @@ const PlanFilterSelector: React.FC = () => {
       </div>
 
       {/* 완료 버튼 */}
-      <div className="travel-plan-complete-button">
+      <div className={styles.travel_plan_complete_button}>
         <LongBtn type="submit" content="완료" />
       </div>
     </form>
