@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PlanHeader from "./include/PlanHeader"; // 일정 날짜 헤더 컴포넌트
 
 // 모달 컴포넌트
@@ -56,6 +56,27 @@ const PlanModify: React.FC = () => {
   const [selectedPlans, setSelectedPlans] = useState<number[]>([]); // 선택된 일정 관리
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [isPromptOpen, setPromptOpen] = useState<boolean>(false); // PromptModal 상태 추가
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [modalWidth, setModalWidth] = useState<string>("100%"); // css의 fixed는 width가 뷰포트를 기준임 -> 너비 조정이 힘들어서 상태 관리로 해결
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (containerRef.current) {
+        setModalWidth(`${containerRef.current.offsetWidth}px`);
+      }
+    };
+
+    // 초기 너비 설정
+    handleResize();
+
+    // 윈도우 리사이즈 이벤트 추가
+    window.addEventListener("resize", handleResize);
+
+    // 리사이즈 이벤트 제거
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleDayClick = (day: string) => {
     setSelectedDay(day);
@@ -116,7 +137,12 @@ const PlanModify: React.FC = () => {
 
   return (
     <>
-      <div className={`${styles.travel_plan_list_container} ${!isPromptOpen ? styles.with_padding_bottom : ''}`}>
+      <div
+        ref={containerRef}
+        className={`${styles.travel_plan_list_container} ${
+          !isPromptOpen ? styles.with_padding_bottom : ""
+        }`}
+      >
         {/* PlanHeader 컴포넌트 */}
         <PlanHeader
           destination={destination}
@@ -168,6 +194,9 @@ const PlanModify: React.FC = () => {
         {!isPromptOpen && (
           <div
             className={styles.open_modal_cotanier}
+            style={{
+              width: modalWidth,
+            }}
             onClick={handleOpenModalClick}
           >
             <div className={styles.top_btn}>
