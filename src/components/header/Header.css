@@ -31,6 +31,15 @@
   display: flex;
   gap: 10px;
   align-items: center;
+
+  .profile_img{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--main-color-1, #76adec);
+  object-fit: cover;
+  cursor: pointer;
+  }
 }
 
 .member-nickname{
@@ -43,3 +52,5 @@
     font-weight: var(--semibold);
   }
 }
+
+
