@@ -29,7 +29,11 @@ const Header: React.FC<HeaderProps> = ({ openSideBar }) => {
         </div>
 
         <div className="text-container">
-          <div className="member-profile"></div>
+          <img
+            className="profile_img"
+            src={memberInfo.profile_url}
+            alt="프로필 이미지"
+          />
           <p className="member-nickname">
             {memberInfo.nickname}
             <span>님</span>
