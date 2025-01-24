@@ -5,53 +5,117 @@ import ConfirmModal from "../../components/modal/ConfirmModal"; // 모달 컴포
 import PlanHeader from "./include/PlanHeader"; // 일정 날짜 헤더 컴포넌트
 import styles from "./PlanList.module.css";
 
+interface spotResponse {
+  kor_name: string;
+  eng_name: string;
+  description: string;
+  address: string;
+  zip: string;
+  url: string;
+  image_url: string;
+  map_url: string;
+  likes: number;
+  satisfaction: number;
+  spot_category: number;
+  phone_number: string;
+  business_status: boolean;
+  business_hours: string;
+  order: number;
+  day_x: number;
+  spot_time: Date;
+}
+interface plan {
+  name: string;
+  start_date: Date;
+  end_date: Date;
+  main_location: string;
+  ages: number;
+  companion_count: number;
+  concepts: string;
+}
+interface spot {
+  kor_name: string;
+  eng_name?: string;
+  description: string;
+  address: string;
+  map_url?: string;
+  day: string;
+  time: string;
+  // TODO: 지도 API 이용해야 할지?
+  drivingTime: string;
+  image_url: string;
+  isParkingLot?: boolean;
+  isPet?: boolean;
+}
+
+//
+const generateDaysArray = (startDate: Date, endDate: Date) => {
+  const daysArray = [];
+  let currentDate = new Date(startDate);
+  let dayCount = 1;
+
+  while (currentDate <= endDate) {
+    daysArray.push({
+      day: `${dayCount}일차`,
+      date: `${currentDate.getMonth() + 1}월 ${currentDate.getDate()}일`,
+    });
+    currentDate.setDate(currentDate.getDate() + 1);
+    dayCount++;
+  }
+
+  return daysArray;
+};
+
 const PlanList: React.FC = () => {
-  const navigate = useNavigate();
-
-  // 테스트 데이터
-  const days = [
-    { day: "DAY 1", date: "02월18일" },
-    { day: "DAY 2", date: "02월19일" },
-    { day: "DAY 3", date: "02월20일" },
-    { day: "DAY 4", date: "02월21일" },
-    { day: "DAY 5", date: "02월22일" },
-  ];
-
-  // 테스트 데이터(여행 지역)
-  const destination = "제주도";
-
-  // 테스트 데이터
-  const travelPlans = [
+  const [plan, setPlan] = useState<plan>({
+    name: "제주도 여행",
+    start_date: new Date(),
+    end_date: new Date(new Date().setDate(new Date().getDate() + 2)),
+    main_location: "제주시",
+    ages: 20,
+    companion_count: 3,
+    concepts: "가족여행",
+  });
+  const [spots, setSpots] = useState<spot[]>([
     {
-      day: "DAY 1",
+      day: "1일차",
       time: "오후 1시",
       drivingTime: "30분",
-      image: "/images/jeju.jpg",
-      title: "금릉해변",
+      image_url: "/images/jeju.jpg",
+      kor_name: "금릉해변",
+      eng_name: "Geumneung Beach",
       description:
         "바닥이 훤히 비치는 투명한 물빛과 얕은 수심으로 아이들과 물놀이하기 좋은 금능해수욕장입니다.",
+      address: "제주특별자치도 제주시 한림읍 금능리 1377-1",
     },
     {
-      day: "DAY 1",
+      day: "1일차",
       time: "오후 2시",
       drivingTime: "15분",
-      image: "/images/jeju.jpg",
-      title: "협재해변",
+      image_url: "/images/jeju.jpg",
+      kor_name: "협재해변",
+      eng_name: "Hyeopjae Beach",
       description:
         "협재해변은 제주도의 대표적인 맑은 물과 아름다운 풍경을 자랑합니다.",
+      address: "제주특별자치도 제주시 한림읍 협재리 2497",
     },
     {
-      day: "DAY 2",
+      day: "1일차",
       time: "오후 3시",
       drivingTime: "20분",
-      image: "/images/jeju.jpg",
-      title: "한라산",
+      image_url: "/images/jeju.jpg",
+      kor_name: "한라산",
+      eng_name: "Halla Mountain",
       description:
         "한라산은 제주도의 대표적인 산으로 트레킹 코스로 유명합니다.",
+      address: "제주특별자치도 서귀포시 성산읍 성산리 200-1",
     },
-  ];
+  ]);
 
-  const [selectedDay, setSelectedDay] = useState<string>("DAY 1");
+  const days = generateDaysArray(plan.start_date, plan.end_date);
+  const navigate = useNavigate();
+
+  const [selectedDay, setSelectedDay] = useState<string>("1일차");
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   // 헤더 날짜 선택
@@ -80,16 +144,16 @@ const PlanList: React.FC = () => {
       <form className={styles.travel_plan_list_container}>
         {/* PlanHeader 컴포넌트 */}
         <PlanHeader
-          destination={destination}
+          destination={plan.main_location}
           days={days} // days 배열 전달
           selectedDay={selectedDay}
           onDayClick={handleDayClick} // DAY 변경 핸들러 전달
         />
 
         {/* 일정 요소 list */}
-        {travelPlans
-          .filter((plan) => plan.day === selectedDay)
-          .map((plan, index) => (
+        {spots
+          .filter((spot) => spot.day === selectedDay)
+          .map((spot, index) => (
             <div className={styles.travel_plan_card_section} key={index}>
               <div className={styles.travel_plan_card_container}>
                 <div className={styles.timeline_indicator}>
@@ -97,19 +161,21 @@ const PlanList: React.FC = () => {
                   <div className={styles.line}></div>
                   <div className={styles.driving_time}>
                     <img src="/icons/car.jpg" alt="운전 아이콘" />
-                    <p>{plan.drivingTime}</p>
+                    <p>{spot.drivingTime}</p>
                   </div>
                 </div>
                 <div className={styles.travel_time_container}>
-                  <div className={styles.travel_time}>{plan.time}</div>
+                  <div className={styles.travel_time}>{spot.time}</div>
                 </div>
                 <div className={styles.travle_image_container}>
                   <div className={styles.travle_image}>
-                    <img src={plan.image} alt={plan.title} />
+                    <img src={spot.image_url} alt={spot.eng_name} />
                   </div>
                   <div className={styles.place_description}>
-                    <h2>{plan.title}</h2>
-                    <p>{plan.description}</p>
+                    <h2>{spot.kor_name}</h2>
+                    <p>{spot.eng_name}</p>
+                    <p>{spot.address}</p>
+                    <p>{spot.description}</p>
                   </div>
                 </div>
               </div>
