@@ -32,8 +32,9 @@
 }
 
 .region_input_container {
+  position: relative;
   width: 98%;
-  margin: 20px 0px 20px 15px;
+  margin: 20px 0px 0px 15px;
 }
 
 .region_input {
@@ -45,16 +46,28 @@
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 }
 
-.region_search_button {
-  width: 40px;
-  height: 40px;
-  background-color: #fff;
-  border: 1px solid #e0dede;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.filtered_region_list {
+  width: 98%;
+  max-height: 200px;
+  overflow-y: auto;
+  border-left: 1px solid var(--grey-1);
+  border-right: 1px solid var(--grey-1);
+  border-bottom: 1px solid var(--grey-1);
+  border-top: none;
+  margin-left: 15px;
+  padding: 4px 0px;
+  background-color: var(--white);
+  border-radius: 0 0 var(--border-radius-2) var(--border-radius-2);
+  font-size: var(--font-size-5);
+}
+
+.filtered_region_list li {
+  padding: 7px 12px;
   cursor: pointer;
+}
+
+.filtered_region_list li:hover {
+  background-color: var(--grey-3);
 }
 
 /* 일정 섹션 */
@@ -62,7 +75,8 @@
   display: flex;
   flex-direction: column;
   margin: 20px 0;
-  height: 390px; /* 일정 높이 고정 */
+  height: 390px;
+  /* 일정 높이 고정 */
 }
 
 /* 달력 컨테이너 */
@@ -71,7 +85,8 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 390px; /* 일정 높이 고정 */
+  height: 390px;
+  /* 일정 높이 고정 */
   position: relative;
 }
 
@@ -81,13 +96,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 366px; /* wrapper의 높이 고정 */
+  height: 366px;
+  /* wrapper의 높이 고정 */
 }
 
 /* react-calendar */
 .custom_calendar {
   padding: 10px 10px;
-  height: 366px; /* react-calendar 높이 고정 */
+  height: 366px;
+  /* react-calendar 높이 고정 */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -287,14 +304,16 @@
 .companion_group {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 좌우 정렬 */
+  justify-content: space-between;
+  /* 좌우 정렬 */
 }
 
 .companion_controls {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-grow: 1; /* 가운데 공간을 확보 */
+  flex-grow: 1;
+  /* 가운데 공간을 확보 */
 }
 
 .companion_minus,
@@ -309,17 +328,21 @@
   cursor: pointer;
   font-size: var(--font-size-6);
   color: #000;
-  background-color: #fff; /* 버튼 배경색 */
+  background-color: #fff;
+  /* 버튼 배경색 */
   transition: background-color 0.2s ease, border-color 0.2s ease,
-    color 0.2s ease; /* 클릭 시 애니메이션 */
+    color 0.2s ease;
+  /* 클릭 시 애니메이션 */
 }
 
 .companion_minus:hover {
-  background-color: var(--sub-color-2); /* 호버 시 하늘색에 가까운 배경 */
+  background-color: var(--sub-color-2);
+  /* 호버 시 하늘색에 가까운 배경 */
 }
 
 .companion_plus:hover {
-  background-color: var(--sub-color-1); /* 호버 시 하늘색에 가까운 배경 */
+  background-color: var(--sub-color-1);
+  /* 호버 시 하늘색에 가까운 배경 */
 }
 
 .companion_label {
@@ -328,7 +351,8 @@
   color: var(--text-main);
   text-align: center;
   padding: 0 10px;
-  width: 70px; /* 고정 너비로 일관된 정렬 유지 */
+  width: 70px;
+  /* 고정 너비로 일관된 정렬 유지 */
 }
 
 .companion_count {
@@ -373,23 +397,8 @@
   align-items: center;
 }
 
-.travel_plan_complete_button > * {
+.travel_plan_complete_button>* {
   max-width: 50%;
   width: 100%;
 }
 
-.filtered_region_list {
-  width: 98%;
-  max-height: 200px;
-  overflow-y: auto;
-  border: 1px solid var(--grey-1);
-  padding: 8px 0px 0px 12px;
-  margin: 8px 0px 0px 15px;
-  background-color: var(--white);
-  border-radius: var(--border-radius-2);
-  font-size: var(--font-size-5);
-}
-
-.filtered_region_list li {
-  margin-bottom: 8px;
-}

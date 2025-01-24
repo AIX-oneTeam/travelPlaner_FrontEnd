@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Calendar, { CalendarProps } from "react-calendar";
 import LongBtn from "../../components/buttons/LongBtn";
-import NormalInput from "../../components/input/NormalInput";
+import NormalInput2 from "../../components/input/NormalInput2";
 import { Cloud, Sun, CloudRain, AlertCircle } from "lucide-react";
 import { API_BASE_URL } from "../../config";
 import axios from "axios";
@@ -303,11 +303,12 @@ const PlanFilterSelector: React.FC = () => {
         <h2 className={styles.section_title}>1. 지역</h2>
         <div className={styles.region_input_container}>
           {/* 입력 필드 */}
-          <NormalInput
+          <NormalInput2
             type="text"
             value={region}
             placeholder="지역을 입력해주세요"
             onChange={handleRegionChange}
+            className={`${styles.NormalInput_box} ${region && filteredRegions.length > 0 ? styles.hasList : ''}`}
           />
         </div>
 
@@ -317,7 +318,6 @@ const PlanFilterSelector: React.FC = () => {
             {filteredRegions.map((filteredRegion, index) => (
               <li
                 key={index}
-                className={styles.filtered_region_item}
                 onClick={() =>
                   handleRegionSelect(
                     filteredRegion.city_province === filteredRegion.city_county
@@ -335,6 +335,7 @@ const PlanFilterSelector: React.FC = () => {
         )}
       </div>
 
+
       {/* 날짜 선택 */}
       <DateSelector
         selectedDateRange={selectedDateRange}
@@ -351,6 +352,7 @@ const PlanFilterSelector: React.FC = () => {
           {ages.map((age) => (
             <button
               key={age}
+              type="button"
               className={`${styles.age_button} ${selectedAge === age ? styles.active : ""
                 }`}
               onClick={() => setSelectedAge(age)}
