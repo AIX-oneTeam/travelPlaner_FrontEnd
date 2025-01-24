@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 
 // 디코드된 토큰 interface
 interface MemberInfo {
+  id?: number;
   nickname: string;
   email: string;
   profile_url?: string;
@@ -24,6 +25,7 @@ const useMemberStore: any = create(
   persist<MemberStore>(
     (set, get) => ({
       memberInfo: {
+        id: -1,
         nickname: "익명의 사용자",
         email: "",
         profile_url: "",
@@ -35,6 +37,7 @@ const useMemberStore: any = create(
       initMemberInfo: () => {
         set({
           memberInfo: {
+            id: -1,
             nickname: "익명의 사용자",
             email: "",
             profile_url: "",
