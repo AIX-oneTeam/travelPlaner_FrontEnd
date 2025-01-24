@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LongBtn from "../../components/buttons/LongBtn";
 import ConfirmModal from "../../components/modal/ConfirmModal"; // 모달 컴포넌트
 import PlanHeader from "./include/PlanHeader"; // 일정 날짜 헤더 컴포넌트
 import styles from "./PlanList.module.css";
+import axios from "axios";
 
 interface spotResponse {
   kor_name: string;
@@ -66,7 +67,10 @@ const generateDaysArray = (startDate: Date, endDate: Date) => {
   return daysArray;
 };
 
-const PlanList: React.FC = () => {
+const PlanList: React.FC = (planId) => {
+  // 테스트 데이터
+  planId = 1;
+
   const [plan, setPlan] = useState<plan>({
     name: "제주도 여행",
     start_date: new Date(),
@@ -111,6 +115,30 @@ const PlanList: React.FC = () => {
       address: "제주특별자치도 서귀포시 성산읍 성산리 200-1",
     },
   ]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/plan_spots/${planId}`
+        );
+        const plan = response.data.data[0];
+        const spotInfos = response.data.data[1];
+        setPlan(plan.plan);
+
+        const updatedSpots = spotInfos.map((spotInfo: any) => ({
+          ...spotInfo.spot,
+          ...spotInfo.plan_spot,
+        }));
+        setSpots((prev) => [...prev, ...updatedSpots]);
+        console.log(spots);
+        console.log(updatedSpots);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
+  }, []);
 
   const days: { day: number; date: string }[] = generateDaysArray(
     plan.start_date,
