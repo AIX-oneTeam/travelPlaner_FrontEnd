@@ -1,24 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import "./NormalInput.css";
 
 interface NormalInputProps {
   type?: "text" | "password" | "email" | "number" | "tel";
   placeholder?: string;
+  value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const NormalInput: React.FC<NormalInputProps> = ({
   type = "text",
   placeholder = "입력해주세요",
-  onChange = () => {},
+  value = "",
+  onChange = () => { },
 }) => {
-  const [inputValue, setInputValue] = useState<string>("");
-
-  const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
-  onChange = inputHandler;
   return (
     <div id="NormalInput-container">
       <label htmlFor="input">
@@ -27,8 +22,8 @@ const NormalInput: React.FC<NormalInputProps> = ({
           name="input"
           type={type}
           placeholder={placeholder}
-          value={inputValue}
-          onChange={onChange}
+          value={value} // 부모 상태를 반영
+          onChange={onChange} // 부모로부터 전달된 onChange 호출
         />
       </label>
     </div>

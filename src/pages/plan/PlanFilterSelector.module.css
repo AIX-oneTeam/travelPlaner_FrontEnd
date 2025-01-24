@@ -201,7 +201,7 @@
 
 /* 날씨 정보 */
 .weather_container {
-  max-width: 49%;
+  max-width: 35%;
   margin: 50px auto 50px auto;
 }
 
@@ -376,4 +376,20 @@
 .travel_plan_complete_button > * {
   max-width: 50%;
   width: 100%;
+}
+
+.filtered_region_list {
+  width: 98%;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--grey-1);
+  padding: 8px 0px 0px 12px;
+  margin: 8px 0px 0px 15px;
+  background-color: var(--white);
+  border-radius: var(--border-radius-2);
+  font-size: var(--font-size-5);
+}
+
+.filtered_region_list li {
+  margin-bottom: 8px;
 }

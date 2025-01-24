@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Calendar, { CalendarProps } from "react-calendar";
 import LongBtn from "../../components/buttons/LongBtn";
-import SearchInput2 from "../../components/input/SearchInput2";
+import NormalInput from "../../components/input/NormalInput";
 import { Cloud, Sun, CloudRain, AlertCircle } from "lucide-react";
+import { API_BASE_URL } from "../../config";
+import axios from "axios";
 
 //css import
 import "react-calendar/dist/Calendar.css";
@@ -35,7 +37,7 @@ const purposes = [
   "역사 여행",
 ];
 
-// 날짜 선택 컴포넌트
+/* 일정(달력) 컴포넌트 */
 interface DateSelectorProps {
   selectedDateRange: [Date, Date] | null;
   setSelectedDateRange: React.Dispatch<
@@ -43,6 +45,7 @@ interface DateSelectorProps {
   >;
 }
 
+/* 일정(달력) 컴포넌트 */
 const DateSelector: React.FC<DateSelectorProps> = ({
   selectedDateRange,
   setSelectedDateRange,
@@ -137,7 +140,7 @@ interface WeatherState {
   error?: boolean;
 }
 
-// 날씨 정보 컴포넌트
+/* 날씨 정보 컴포넌트 */
 const WeatherAlert = () => {
   // 기본 날씨 상태 설정 (error, setWeatherState는 API 연동 전까지는 불필요)
   const [weatherState, setWeatherState] = useState<WeatherState>({
@@ -188,6 +191,61 @@ const PlanFilterSelector: React.FC = () => {
     [Date, Date] | null
   >(null);
 
+  const [region, setRegion] = useState<string>(""); // 지역 입력값
+  const [allRegions, setAllRegions] = useState<any[]>([]); // 모든 지역 리스트
+  const [filteredRegions, setFilteredRegions] = useState<any[]>([]); // 필터링된 지역 리스트
+  const [selectedAge, setSelectedAge] = useState<string | null>(null); // 나이
+  const [selectedPurposes, setSelectedPurposes] = useState<string[]>([]); // 목적
+
+  // 매핑 테이블
+  const provinceMappings: Record<string, string> = {
+    "강원특별자치도": "강원도",
+    "충청북도": "충북",
+    "충청남도": "충남",
+    "전북특별자치도": "전라북도",
+    "전라남도": "전남",
+    "경상북도": "경북",
+    "경상남도": "경남",
+    "제주특별자치도": "제주도",
+  };
+
+  // 모든 지역 데이터를 가져오는 함수
+  const fetchAllRegions = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/regions/all`); // API 호출
+      const divisions = response.data.data.divisions;
+      setAllRegions(divisions); // 전체 지역 데이터 저장
+    } catch (error) {
+      console.error("Error fetching regions:", error);
+    }
+  };
+
+  // 사용자가 입력한 값에 따라 필터링
+  const handleRegionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setRegion(value); // 입력값 업데이트
+
+    // 매핑 테이블에서 공식 명칭으로 변환
+    const mappedProvinces = Object.keys(provinceMappings).filter((key) =>
+      provinceMappings[key].includes(value)
+    );
+
+    // 입력값 또는 변환된 값에 따라 필터링
+    const filtered = allRegions.filter(
+      (region) =>
+        mappedProvinces.includes(region.city_province) ||
+        region.city_province.includes(value) ||
+        region.city_county.includes(value)
+    );
+    setFilteredRegions(filtered); // 필터링된 결과 업데이트
+  };
+
+  // 사용자가 리스트에서 지역 선택 시 상태 저장
+  const handleRegionSelect = (selectedRegion: string) => {
+    setRegion(selectedRegion);
+    setFilteredRegions([]); // 리스트 초기화
+  };
+
   const [companions, setCompanions] = useState<Companion[]>([
     { label: "성인", count: 0 },
     { label: "청소년", count: 0 },
@@ -195,11 +253,6 @@ const PlanFilterSelector: React.FC = () => {
     { label: "영유아", count: 0 },
     { label: "반려견", count: 0 },
   ]);
-
-  const [region, setRegion] = useState<string>(""); // 지역
-  const [selectedAge, setSelectedAge] = useState<string | null>(null); // 나이
-  const [selectedPurposes, setSelectedPurposes] = useState<string[]>([]); // 목적
-  // const [activeButton, setActiveButton] = useState<string | null>(null);
 
   // 동반자 수 변경 이벤트 핸들러
   const handleCompanionChange = (label: string, delta: number) => {
@@ -210,7 +263,7 @@ const PlanFilterSelector: React.FC = () => {
         (companion) =>
           companion.label === label // label이 일치하는 동반자를 찾음
             ? // 기존 동반자 정보는 그대로 유지하고 count를 delta만큼 변경하되 최소값은 0으로 제한
-              { ...companion, count: Math.max(0, companion.count + delta) }
+            { ...companion, count: Math.max(0, companion.count + delta) }
             : companion // label이 일치하지 않으면 기존 동반자 데이터를 그대로 반환
       )
     );
@@ -232,6 +285,11 @@ const PlanFilterSelector: React.FC = () => {
     navigate("/plan/list");
   };
 
+  // useEffect에서 API 호출
+  useEffect(() => {
+    fetchAllRegions(); // 컴포넌트 로드 시 호출
+  }, []);
+
   return (
     <form className={styles.travel_plan_container} onSubmit={handleSubmit}>
       <h1 className={styles.travel_plan_header}>
@@ -241,17 +299,40 @@ const PlanFilterSelector: React.FC = () => {
         맞춤 여행 플랜을 준비하고 있습니다.
       </p>
 
-      {/* 지역 선택 */}
       <div className={styles.travel_region_section}>
         <h2 className={styles.section_title}>1. 지역</h2>
         <div className={styles.region_input_container}>
-          <SearchInput2
+          {/* 입력 필드 */}
+          <NormalInput
             type="text"
             value={region}
             placeholder="지역을 입력해주세요"
-            onChange={(e) => setRegion(e.target.value)}
+            onChange={handleRegionChange}
           />
         </div>
+
+        {/* 필터링된 지역 리스트 */}
+        {region && filteredRegions.length > 0 && (
+          <ul className={styles.filtered_region_list}>
+            {filteredRegions.map((filteredRegion, index) => (
+              <li
+                key={index}
+                className={styles.filtered_region_item}
+                onClick={() =>
+                  handleRegionSelect(
+                    filteredRegion.city_province === filteredRegion.city_county
+                      ? filteredRegion.city_province // 광역시는 중복 제거
+                      : `${filteredRegion.city_province} - ${filteredRegion.city_county}` // 일반 형식
+                  )
+                }
+              >
+                {filteredRegion.city_province === filteredRegion.city_county
+                  ? filteredRegion.city_province // 광역시는 중복 제거
+                  : `${filteredRegion.city_province} - ${filteredRegion.city_county}`} {/* 일반 형식 */}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* 날짜 선택 */}
@@ -270,9 +351,8 @@ const PlanFilterSelector: React.FC = () => {
           {ages.map((age) => (
             <button
               key={age}
-              className={`${styles.age_button} ${
-                selectedAge === age ? styles.active : ""
-              }`}
+              className={`${styles.age_button} ${selectedAge === age ? styles.active : ""
+                }`}
               onClick={() => setSelectedAge(age)}
             >
               {age}
@@ -305,8 +385,8 @@ const PlanFilterSelector: React.FC = () => {
                   {label === "반려견"
                     ? `총 ${count} 마리`
                     : index === 0
-                    ? `(본인 포함) 총 ${count}명`
-                    : `총 ${count}명`}
+                      ? `(본인 포함) 총 ${count}명`
+                      : `총 ${count}명`}
                 </span>
               </div>
             </div>
@@ -322,9 +402,8 @@ const PlanFilterSelector: React.FC = () => {
             <button
               key={purpose}
               type="button"
-              className={`${styles.purpose_button} ${
-                selectedPurposes.includes(purpose) ? styles.active : ""
-              }`}
+              className={`${styles.purpose_button} ${selectedPurposes.includes(purpose) ? styles.active : ""
+                }`}
               onClick={() => togglePurpose(purpose)}
             >
               {purpose}
