@@ -31,7 +31,11 @@ const Header: React.FC<HeaderProps> = ({ openSideBar }) => {
         <div className="text-container">
           <img
             className="profile_img"
-            src={memberInfo.profile_url}
+            src={
+              memberInfo.profile_url
+                ? memberInfo.profile_url
+                : "/images/default_profile_img.png"
+            }
             alt="프로필 이미지"
           />
           <p className="member-nickname">
