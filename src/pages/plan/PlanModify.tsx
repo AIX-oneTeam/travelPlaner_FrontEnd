@@ -11,11 +11,11 @@ import styles from "./PlanModify.module.css";
 const PlanModify: React.FC = () => {
   // 테스트 데이터
   const days = [
-    { day: "DAY 1", date: "02월18일" },
-    { day: "DAY 2", date: "02월19일" },
-    { day: "DAY 3", date: "02월20일" },
-    { day: "DAY 4", date: "02월21일" },
-    { day: "DAY 5", date: "02월22일" },
+    { day: 1, date: "02월18일" },
+    { day: 2, date: "02월19일" },
+    { day: 3, date: "02월20일" },
+    { day: 4, date: "02월21일" },
+    { day: 5, date: "02월22일" },
   ];
 
   // 테스트 데이터(여행 지역)
@@ -24,7 +24,7 @@ const PlanModify: React.FC = () => {
   // 테스트 데이터
   const travelPlans = [
     {
-      day: "DAY 1",
+      day: 1,
       time: "오후 1시",
       drivingTime: "30분",
       image: "/images/jeju.jpg",
@@ -33,7 +33,7 @@ const PlanModify: React.FC = () => {
         "바닥이 훤히 비치는 투명한 물빛과 얕은 수심으로 아이들과 물놀이하기 좋은 금능해수욕장입니다.",
     },
     {
-      day: "DAY 1",
+      day: 1,
       time: "오후 2시",
       drivingTime: "15분",
       image: "/images/jeju.jpg",
@@ -42,7 +42,7 @@ const PlanModify: React.FC = () => {
         "협재해변은 제주도의 대표적인 맑은 물과 아름다운 풍경을 자랑합니다.",
     },
     {
-      day: "DAY 2",
+      day: 1,
       time: "오후 3시",
       drivingTime: "20분",
       image: "/images/jeju.jpg",
@@ -52,7 +52,7 @@ const PlanModify: React.FC = () => {
     },
   ];
 
-  const [selectedDay, setSelectedDay] = useState<string>("DAY 1");
+  const [selectedDay, setSelectedDay] = useState<number>(1);
   const [selectedPlans, setSelectedPlans] = useState<number[]>([]); // 선택된 일정 관리
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [isPromptOpen, setPromptOpen] = useState<boolean>(false); // PromptModal 상태 추가
@@ -78,7 +78,7 @@ const PlanModify: React.FC = () => {
     };
   }, []);
 
-  const handleDayClick = (day: string) => {
+  const handleDayClick = (day: number) => {
     setSelectedDay(day);
     setSelectedPlans([]); // 날짜 변경 시 선택 초기화
   };

@@ -39,7 +39,7 @@ interface spot {
   description: string;
   address: string;
   map_url?: string;
-  day: string;
+  day: number;
   time: string;
   // TODO: 지도 API 이용해야 할지?
   drivingTime: string;
@@ -56,7 +56,7 @@ const generateDaysArray = (startDate: Date, endDate: Date) => {
 
   while (currentDate <= endDate) {
     daysArray.push({
-      day: `${dayCount}일차`,
+      day: dayCount,
       date: `${currentDate.getMonth() + 1}월 ${currentDate.getDate()}일`,
     });
     currentDate.setDate(currentDate.getDate() + 1);
@@ -78,7 +78,7 @@ const PlanList: React.FC = () => {
   });
   const [spots, setSpots] = useState<spot[]>([
     {
-      day: "1일차",
+      day: 1,
       time: "오후 1시",
       drivingTime: "30분",
       image_url: "/images/jeju.jpg",
@@ -89,7 +89,7 @@ const PlanList: React.FC = () => {
       address: "제주특별자치도 제주시 한림읍 금능리 1377-1",
     },
     {
-      day: "1일차",
+      day: 1,
       time: "오후 2시",
       drivingTime: "15분",
       image_url: "/images/jeju.jpg",
@@ -100,7 +100,7 @@ const PlanList: React.FC = () => {
       address: "제주특별자치도 제주시 한림읍 협재리 2497",
     },
     {
-      day: "1일차",
+      day: 1,
       time: "오후 3시",
       drivingTime: "20분",
       image_url: "/images/jeju.jpg",
@@ -112,14 +112,17 @@ const PlanList: React.FC = () => {
     },
   ]);
 
-  const days = generateDaysArray(plan.start_date, plan.end_date);
+  const days: { day: number; date: string }[] = generateDaysArray(
+    plan.start_date,
+    plan.end_date
+  );
   const navigate = useNavigate();
 
-  const [selectedDay, setSelectedDay] = useState<string>("1일차");
+  const [selectedDay, setSelectedDay] = useState<number>(1);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   // 헤더 날짜 선택
-  const handleDayClick = (day: string) => {
+  const handleDayClick = (day: number) => {
     setSelectedDay(day);
   };
 
