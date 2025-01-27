@@ -279,11 +279,51 @@ const PlanFilterSelector: React.FC = () => {
 
   // 입력 데이터 전송 이벤트 핸들러
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault(); // 폼 기본 동작 방지
+    event.preventDefault();
 
-    // API 통신 로직 추가
-    navigate("/plan/list");
+    try {
+      // 날짜를 MySQL의 DATETIME 형식으로 변환
+      const formatToStartOfDay = (date: Date): string => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // JavaScript는 월 0부터 시작하므로 +1
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day} 00:00:00`;
+      };
+
+      // dateRange 변환
+      const formattedDateRange = selectedDateRange
+        ? {
+          startDate: formatToStartOfDay(selectedDateRange[0]), 
+          endDate: formatToStartOfDay(selectedDateRange[1]),
+        }
+        : null;
+
+      // companions에서 count가 0 이상인 데이터만 필터링
+      const filteredCompanions = companions.filter((companion) => companion.count > 0);
+
+      // 전송할 데이터 묶기
+      const requestData = {
+        region,
+        dateRange: formattedDateRange,
+        ageGroup: selectedAge,
+        companions: filteredCompanions,
+        purposes: selectedPurposes,
+      };
+
+      console.log("전송 데이터:", requestData);
+
+      // API 요청
+      const response = await axios.post(`${API_BASE_URL}/plans`, requestData);
+
+      // 성공 처리
+      console.log("응답 데이터:", response.data);
+      navigate("/plan/list");
+    } catch (error) {
+      console.error("API 요청 중 오류 발생:", error);
+      alert("여행 계획 저장 중 오류가 발생했습니다. 다시 시도해주세요.");
+    }
   };
+
 
   // useEffect에서 API 호출
   useEffect(() => {
@@ -322,13 +362,13 @@ const PlanFilterSelector: React.FC = () => {
                   handleRegionSelect(
                     filteredRegion.city_province === filteredRegion.city_county
                       ? filteredRegion.city_province // 광역시는 중복 제거
-                      : `${filteredRegion.city_province} - ${filteredRegion.city_county}` // 일반 형식
+                      : `${filteredRegion.city_province} - ${filteredRegion.city_county}`
                   )
                 }
               >
                 {filteredRegion.city_province === filteredRegion.city_county
-                  ? filteredRegion.city_province // 광역시는 중복 제거
-                  : `${filteredRegion.city_province} - ${filteredRegion.city_county}`} {/* 일반 형식 */}
+                  ? filteredRegion.city_province
+                  : `${filteredRegion.city_province} - ${filteredRegion.city_county}`}
               </li>
             ))}
           </ul>
@@ -371,6 +411,7 @@ const PlanFilterSelector: React.FC = () => {
             <div key={label} className={styles.companion_group}>
               <div className={styles.companion_controls}>
                 <button
+                  type="button"
                   className={styles.companion_minus}
                   onClick={() => handleCompanionChange(label, -1)}
                 >
@@ -378,6 +419,7 @@ const PlanFilterSelector: React.FC = () => {
                 </button>
                 <span className={styles.companion_label}>{label}</span>
                 <button
+                  type="button"
                   className={styles.companion_plus}
                   onClick={() => handleCompanionChange(label, 1)}
                 >
