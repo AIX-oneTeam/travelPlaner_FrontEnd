@@ -1,58 +1,35 @@
 import React, { useEffect, useRef, useState } from "react";
-import PlanHeader from "./include/PlanHeader"; // 일정 날짜 헤더 컴포넌트
+import PlanHeader from "./PlanHeader"; // 일정 날짜 헤더 컴포넌트
 
 // 모달 컴포넌트
-import ConfirmModal from "../../components/modal/ConfirmModal";
-import PromptModal from "../../components/modal/PromptModal";
+import ConfirmModal from "../../../components/modal/ConfirmModal";
+import PromptModal from "../../../components/modal/PromptModal";
 
 // css
 import styles from "./PlanModify.module.css";
 
-const PlanModify: React.FC = () => {
-  // 테스트 데이터
-  const days = [
-    { day: 1, date: "02월18일" },
-    { day: 2, date: "02월19일" },
-    { day: 3, date: "02월20일" },
-    { day: 4, date: "02월21일" },
-    { day: 5, date: "02월22일" },
-  ];
+interface spotInterface {
+  kor_name: string;
+  eng_name?: string;
+  description: string;
+  address: string;
+  map_url?: string;
+  image_url: string;
+  day_x: number;
+  time: string;
+  // TODO: 지도 API 이용해야 할지?
+  drivingTime?: string;
+  isParkingLot?: boolean;
+  isPet?: boolean;
+}
 
-  // 테스트 데이터(여행 지역)
-  const destination = "제주도";
+interface PlanListProps {
+  spots: spotInterface[];
+  selectedDay: number;
+}
 
-  // 테스트 데이터
-  const travelPlans = [
-    {
-      day: 1,
-      time: "오후 1시",
-      drivingTime: "30분",
-      image: "/images/jeju.jpg",
-      title: "금릉해변",
-      description:
-        "바닥이 훤히 비치는 투명한 물빛과 얕은 수심으로 아이들과 물놀이하기 좋은 금능해수욕장입니다.",
-    },
-    {
-      day: 1,
-      time: "오후 2시",
-      drivingTime: "15분",
-      image: "/images/jeju.jpg",
-      title: "협재해변",
-      description:
-        "협재해변은 제주도의 대표적인 맑은 물과 아름다운 풍경을 자랑합니다.",
-    },
-    {
-      day: 1,
-      time: "오후 3시",
-      drivingTime: "20분",
-      image: "/images/jeju.jpg",
-      title: "한라산",
-      description:
-        "한라산은 제주도의 대표적인 산으로 트레킹 코스로 유명합니다.",
-    },
-  ];
-
-  const [selectedDay, setSelectedDay] = useState<number>(1);
+const PlanModify: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
+  const [selectedDaystate, setSelectedDaystate] = useState<number>(selectedDay);
   const [selectedPlans, setSelectedPlans] = useState<number[]>([]); // 선택된 일정 관리
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [isPromptOpen, setPromptOpen] = useState<boolean>(false); // PromptModal 상태 추가
@@ -79,7 +56,7 @@ const PlanModify: React.FC = () => {
   }, []);
 
   const handleDayClick = (day: number) => {
-    setSelectedDay(day);
+    setSelectedDaystate(day);
     setSelectedPlans([]); // 날짜 변경 시 선택 초기화
   };
 
@@ -96,8 +73,8 @@ const PlanModify: React.FC = () => {
 
   // 전체 선택
   const handleSelectAll = () => {
-    const allIndexes = travelPlans
-      .filter((plan) => plan.day === selectedDay)
+    const allIndexes = spots
+      .filter((spot) => spot.day_x === selectedDaystate)
       .map((_, index) => index);
 
     // 현재 선택 상태와 모든 인덱스 비교
@@ -143,14 +120,6 @@ const PlanModify: React.FC = () => {
           !isPromptOpen ? styles.with_padding_bottom : ""
         }`}
       >
-        {/* PlanHeader 컴포넌트 */}
-        <PlanHeader
-          destination={destination}
-          days={days} // days 배열 전달
-          selectedDay={selectedDay}
-          onDayClick={handleDayClick} // DAY 변경 핸들러 전달
-        />
-
         <div
           className={styles.travel_plan_controls}
           style={{ textAlign: "right" }}
@@ -165,9 +134,9 @@ const PlanModify: React.FC = () => {
         </div>
 
         {/* 일정 요소 list */}
-        {travelPlans
-          .filter((plan) => plan.day === selectedDay)
-          .map((plan, index) => (
+        {spots
+          .filter((spot) => spot.day_x === selectedDaystate)
+          .map((spot, index) => (
             <div className={styles.travel_plan_card_section} key={index}>
               <div className={styles.travel_plan_card_container}>
                 <div className={styles.teavel_plan_check}>
@@ -179,11 +148,11 @@ const PlanModify: React.FC = () => {
                 </div>
                 <div className={styles.travle_image_container}>
                   <div className={styles.travle_image}>
-                    <img src={plan.image} alt={plan.title} />
+                    <img src={spot.image_url} alt={spot.eng_name} />
                   </div>
                   <div className={styles.place_description}>
-                    <h2>{plan.title}</h2>
-                    <p>{plan.description}</p>
+                    <h2>{spot.kor_name}</h2>
+                    <p>{spot.description}</p>
                   </div>
                 </div>
               </div>

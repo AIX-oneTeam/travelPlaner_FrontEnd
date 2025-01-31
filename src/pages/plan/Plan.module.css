@@ -1,0 +1,27 @@
+.travel_plan_list_container {
+  width: 100%;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  background-color: var(--grey-3);
+  min-height: 100vh;
+}
+
+
+
+/* 버튼 컨테이너 */
+.form_actions_btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 40px;
+  padding: 50px 0px;
+}
+
+.travle_save_btn,
+.travle_modify_btn {
+  width: 370px;
+}
