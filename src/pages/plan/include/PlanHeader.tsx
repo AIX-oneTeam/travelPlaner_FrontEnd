@@ -3,15 +3,15 @@ import Slider from "react-slick";
 import styles from "./PlanHeader.module.css";
 
 interface Day {
-  day: string; // DAY 1
+  day: number; // DAY 1
   date: string; // 1월 21일
 }
 
 interface PlanHeaderProps {
   days: Day[]; // days 배열
   destination: string;
-  selectedDay: string;
-  onDayClick: (day: string) => void; // DAY 클릭 이벤트 핸들러
+  selectedDay: number;
+  onDayClick: (day: number) => void; // DAY 클릭 이벤트 핸들러
 }
 
 const PlanHeader: React.FC<PlanHeaderProps> = ({
@@ -61,7 +61,7 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({
                 }`}
                 onClick={() => onDayClick(day)}
               >
-                <div className={styles.travel_plan_list_day}>{day}</div>
+                <div className={styles.travel_plan_list_day}>{day}일차</div>
                 <div className={styles.travel_plan_list_date_text}>{date}</div>
               </div>
             ))}
