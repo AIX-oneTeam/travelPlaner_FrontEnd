@@ -136,18 +136,3 @@
   color: var(--text-sub);
   line-height: 1.5;
 }
-
-/* 버튼 컨테이너 */
-.form_actions_btns {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  gap: 40px;
-  padding: 50px 0px;
-}
-
-.travle_save_btn,
-.travle_modify_btn {
-  width: 370px;
-}
