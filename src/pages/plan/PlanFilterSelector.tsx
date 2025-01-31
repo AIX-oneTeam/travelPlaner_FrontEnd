@@ -200,14 +200,14 @@ const PlanFilterSelector: React.FC = () => {
 
   // 매핑 테이블
   const provinceMappings: Record<string, string> = {
-    "강원특별자치도": "강원도",
-    "충청북도": "충북",
-    "충청남도": "충남",
-    "전북특별자치도": "전라북도",
-    "전라남도": "전남",
-    "경상북도": "경북",
-    "경상남도": "경남",
-    "제주특별자치도": "제주도",
+    강원특별자치도: "강원도",
+    충청북도: "충북",
+    충청남도: "충남",
+    전북특별자치도: "전라북도",
+    전라남도: "전남",
+    경상북도: "경북",
+    경상남도: "경남",
+    제주특별자치도: "제주도",
   };
 
   // 모든 지역 데이터를 가져오는 함수
@@ -264,7 +264,7 @@ const PlanFilterSelector: React.FC = () => {
         (companion) =>
           companion.label === label // label이 일치하는 동반자를 찾음
             ? // 기존 동반자 정보는 그대로 유지하고 count를 delta만큼 변경하되 최소값은 0으로 제한
-            { ...companion, count: Math.max(0, companion.count + delta) }
+              { ...companion, count: Math.max(0, companion.count + delta) }
             : companion // label이 일치하지 않으면 기존 동반자 데이터를 그대로 반환
       )
     );
@@ -294,13 +294,15 @@ const PlanFilterSelector: React.FC = () => {
       // 선택된 날짜 범위를 변환하거나, 없다면 null로 처리
       const formattedDateRange = selectedDateRange
         ? {
-          start_date: formatToDate(selectedDateRange[0]),
-          end_date: formatToDate(selectedDateRange[1]),
-        }
+            start_date: formatToDate(selectedDateRange[0]),
+            end_date: formatToDate(selectedDateRange[1]),
+          }
         : null;
 
       // companions에서 count가 0 이상인 데이터만 필터링
-      const filteredCompanions = companions.filter((companion) => companion.count > 0);
+      const filteredCompanions = companions.filter(
+        (companion) => companion.count > 0
+      );
 
       // 전송할 데이터 구성
       const requestData = {
@@ -315,11 +317,15 @@ const PlanFilterSelector: React.FC = () => {
       console.log("전송 데이터:", requestData);
 
       // API 요청
-      const response = await axios.post(`${API_BASE_URL}/agents/plan`, requestData);
+      const response = await axios.post(
+        `${API_BASE_URL}/agents/plan`,
+        requestData
+      );
 
       // 성공 처리
       console.log("응답 데이터:", response.data);
-      navigate("/plan/list");
+      // TODO: 백엔드 에이전트 응답이 리다이렉션 해줘야 함.
+      // navigate("/plan/list");
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);
       alert("여행 계획 저장 중 오류가 발생했습니다. 다시 시도해주세요.");
@@ -349,7 +355,9 @@ const PlanFilterSelector: React.FC = () => {
             value={region}
             placeholder="지역을 입력해주세요"
             onChange={handleRegionChange}
-            className={`${styles.NormalInput_box} ${region && filteredRegions.length > 0 ? styles.hasList : ''}`}
+            className={`${styles.NormalInput_box} ${
+              region && filteredRegions.length > 0 ? styles.hasList : ""
+            }`}
           />
         </div>
 
@@ -376,7 +384,6 @@ const PlanFilterSelector: React.FC = () => {
         )}
       </div>
 
-
       {/* 날짜 선택 */}
       <DateSelector
         selectedDateRange={selectedDateRange}
@@ -394,8 +401,9 @@ const PlanFilterSelector: React.FC = () => {
             <button
               key={age}
               type="button"
-              className={`${styles.age_button} ${selectedAge === age ? styles.active : ""
-                }`}
+              className={`${styles.age_button} ${
+                selectedAge === age ? styles.active : ""
+              }`}
               onClick={() => setSelectedAge(age)}
             >
               {age}
@@ -430,8 +438,8 @@ const PlanFilterSelector: React.FC = () => {
                   {label === "반려견"
                     ? `총 ${count} 마리`
                     : index === 0
-                      ? `(본인 포함) 총 ${count}명`
-                      : `총 ${count}명`}
+                    ? `(본인 포함) 총 ${count}명`
+                    : `총 ${count}명`}
                 </span>
               </div>
             </div>
@@ -447,8 +455,9 @@ const PlanFilterSelector: React.FC = () => {
             <button
               key={purpose}
               type="button"
-              className={`${styles.purpose_button} ${selectedPurposes.includes(purpose) ? styles.active : ""
-                }`}
+              className={`${styles.purpose_button} ${
+                selectedPurposes.includes(purpose) ? styles.active : ""
+              }`}
               onClick={() => togglePurpose(purpose)}
             >
               {purpose}

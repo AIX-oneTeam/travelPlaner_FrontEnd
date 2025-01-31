@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import LongBtn from "../../components/buttons/LongBtn";
 import ConfirmModal from "../../components/modal/ConfirmModal"; // 모달 컴포넌트
 import PlanHeader from "./include/PlanHeader"; // 일정 날짜 헤더 컴포넌트
@@ -121,6 +121,8 @@ const Plan: React.FC = (planId) => {
     // },
   ]);
 
+  const fetchPlanDataFromAgent = async () => {};
+
   const fetchPlanData = async () => {
     try {
       const response = await axios.get(
@@ -141,7 +143,9 @@ const Plan: React.FC = (planId) => {
   };
 
   useEffect(() => {
-    fetchPlanData();
+    if (planId) {
+      fetchPlanData();
+    }
   }, []);
 
   const days: { day: number; date: string }[] = generateDaysArray(

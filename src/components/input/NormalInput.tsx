@@ -12,7 +12,7 @@ const NormalInput: React.FC<NormalInputProps> = ({
   type = "text",
   placeholder = "입력해주세요",
   value = "",
-  onChange = () => { },
+  onChange = () => {},
 }) => {
   return (
     <div id="NormalInput-container">
@@ -22,6 +22,7 @@ const NormalInput: React.FC<NormalInputProps> = ({
           name="input"
           type={type}
           placeholder={placeholder}
+          autoComplete="off"
           value={value} // 부모 상태를 반영
           onChange={onChange} // 부모로부터 전달된 onChange 호출
         />
