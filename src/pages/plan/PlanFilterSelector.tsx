@@ -11,6 +11,24 @@ import axios from "axios";
 import "react-calendar/dist/Calendar.css";
 import styles from "./PlanFilterSelector.module.css";
 
+// 가능한 날씨 상태
+type WeatherType = "맑음" | "흐림" | "비";
+
+// 날씨 상태 인터페이스 (나중에 API 연동 시 사용할 error 옵션 포함)
+interface WeatherState {
+  type: WeatherType;
+  error?: boolean;
+}
+
+// 일정(달력) 컴포넌트
+interface DateSelectorProps {
+  selectedDateRange: [Date, Date] | null;
+  setSelectedDateRange: React.Dispatch<
+    React.SetStateAction<[Date, Date] | null>
+  >;
+}
+
+// 일행 인터페이스
 interface Companion {
   label: string;
   count: number;
@@ -37,15 +55,7 @@ const purposes = [
   "역사 여행",
 ];
 
-/* 일정(달력) 컴포넌트 */
-interface DateSelectorProps {
-  selectedDateRange: [Date, Date] | null;
-  setSelectedDateRange: React.Dispatch<
-    React.SetStateAction<[Date, Date] | null>
-  >;
-}
-
-/* 일정(달력) 컴포넌트 */
+// 일정(달력) 컴포넌트
 const DateSelector: React.FC<DateSelectorProps> = ({
   selectedDateRange,
   setSelectedDateRange,
@@ -131,16 +141,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
   );
 };
 
-// 가능한 날씨 상태
-type WeatherType = "맑음" | "흐림" | "비";
-
-// 날씨 상태 인터페이스 (나중에 API 연동 시 사용할 error 옵션 포함)
-interface WeatherState {
-  type: WeatherType;
-  error?: boolean;
-}
-
-/* 날씨 정보 컴포넌트 */
+// 날씨 정보 컴포넌트
 const WeatherAlert = () => {
   // 기본 날씨 상태 설정 (error, setWeatherState는 API 연동 전까지는 불필요)
   const [weatherState, setWeatherState] = useState<WeatherState>({
@@ -199,14 +200,14 @@ const PlanFilterSelector: React.FC = () => {
 
   // 매핑 테이블
   const provinceMappings: Record<string, string> = {
-    강원특별자치도: "강원도",
-    충청북도: "충북",
-    충청남도: "충남",
-    전북특별자치도: "전라북도",
-    전라남도: "전남",
-    경상북도: "경북",
-    경상남도: "경남",
-    제주특별자치도: "제주도",
+    "강원특별자치도": "강원도",
+    "충청북도": "충북",
+    "충청남도": "충남",
+    "전북특별자치도": "전라북도",
+    "전라남도": "전남",
+    "경상북도": "경북",
+    "경상남도": "경남",
+    "제주특별자치도": "제주도",
   };
 
   // 모든 지역 데이터를 가져오는 함수
@@ -216,7 +217,7 @@ const PlanFilterSelector: React.FC = () => {
       const divisions = response.data.data.divisions;
       setAllRegions(divisions); // 전체 지역 데이터 저장
     } catch (error) {
-      console.error("Error fetching regions:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -263,7 +264,7 @@ const PlanFilterSelector: React.FC = () => {
         (companion) =>
           companion.label === label // label이 일치하는 동반자를 찾음
             ? // 기존 동반자 정보는 그대로 유지하고 count를 delta만큼 변경하되 최소값은 0으로 제한
-              { ...companion, count: Math.max(0, companion.count + delta) }
+            { ...companion, count: Math.max(0, companion.count + delta) }
             : companion // label이 일치하지 않으면 기존 동반자 데이터를 그대로 반환
       )
     );
@@ -277,48 +278,47 @@ const PlanFilterSelector: React.FC = () => {
     );
   };
 
-  // 입력 데이터 전송 이벤트 핸들러
+  // 일정 계획 데이터 전송 이벤트 핸들러(완료 버튼 클릭시)
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     try {
-      // 날짜를 MySQL의 DATETIME 형식으로 변환
-      const formatToStartOfDay = (date: Date): string => {
+      // 날짜를 MySQL의 DATE 형식(YYYY-MM-DD)으로 변환
+      const formatToDate = (date: Date): string => {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, "0"); // JavaScript는 월 0부터 시작하므로 +1
         const day = String(date.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day} 00:00:00`;
+        return `${year}-${month}-${day}`;
       };
 
-      // dateRange 변환
+      // 선택된 날짜 범위를 변환하거나, 없다면 null로 처리
       const formattedDateRange = selectedDateRange
         ? {
-            startDate: formatToStartOfDay(selectedDateRange[0]),
-            endDate: formatToStartOfDay(selectedDateRange[1]),
-          }
+          start_date: formatToDate(selectedDateRange[0]),
+          end_date: formatToDate(selectedDateRange[1]),
+        }
         : null;
 
       // companions에서 count가 0 이상인 데이터만 필터링
-      const filteredCompanions = companions.filter(
-        (companion) => companion.count > 0
-      );
+      const filteredCompanions = companions.filter((companion) => companion.count > 0);
 
-      // 전송할 데이터 묶기
+      // 전송할 데이터 구성
       const requestData = {
-        region,
-        dateRange: formattedDateRange,
+        location: region,
+        start_date: formattedDateRange?.start_date,
+        end_date: formattedDateRange?.end_date,
         ageGroup: selectedAge,
         companions: filteredCompanions,
-        purposes: selectedPurposes,
+        concepts: selectedPurposes,
       };
 
       console.log("전송 데이터:", requestData);
 
       // API 요청
-      // const response = await axios.post(`${API_BASE_URL}/plans`, requestData);
+      const response = await axios.post(`${API_BASE_URL}/agents/plan`, requestData);
 
       // 성공 처리
-      // console.log("응답 데이터:", response.data);
+      console.log("응답 데이터:", response.data);
       navigate("/plan/list");
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);
@@ -328,7 +328,7 @@ const PlanFilterSelector: React.FC = () => {
 
   // useEffect에서 API 호출
   useEffect(() => {
-    fetchAllRegions(); // 컴포넌트 로드 시 호출
+    fetchAllRegions();
   }, []);
 
   return (
@@ -349,9 +349,7 @@ const PlanFilterSelector: React.FC = () => {
             value={region}
             placeholder="지역을 입력해주세요"
             onChange={handleRegionChange}
-            className={`${styles.NormalInput_box} ${
-              region && filteredRegions.length > 0 ? styles.hasList : ""
-            }`}
+            className={`${styles.NormalInput_box} ${region && filteredRegions.length > 0 ? styles.hasList : ''}`}
           />
         </div>
 
@@ -378,6 +376,7 @@ const PlanFilterSelector: React.FC = () => {
         )}
       </div>
 
+
       {/* 날짜 선택 */}
       <DateSelector
         selectedDateRange={selectedDateRange}
@@ -395,9 +394,8 @@ const PlanFilterSelector: React.FC = () => {
             <button
               key={age}
               type="button"
-              className={`${styles.age_button} ${
-                selectedAge === age ? styles.active : ""
-              }`}
+              className={`${styles.age_button} ${selectedAge === age ? styles.active : ""
+                }`}
               onClick={() => setSelectedAge(age)}
             >
               {age}
@@ -432,8 +430,8 @@ const PlanFilterSelector: React.FC = () => {
                   {label === "반려견"
                     ? `총 ${count} 마리`
                     : index === 0
-                    ? `(본인 포함) 총 ${count}명`
-                    : `총 ${count}명`}
+                      ? `(본인 포함) 총 ${count}명`
+                      : `총 ${count}명`}
                 </span>
               </div>
             </div>
@@ -449,9 +447,8 @@ const PlanFilterSelector: React.FC = () => {
             <button
               key={purpose}
               type="button"
-              className={`${styles.purpose_button} ${
-                selectedPurposes.includes(purpose) ? styles.active : ""
-              }`}
+              className={`${styles.purpose_button} ${selectedPurposes.includes(purpose) ? styles.active : ""
+                }`}
               onClick={() => togglePurpose(purpose)}
             >
               {purpose}
