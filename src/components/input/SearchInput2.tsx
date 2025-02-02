@@ -22,6 +22,7 @@ const SearchInput2: React.FC<NormalInputProps> = ({
           name="input"
           type={type}
           placeholder={placeholder}
+          autoComplete="off"
           value={value}
           onChange={onChange}
         />

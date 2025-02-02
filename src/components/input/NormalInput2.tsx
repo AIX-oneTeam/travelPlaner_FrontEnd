@@ -14,7 +14,7 @@ const NormalInput: React.FC<NormalInputProps> = ({
   placeholder = "입력해주세요",
   value = "",
   className = "",
-  onChange = () => { },
+  onChange = () => {},
 }) => {
   console.log(styles);
   return (
@@ -25,6 +25,7 @@ const NormalInput: React.FC<NormalInputProps> = ({
           name="input"
           type={type}
           placeholder={placeholder}
+          autoComplete="off"
           value={value} // 부모 상태를 반영
           onChange={onChange} // 부모로부터 전달된 onChange 호출
         />

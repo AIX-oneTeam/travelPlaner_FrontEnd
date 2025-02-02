@@ -30,6 +30,7 @@ const SearchTextArea: React.FC<TextAreaInputProps> = ({
           name="prompt-input"
           placeholder={placeholder}
           value={inputValue}
+          autoComplete="off"
           rows={5}
           onChange={onChange}
         ></textarea>

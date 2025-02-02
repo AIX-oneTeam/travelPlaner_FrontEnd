@@ -8,23 +8,29 @@ import PromptModal from "../../../components/modal/PromptModal";
 // css
 import styles from "./PlanModify.module.css";
 
-interface spotInterface {
+interface spotResponse {
   kor_name: string;
-  eng_name?: string;
+  eng_name: string;
   description: string;
   address: string;
-  map_url?: string;
+  zip: string;
+  url: string;
   image_url: string;
+  map_url: string;
+  likes: number;
+  satisfaction: number;
+  spot_category: number;
+  phone_number: string;
+  business_status: boolean;
+  business_hours: string;
+  order: number;
   day_x: number;
-  time: string;
-  // TODO: 지도 API 이용해야 할지?
+  spot_time: string;
   drivingTime?: string;
-  isParkingLot?: boolean;
-  isPet?: boolean;
 }
 
 interface PlanListProps {
-  spots: spotInterface[];
+  spots: spotResponse[];
   selectedDay: number;
 }
 

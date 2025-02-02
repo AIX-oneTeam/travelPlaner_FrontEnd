@@ -1,23 +1,29 @@
 import React from "react";
 import styles from "./PlanList.module.css";
 
-interface spotInterface {
+interface spotResponse {
   kor_name: string;
-  eng_name?: string;
+  eng_name: string;
   description: string;
   address: string;
-  map_url?: string;
+  zip: string;
+  url: string;
   image_url: string;
+  map_url: string;
+  likes: number;
+  satisfaction: number;
+  spot_category: number;
+  phone_number: string;
+  business_status: boolean;
+  business_hours: string;
+  order: number;
   day_x: number;
-  time: string;
-  // TODO: 지도 API 이용해야 할지?
+  spot_time: string;
   drivingTime?: string;
-  isParkingLot?: boolean;
-  isPet?: boolean;
 }
 
 interface PlanListProps {
-  spots: spotInterface[];
+  spots: spotResponse[];
   selectedDay: number;
 }
 
@@ -39,7 +45,7 @@ const PlanList: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
                 </div>
               </div>
               <div className={styles.travel_time_container}>
-                <div className={styles.travel_time}>{spot.time}</div>
+                <div className={styles.travel_time}>{spot.spot_time}</div>
               </div>
               <div className={styles.travle_image_container}>
                 <div className={styles.travle_image}>
