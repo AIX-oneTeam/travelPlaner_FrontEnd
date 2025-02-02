@@ -10,9 +10,26 @@
   background-color: var(--white);
 }
 
-.travel_plan_list_destination {
+.travel_plan_list_name {
   font-size: var(--font-size-1);
   font-weight: var(--bold);
+  color: var(--text-main);
+  text-align: left;
+}
+
+
+.travel_plan_list_sub_info {
+  width: 100%;
+  padding: 0px 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  gap: 10px;
+}
+
+.travel_plan_list_destination {
+  font-size: var(--font-size-2);
+  font-weight: var(--semibold);
   color: var(--text-main);
   text-align: left;
 }
@@ -25,23 +42,7 @@
   padding: 0px 20px;
 }
 
-.travel_plan_list_icon {
-  position: relative; /* 부모 요소에 상대 위치 설정 */
-  width: 45px;
-  height: 40px;
-  cursor: pointer;
-  background-color: var(--grey-3);
-  border-radius: 50%;
-  overflow: hidden;
-}
 
-.travel_plan_list_icon img {
-  position: absolute;
-  top: 50%;
-  left: 60%;
-  transform: translate(-50%, -50%);
-  width: 70%;
-}
 
 .travel_plan_list_dates_wrapper {
   width: calc(100% - 60px);

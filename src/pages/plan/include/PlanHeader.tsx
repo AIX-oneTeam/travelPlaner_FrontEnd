@@ -10,6 +10,7 @@ interface Day {
 interface PlanHeaderProps {
   days: Day[]; // days 배열
   destination: string;
+  name: string;
   selectedDay: number;
   onDayClick: (day: number) => void; // DAY 클릭 이벤트 핸들러
 }
@@ -17,6 +18,7 @@ interface PlanHeaderProps {
 const PlanHeader: React.FC<PlanHeaderProps> = ({
   days,
   destination,
+  name,
   selectedDay,
   onDayClick,
 }) => {
@@ -44,13 +46,13 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({
 
   return (
     <div className={styles.travel_plan_list_header}>
-      <div className={styles.travel_plan_list_destination}>{destination}</div>
+      <div className={styles.travel_plan_list_name}>{name}</div>
 
+      <div className={styles.travel_plan_list_sub_info}>
+        <div className={styles.travel_plan_list_destination}>{destination}</div>
+      </div>
       {/* 슬라이더 */}
       <div className={styles.travel_plan_list_content}>
-        <div className={styles.travel_plan_list_icon}>
-          <img src="/icons/memo.jpg" alt="Icon" />
-        </div>
         <div className={styles.travel_plan_list_dates_wrapper}>
           <Slider {...sliderSettings}>
             {days.map(({ day, date }) => (

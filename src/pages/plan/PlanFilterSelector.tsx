@@ -11,6 +11,7 @@ import usePlanStore from "../../stores/PlanStore";
 //css import
 import "react-calendar/dist/Calendar.css";
 import styles from "./PlanFilterSelector.module.css";
+import AlertModal from "../../components/modal/AlertModal";
 
 // 가능한 날씨 상태
 type WeatherType = "맑음" | "흐림" | "비";
@@ -190,6 +191,11 @@ const PlanFilterSelector: React.FC = () => {
   const navigate = useNavigate();
   const setPlan = usePlanStore((state) => state.setPlan);
 
+  // 유효성 모달 메시지
+  const [message, setMessage] = useState<string>("");
+  // 유효성 모달 여부
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const [selectedDateRange, setSelectedDateRange] = useState<
     [Date, Date] | null
   >(null);
@@ -284,6 +290,32 @@ const PlanFilterSelector: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
+    if (region === "") {
+      setMessage("지역을 입력해주세요.");
+      setIsOpen(true);
+      return;
+    }
+    if (selectedDateRange === null) {
+      setMessage("날짜를 선택해주세요.");
+      setIsOpen(true);
+      return;
+    }
+    if (selectedAge === null) {
+      setMessage("연령대를 선택해주세요.");
+      setIsOpen(true);
+      return;
+    }
+    if (companions.every((companion) => companion.count === 0)) {
+      setMessage("일행을 선택해주세요.");
+      setIsOpen(true);
+      return;
+    }
+    if (selectedPurposes.length === 0) {
+      setMessage("목적을 선택해주세요.");
+      setIsOpen(true);
+      return;
+    }
+
     try {
       // 날짜를 MySQL의 DATE 형식(YYYY-MM-DD)으로 변환
       const formatToDate = (date: Date): string => {
@@ -306,11 +338,11 @@ const PlanFilterSelector: React.FC = () => {
 
       // PlanStore에 데이터 저장
       setPlan({
-        location: region,
+        main_location: region,
         start_date: formattedDateRange?.start_date || "",
         end_date: formattedDateRange?.end_date || "",
-        ageGroup: selectedAge || "",
-        companions: filteredCompanions,
+        ages: selectedAge || "",
+        companion_count: filteredCompanions,
         concepts: selectedPurposes,
       });
 
@@ -459,6 +491,14 @@ const PlanFilterSelector: React.FC = () => {
       {/* 완료 버튼 */}
       <div className={styles.travel_plan_complete_button}>
         <LongBtn type="submit" content="완료" />
+      </div>
+
+      <div>
+        <AlertModal
+          isOpen={isOpen}
+          content={message}
+          onConfirm={() => setIsOpen(false)}
+        />
       </div>
     </form>
   );
