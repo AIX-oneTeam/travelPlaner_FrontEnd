@@ -12,6 +12,7 @@ interface MemberInfo {
 // 스토어 객체 interface
 interface MemberStore {
   memberInfo: MemberInfo;
+  getMemberInfo: () => MemberInfo;
   setMemberInfo: (memberInfo: MemberInfo) => void;
   // 익명 사용자 여부 확인
   isAnonymous: () => boolean;
@@ -29,6 +30,7 @@ const useMemberStore: any = create(
         profile_url: "",
         roles: [],
       },
+      getMemberInfo: () => get().memberInfo,
       setMemberInfo: (newMemberInfo: MemberInfo) =>
         set({ memberInfo: newMemberInfo }),
 

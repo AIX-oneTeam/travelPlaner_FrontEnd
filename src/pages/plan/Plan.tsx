@@ -8,6 +8,7 @@ import styles from "./Plan.module.css";
 import axios from "axios";
 import PlanModify from "./include/PlanModify";
 import usePlanStore from "../../stores/PlanStore";
+import useMemberStore from "../../stores/MemberStore";
 import { API_BASE_URL } from "../../config";
 import AlertModal from "../../components/modal/AlertModal";
 
@@ -83,6 +84,7 @@ const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
   const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const memberStore = useMemberStore();
 
   const [plan, setPlan] = useState<planInterface>({
     name: "",
@@ -190,14 +192,40 @@ const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
   };
 
   // 모달 열기
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     setModalOpen(true);
   };
 
   // 모달 안에서 저장 버튼 클릭했을때
-  const handleModalConfirm = () => {
+  const handleModalConfirm = async () => {
     setModalOpen(false);
     // 저장 로직 추가
+    // plan의 concepts와 companion_count를 문자열로 직렬화
+    const concepts = JSON.stringify(plan.concepts);
+    const companion_count = JSON.stringify(plan.companion_count);
+    try {
+      const response = await axios.post(`${API_BASE_URL}/plans`, {
+        plan: {
+          ...plan,
+          concepts,
+          companion_count,
+        },
+
+        spots: spots,
+        // TODO: HTTPS 환경에서 쿠키로 전달하게끔 변경해야 함.
+        // 현재는 HTTP환경이라 POST요청시 HttpOnly 쿠키가 전달되지 않아 임시방편임.
+        email: memberStore.getMemberInfo().email,
+        withCredentials: true,
+      });
+      console.log("savePlanData", response.data);
+      setMessage("일정 저장 완료");
+
+      setIsOpen(true);
+    } catch (err) {
+      console.error(err);
+      setMessage("일정 저장 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
+      setIsOpen(true);
+    }
   };
 
   // 모달 닫기
@@ -281,7 +309,12 @@ const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
         content={message}
         onConfirm={() => {
           setIsOpen(false);
-          navigate("/plan/filter/selector");
+          if (
+            message !==
+            "일정 저장 중 오류가 발생했습니다. 잠시후 다시 시도해주세요"
+          ) {
+            navigate("/plan/filter/selector");
+          }
         }}
       />
     </>
