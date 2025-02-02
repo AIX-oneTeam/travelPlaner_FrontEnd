@@ -7,6 +7,8 @@ import PlanList from "./include/PlanList"; // 일정 리스트 컴포넌트
 import styles from "./Plan.module.css";
 import axios from "axios";
 import PlanModify from "./include/PlanModify";
+import usePlanStore from "../../stores/PlanStore";
+import { API_BASE_URL } from "../../config";
 
 interface spotResponse {
   kor_name: string;
@@ -25,10 +27,12 @@ interface spotResponse {
   business_hours: string;
   order: number;
   day_x: number;
-  spot_time: Date;
+  spot_time: string;
+  drivingTime?: string;
 }
 interface planInterface {
   name: string;
+
   start_date: Date;
   end_date: Date;
   main_location: string;
@@ -70,22 +74,21 @@ const generateDaysArray = (startDate: Date, endDate: Date) => {
   return daysArray;
 };
 
-const Plan: React.FC = (planId) => {
-  // 테스트 데이터
-  planId = 1;
-
+const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
   const [isModifying, setModifying] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태 추가
+  const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
 
   const [plan, setPlan] = useState<planInterface>({
-    name: "제주도 여행",
+    name: "",
     start_date: new Date(),
     end_date: new Date(new Date().setDate(new Date().getDate() + 2)),
-    main_location: "제주시",
+    main_location: "",
     ages: 20,
     companion_count: 3,
     concepts: "가족여행",
   });
-  const [spots, setSpots] = useState<spotInterface[]>([
+  const [spots, setSpots] = useState<spotResponse[]>([
     // {
     //   day_x: 1,
     //   time: "오후 1시",
@@ -121,7 +124,33 @@ const Plan: React.FC = (planId) => {
     // },
   ]);
 
-  const fetchPlanDataFromAgent = async () => {};
+  const planStore = usePlanStore();
+
+  const fetchPlanDataFromAgent = async () => {
+    try {
+      setIsLoading(true); // 로딩 시작
+      const planData = planStore.getPlan();
+      const response = await axios.post(
+        `${API_BASE_URL}/agents/plan`,
+        planData
+      );
+
+      console.log(response);
+      const newPlan = response.data.data.plan;
+      console.log(newPlan);
+      setPlan(newPlan);
+      const spotInfos = response.data.data.spots.spots;
+      console.log("spotInfos", spotInfos);
+
+      console.log("before spots", spots);
+      setSpots(spotInfos);
+      console.log("after spots", spots);
+    } catch (err) {
+      console.error("에이전트 요청 중 오류 발생:", err);
+    } finally {
+      setIsLoading(false); // 로딩 종료
+    }
+  };
 
   const fetchPlanData = async () => {
     try {
@@ -143,15 +172,28 @@ const Plan: React.FC = (planId) => {
   };
 
   useEffect(() => {
+    // 플랜 아이디가 있으면 플랜 데이터 가져오기
     if (planId) {
       fetchPlanData();
     }
+    // 플랜 아이디가 없다면 스토어의 데이터로 에이전트 요청
+    else {
+      fetchPlanDataFromAgent();
+    }
   }, []);
+
+  useEffect(() => {
+    console.log("useEffect spots", spots);
+    if (spots.length > 0) {
+      setIsDataLoaded(true);
+    }
+  }, [spots, isDataLoaded]);
 
   const days: { day: number; date: string }[] = generateDaysArray(
     plan.start_date,
     plan.end_date
   );
+
   const navigate = useNavigate();
 
   const [selectedDay, setSelectedDay] = useState<number>(1);
@@ -189,10 +231,22 @@ const Plan: React.FC = (planId) => {
           onDayClick={handleDayClick} // DAY 변경 핸들러 전달
         />
 
-        {!isModifying ? (
-          <PlanList spots={spots} selectedDay={selectedDay} />
+        {isLoading ? (
+          <div className={styles.loading_container}>
+            <div className={styles.loading_spinner}></div>
+            <p>AI가 여행 일정을 생성하고 있습니다...</p>
+          </div>
+        ) : isDataLoaded ? (
+          !isModifying ? (
+            <PlanList spots={spots} selectedDay={selectedDay} />
+          ) : (
+            <PlanModify spots={spots} selectedDay={selectedDay} />
+          )
         ) : (
-          <PlanModify spots={spots} selectedDay={selectedDay} />
+          <div className={styles.loading_container}>
+            <div className={styles.loading_spinner}></div>
+            <p>데이터를 불러오고 있습니다.</p>
+          </div>
         )}
 
         <div className={styles.form_actions_btns}>

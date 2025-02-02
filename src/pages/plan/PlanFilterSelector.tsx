@@ -6,6 +6,7 @@ import NormalInput2 from "../../components/input/NormalInput2";
 import { Cloud, Sun, CloudRain, AlertCircle } from "lucide-react";
 import { API_BASE_URL } from "../../config";
 import axios from "axios";
+import usePlanStore from "../../stores/PlanStore";
 
 //css import
 import "react-calendar/dist/Calendar.css";
@@ -187,6 +188,7 @@ const WeatherAlert = () => {
 
 const PlanFilterSelector: React.FC = () => {
   const navigate = useNavigate();
+  const setPlan = usePlanStore((state) => state.setPlan);
 
   const [selectedDateRange, setSelectedDateRange] = useState<
     [Date, Date] | null
@@ -286,12 +288,11 @@ const PlanFilterSelector: React.FC = () => {
       // 날짜를 MySQL의 DATE 형식(YYYY-MM-DD)으로 변환
       const formatToDate = (date: Date): string => {
         const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0"); // JavaScript는 월 0부터 시작하므로 +1
+        const month = String(date.getMonth() + 1).padStart(2, "0");
         const day = String(date.getDate()).padStart(2, "0");
         return `${year}-${month}-${day}`;
       };
 
-      // 선택된 날짜 범위를 변환하거나, 없다면 null로 처리
       const formattedDateRange = selectedDateRange
         ? {
             start_date: formatToDate(selectedDateRange[0]),
@@ -299,35 +300,24 @@ const PlanFilterSelector: React.FC = () => {
           }
         : null;
 
-      // companions에서 count가 0 이상인 데이터만 필터링
       const filteredCompanions = companions.filter(
         (companion) => companion.count > 0
       );
 
-      // 전송할 데이터 구성
-      const requestData = {
+      // PlanStore에 데이터 저장
+      setPlan({
         location: region,
-        start_date: formattedDateRange?.start_date,
-        end_date: formattedDateRange?.end_date,
-        ageGroup: selectedAge,
+        start_date: formattedDateRange?.start_date || "",
+        end_date: formattedDateRange?.end_date || "",
+        ageGroup: selectedAge || "",
         companions: filteredCompanions,
         concepts: selectedPurposes,
-      };
+      });
 
-      console.log("전송 데이터:", requestData);
-
-      // API 요청
-      const response = await axios.post(
-        `${API_BASE_URL}/agents/plan`,
-        requestData
-      );
-
-      // 성공 처리
-      console.log("응답 데이터:", response.data);
-      // TODO: 백엔드 에이전트 응답이 리다이렉션 해줘야 함.
-      // navigate("/plan/list");
+      // 플랜 페이지로 이동
+      navigate("/plan/list");
     } catch (error) {
-      console.error("API 요청 중 오류 발생:", error);
+      console.error("데이터 저장 중 오류 발생:", error);
       alert("여행 계획 저장 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
