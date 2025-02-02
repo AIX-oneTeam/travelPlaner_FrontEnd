@@ -26,7 +26,7 @@ interface PlanState {
 
 const initialState = {
   main_location: "",
-  name: "",
+  name: "새로운 일정",
   start_date: "",
   end_date: "",
   ages: "",

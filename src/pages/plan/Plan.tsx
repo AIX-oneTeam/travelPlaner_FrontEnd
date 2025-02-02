@@ -117,26 +117,23 @@ const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
         concepts: planData.concepts,
       };
       setPlan(planDataforPrint);
+      console.log("planData", planData);
 
       const response = await axios.post(
         `${API_BASE_URL}/agents/plan`,
         planData
       );
-
-      console.log(response);
       const spotInfos = response.data.data.spots.spots;
-      console.log("spotInfos", spotInfos);
-
-      console.log("before spots", spots);
       setSpots(spotInfos);
-      console.log("after spots", spots);
+      setIsLoading(false); // 로딩 종료
     } catch (err) {
       console.error("에이전트 요청 중 오류 발생:", err);
       setMessage("일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
       setIsOpen(true);
       return;
     } finally {
-      setIsLoading(false); // 로딩 종료
+      // 일정 요청 완료 후 스토어와 로컬스토리지 초기화
+      planStore.initPlanInfo();
     }
   };
 
@@ -214,10 +211,14 @@ const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
         {/* PlanHeader 컴포넌트 */}
         <PlanHeader
           destination={plan.main_location}
+          name={plan.name}
           days={days} // days 배열 전달
           selectedDay={selectedDay}
           onDayClick={handleDayClick} // DAY 변경 핸들러 전달
         />
+        <div className={styles.travel_plan_list_icon}>
+          <img src="/icons/memo.jpg" alt="Icon" />
+        </div>
 
         {isLoading ? (
           <div className={styles.loading_container}>
@@ -238,7 +239,7 @@ const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
         )}
 
         <div className={styles.form_actions_btns}>
-          {isLoading && isDataLoaded ? (
+          {!isLoading && isDataLoaded ? (
             <>
               <div className={styles.travle_save_btn}>
                 <LongBtn
@@ -280,7 +281,7 @@ const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
         content={message}
         onConfirm={() => {
           setIsOpen(false);
-          navigate("/");
+          navigate("/plan/filter/selector");
         }}
       />
     </>

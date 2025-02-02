@@ -7,6 +7,8 @@
   box-sizing: border-box;
   background-color: var(--grey-3);
   min-height: 100vh;
+  position: relative;
+  max-width: var(--max-width);
 }
 
 
@@ -63,4 +65,31 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.travel_plan_list_icon {
+  position: fixed; /* 부모 요소에 상대 위치 설정 */
+  bottom: 20px;
+  right: calc((50% - var(--max-width) / 2) + 20px);
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  background-color: var(--grey-3);
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: var(--shadow-basic);
+}
+
+.travel_plan_list_icon:hover {
+  box-shadow: var(--shadow-hover);
+  transition: box-shadow 0.3s ease;
+}
+
+.travel_plan_list_icon img {
+  position: absolute;
+
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  width: 70%;
 }
