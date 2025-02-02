@@ -7,11 +7,12 @@ interface Companion {
 }
 
 interface PlanState {
-  location: string;
+  main_location: string;
+  name: string;
   start_date: string;
   end_date: string;
-  ageGroup: string;
-  companions: Companion[];
+  ages: string;
+  companion_count: Companion[];
   concepts: string[];
   // 상태 조회 및 수정을 위한 메서드들
   getPlan: () => Omit<
@@ -24,11 +25,12 @@ interface PlanState {
 }
 
 const initialState = {
-  location: "",
+  main_location: "",
+  name: "",
   start_date: "",
   end_date: "",
-  ageGroup: "",
-  companions: [],
+  ages: "",
+  companion_count: [],
   concepts: [],
 };
 

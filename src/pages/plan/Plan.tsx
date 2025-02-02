@@ -9,6 +9,7 @@ import axios from "axios";
 import PlanModify from "./include/PlanModify";
 import usePlanStore from "../../stores/PlanStore";
 import { API_BASE_URL } from "../../config";
+import AlertModal from "../../components/modal/AlertModal";
 
 interface spotResponse {
   kor_name: string;
@@ -32,13 +33,15 @@ interface spotResponse {
 }
 interface planInterface {
   name: string;
-
   start_date: Date;
   end_date: Date;
   main_location: string;
   ages: number;
-  companion_count: number;
-  concepts: string;
+  companion_count: {
+    label: string;
+    count: number;
+  }[];
+  concepts: string[];
 }
 interface spotInterface {
   kor_name: string;
@@ -78,67 +81,49 @@ const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
   const [isModifying, setModifying] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태 추가
   const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   const [plan, setPlan] = useState<planInterface>({
     name: "",
     start_date: new Date(),
-    end_date: new Date(new Date().setDate(new Date().getDate() + 2)),
+    end_date: new Date(new Date().setDate(new Date().getDate() + 1)),
     main_location: "",
     ages: 20,
-    companion_count: 3,
-    concepts: "가족여행",
+    companion_count: [
+      {
+        label: "",
+        count: 0,
+      },
+    ],
+    concepts: [],
   });
-  const [spots, setSpots] = useState<spotResponse[]>([
-    // {
-    //   day_x: 1,
-    //   time: "오후 1시",
-    //   drivingTime: "30분",
-    //   image_url: "/images/jeju.jpg",
-    //   kor_name: "금릉해변",
-    //   eng_name: "Geumneung Beach",
-    //   description:
-    //     "바닥이 훤히 비치는 투명한 물빛과 얕은 수심으로 아이들과 물놀이하기 좋은 금능해수욕장입니다.",
-    //   address: "제주특별자치도 제주시 한림읍 금능리 1377-1",
-    // },
-    // {
-    //   day_x: 1,
-    //   time: "오후 2시",
-    //   drivingTime: "15분",
-    //   image_url: "/images/jeju.jpg",
-    //   kor_name: "협재해변",
-    //   eng_name: "Hyeopjae Beach",
-    //   description:
-    //     "협재해변은 제주도의 대표적인 맑은 물과 아름다운 풍경을 자랑합니다.",
-    //   address: "제주특별자치도 제주시 한림읍 협재리 2497",
-    // },
-    // {
-    //   day_x: 1,
-    //   time: "오후 3시",
-    //   drivingTime: "20분",
-    //   image_url: "/images/jeju.jpg",
-    //   kor_name: "한라산",
-    //   eng_name: "Halla Mountain",
-    //   description:
-    //     "한라산은 제주도의 대표적인 산으로 트레킹 코스로 유명합니다.",
-    //   address: "제주특별자치도 서귀포시 성산읍 성산리 200-1",
-    // },
-  ]);
+  const [spots, setSpots] = useState<spotResponse[]>([]);
 
   const planStore = usePlanStore();
 
   const fetchPlanDataFromAgent = async () => {
     try {
       setIsLoading(true); // 로딩 시작
+
       const planData = planStore.getPlan();
+      const planDataforPrint = {
+        name: planData.name,
+        start_date: new Date(planData.start_date),
+        end_date: new Date(planData.end_date),
+        main_location: planData.main_location,
+        ages: parseInt(planData.ages),
+        companion_count: planData.companion_count,
+        concepts: planData.concepts,
+      };
+      setPlan(planDataforPrint);
+
       const response = await axios.post(
         `${API_BASE_URL}/agents/plan`,
         planData
       );
 
       console.log(response);
-      const newPlan = response.data.data.plan;
-      console.log(newPlan);
-      setPlan(newPlan);
       const spotInfos = response.data.data.spots.spots;
       console.log("spotInfos", spotInfos);
 
@@ -147,6 +132,9 @@ const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
       console.log("after spots", spots);
     } catch (err) {
       console.error("에이전트 요청 중 오류 발생:", err);
+      setMessage("일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
+      setIsOpen(true);
+      return;
     } finally {
       setIsLoading(false); // 로딩 종료
     }
@@ -250,26 +238,30 @@ const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
         )}
 
         <div className={styles.form_actions_btns}>
-          <div className={styles.travle_save_btn}>
-            <LongBtn
-              type="button"
-              content="일정 저장하기"
-              onClick={handleSaveClick}
-            />
-          </div>
-          <div className={styles.travle_modify_btn}>
-            {!isModifying ? (
-              <LongBtn
-                content="일정 변경하기"
-                onClick={() => setModifying(true)}
-              />
-            ) : (
-              <LongBtn
-                content="일정 확인 하기"
-                onClick={() => setModifying(false)}
-              />
-            )}
-          </div>
+          {isLoading && isDataLoaded ? (
+            <>
+              <div className={styles.travle_save_btn}>
+                <LongBtn
+                  type="button"
+                  content="일정 저장하기"
+                  onClick={handleSaveClick}
+                />
+              </div>
+              <div className={styles.travle_modify_btn}>
+                {!isModifying ? (
+                  <LongBtn
+                    content="일정 변경하기"
+                    onClick={() => setModifying(true)}
+                  />
+                ) : (
+                  <LongBtn
+                    content="일정 확인 하기"
+                    onClick={() => setModifying(false)}
+                  />
+                )}
+              </div>
+            </>
+          ) : null}
         </div>
       </form>
 
@@ -281,6 +273,15 @@ const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
         cancelText="취소"
         onConfirm={handleModalConfirm}
         onCancel={handleModalCancel}
+      />
+
+      <AlertModal
+        isOpen={isOpen}
+        content={message}
+        onConfirm={() => {
+          setIsOpen(false);
+          navigate("/");
+        }}
       />
     </>
   );
