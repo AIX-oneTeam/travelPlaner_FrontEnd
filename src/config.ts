@@ -1,5 +1,5 @@
 const LOCAL_API_BASE_URL = "http://127.0.0.1:8000"; // 로컬 주소
-const EC2_API_BASE_URL = "52.79.251.234:8000"; // EC2 주소
+const EC2_API_BASE_URL = "http://52.79.251.234:8000"; // EC2 주소
 
 export const GOOGLE_CLIENT_ID =
   "638525891124-pphosnugos63hd2khdrrf96tjjh9r4q3.apps.googleusercontent.com";
