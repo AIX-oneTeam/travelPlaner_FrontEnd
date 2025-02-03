@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import PlanHeader from "./PlanHeader"; // 일정 날짜 헤더 컴포넌트
+import usePlanStore from "../../../stores/PlanStore";
 
 // 모달 컴포넌트
 import ConfirmModal from "../../../components/modal/ConfirmModal";
@@ -41,6 +42,7 @@ const PlanModify: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
   const [isPromptOpen, setPromptOpen] = useState<boolean>(false); // PromptModal 상태 추가
   const containerRef = useRef<HTMLDivElement>(null);
   const [modalWidth, setModalWidth] = useState<string>("100%"); // css의 fixed는 width가 뷰포트를 기준임 -> 너비 조정이 힘들어서 상태 관리로 해결
+  const planStore = usePlanStore();
 
   useEffect(() => {
     const handleResize = () => {

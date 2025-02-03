@@ -17,6 +17,17 @@
   text-align: left;
 }
 
+.travel_plan_list_name_input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--grey-1);
+  border-radius: 5px;
+}
+
+.travel_plan_list_name_input:focus {
+  outline: none;
+}
+
 
 .travel_plan_list_sub_info {
   width: 100%;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Slider from "react-slick";
 import styles from "./PlanHeader.module.css";
 
@@ -13,6 +13,7 @@ interface PlanHeaderProps {
   name: string;
   selectedDay: number;
   onDayClick: (day: number) => void; // DAY 클릭 이벤트 핸들러
+  onNameChange: (newName: string) => void; // 새로운 props 추가
 }
 
 const PlanHeader: React.FC<PlanHeaderProps> = ({
@@ -21,7 +22,30 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({
   name,
   selectedDay,
   onDayClick,
+  onNameChange,
 }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState(name);
+
+  const handleNameClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleNameBlur = () => {
+    setIsEditing(false);
+    if (editedName.trim()) {
+      onNameChange(editedName);
+    } else {
+      setEditedName(name);
+    }
+  };
+
+  const handleNameKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleNameBlur();
+    }
+  };
+
   const sliderSettings = {
     dots: false,
     infinite: false,
@@ -46,7 +70,21 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({
 
   return (
     <div className={styles.travel_plan_list_header}>
-      <div className={styles.travel_plan_list_name}>{name}</div>
+      <div className={styles.travel_plan_list_name}>
+        {isEditing ? (
+          <input
+            className={styles.travel_plan_list_name_input}
+            type="text"
+            value={editedName}
+            onChange={(e) => setEditedName(e.target.value)}
+            onBlur={handleNameBlur}
+            onKeyDown={handleNameKeyPress}
+            autoFocus
+          />
+        ) : (
+          <span onClick={handleNameClick}>{name}</span>
+        )}
+      </div>
 
       <div className={styles.travel_plan_list_sub_info}>
         <div className={styles.travel_plan_list_destination}>{destination}</div>
