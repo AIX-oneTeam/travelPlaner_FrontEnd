@@ -78,6 +78,13 @@ const generateDaysArray = (startDate: Date, endDate: Date) => {
   return daysArray;
 };
 
+// PlanModify props 인터페이스 수정
+interface PlanModifyProps {
+  spots: spotResponse[];
+  selectedDay: number;
+  onSpotsUpdate: (updatedSpots: spotResponse[]) => void;
+}
+
 const Plan: React.FC = () => {
   const [isModifying, setModifying] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태 추가
@@ -205,11 +212,22 @@ const Plan: React.FC = () => {
   const handleModalConfirm = async () => {
     setModalOpen(false);
     // 저장 로직 추가
-    // plan의 concepts와 companion_count를 문자열로 직렬화
-    const concepts = JSON.stringify(plan.concepts);
-    const companion_count = JSON.stringify(plan.companion_count);
+    let concepts = "";
+    let companion_count = "";
+    if (typeof plan.concepts !== "string") {
+      concepts = JSON.stringify(plan.concepts);
+    } else {
+      concepts = plan.concepts;
+    }
+
+    if (typeof plan.companion_count !== "string") {
+      companion_count = JSON.stringify(plan.companion_count);
+    } else {
+      companion_count = plan.companion_count;
+    }
     try {
       // 일정 수정인 경우
+
       if (planId) {
         const response = await axios.post(`${API_BASE_URL}/plans/${planId}`, {
           plan: {
@@ -255,6 +273,11 @@ const Plan: React.FC = () => {
     setModalOpen(false);
   };
 
+  // spots 업데이트 함수 추가
+  const handleSpotsUpdate = (updatedSpots: spotResponse[]) => {
+    setSpots(updatedSpots);
+  };
+
   return (
     <>
       <form className={styles.travel_plan_list_container}>
@@ -280,7 +303,11 @@ const Plan: React.FC = () => {
           !isModifying ? (
             <PlanDetail spots={spots} selectedDay={selectedDay} />
           ) : (
-            <PlanModify spots={spots} selectedDay={selectedDay} />
+            <PlanModify
+              spots={spots}
+              selectedDay={selectedDay}
+              onSpotsUpdate={handleSpotsUpdate}
+            />
           )
         ) : (
           <div className={styles.loading_container}>

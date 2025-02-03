@@ -33,10 +33,14 @@ interface spotResponse {
 interface PlanListProps {
   spots: spotResponse[];
   selectedDay: number;
+  onSpotsUpdate: (updatedSpots: spotResponse[]) => void;
 }
 
-const PlanModify: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
-  const [selectedDaystate, setSelectedDaystate] = useState<number>(selectedDay);
+const PlanModify: React.FC<PlanListProps> = ({
+  spots,
+  selectedDay,
+  onSpotsUpdate,
+}) => {
   const [selectedPlans, setSelectedPlans] = useState<number[]>([]); // 선택된 일정 관리
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [isPromptOpen, setPromptOpen] = useState<boolean>(false); // PromptModal 상태 추가
@@ -63,11 +67,6 @@ const PlanModify: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
     };
   }, []);
 
-  const handleDayClick = (day: number) => {
-    setSelectedDaystate(day);
-    setSelectedPlans([]); // 날짜 변경 시 선택 초기화
-  };
-
   // 체크 박스 상태 관리
   const handleCheckboxChange = (index: number) => {
     setSelectedPlans((prevSelected) => {
@@ -82,7 +81,7 @@ const PlanModify: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
   // 전체 선택
   const handleSelectAll = () => {
     const allIndexes = spots
-      .filter((spot) => spot.day_x === selectedDaystate)
+      .filter((spot) => spot.day_x === selectedDay)
       .map((_, index) => index);
 
     // 현재 선택 상태와 모든 인덱스 비교
@@ -100,9 +99,18 @@ const PlanModify: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
 
   // 모달 안에서 저장 버튼 클릭했을때
   const handleModalConfirm = () => {
+    // 선택된 인덱스들을 현재 날짜의 spots에서 제외
+    const currentDaySpots = spots.filter((spot) => spot.day_x === selectedDay);
+    const updatedSpots = spots.filter((spot, globalIndex) => {
+      const currentDayIndex = currentDaySpots.indexOf(spot);
+      return (
+        spot.day_x !== selectedDay || !selectedPlans.includes(currentDayIndex)
+      );
+    });
+
+    onSpotsUpdate(updatedSpots);
     setModalOpen(false);
-    setSelectedPlans([]);
-    // 삭제 로직 추가
+    setSelectedPlans([]); // 선택 초기화
   };
 
   // 모달 닫기
@@ -143,7 +151,7 @@ const PlanModify: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
 
         {/* 일정 요소 list */}
         {spots
-          .filter((spot) => spot.day_x === selectedDaystate)
+          .filter((spot) => spot.day_x === selectedDay)
           .map((spot, index) => (
             <div className={styles.travel_plan_card_section} key={index}>
               <div className={styles.travel_plan_card_container}>
