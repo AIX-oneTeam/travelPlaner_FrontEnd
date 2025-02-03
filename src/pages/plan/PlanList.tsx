@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import styles from "./PlanMember.module.css";
+import styles from "./PlanList.module.css";
 import { API_BASE_URL } from "../../config";
-import useMemberStore from "../../stores/MemberStore";
 
 interface SavedPlan {
   id: number;
@@ -42,7 +41,7 @@ const PlanMember: React.FC = () => {
   };
 
   const handlePlanClick = (planId: number) => {
-    navigate(`/plan/${planId}`);
+    navigate(`/plans/${planId}`);
   };
 
   const handleEditClick = (e: React.MouseEvent, planId: number) => {

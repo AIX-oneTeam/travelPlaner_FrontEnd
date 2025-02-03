@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import LongBtn from "../../components/buttons/LongBtn";
 import ConfirmModal from "../../components/modal/ConfirmModal"; // 모달 컴포넌트
 import PlanHeader from "./include/PlanHeader"; // 일정 날짜 헤더 컴포넌트
-import PlanList from "./include/PlanList"; // 일정 리스트 컴포넌트
 import styles from "./Plan.module.css";
 import axios from "axios";
 import PlanModify from "./include/PlanModify";
@@ -11,6 +10,7 @@ import usePlanStore from "../../stores/PlanStore";
 import useMemberStore from "../../stores/MemberStore";
 import { API_BASE_URL } from "../../config";
 import AlertModal from "../../components/modal/AlertModal";
+import PlanDetail from "./include/PlanDetail";
 
 interface spotResponse {
   kor_name: string;
@@ -78,13 +78,16 @@ const generateDaysArray = (startDate: Date, endDate: Date) => {
   return daysArray;
 };
 
-const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
+const Plan: React.FC = () => {
   const [isModifying, setModifying] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태 추가
   const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const memberStore = useMemberStore();
+
+  const location = useLocation();
+  const { planId } = useParams();
 
   const [plan, setPlan] = useState<planInterface>({
     name: "",
@@ -159,15 +162,14 @@ const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
   };
 
   useEffect(() => {
-    // 플랜 아이디가 있으면 플랜 데이터 가져오기
+    // planId가 있으면 저장된 플랜 데이터를 가져오고
+    // 없으면 새로운 플랜을 생성하는 로직
     if (planId) {
       fetchPlanData();
-    }
-    // 플랜 아이디가 없다면 스토어의 데이터로 에이전트 요청
-    else {
+    } else {
       fetchPlanDataFromAgent();
     }
-  }, []);
+  }, [planId]);
 
   useEffect(() => {
     console.log("useEffect spots", spots);
@@ -255,7 +257,7 @@ const Plan: React.FC<{ planId?: number }> = ({ planId }) => {
           </div>
         ) : isDataLoaded ? (
           !isModifying ? (
-            <PlanList spots={spots} selectedDay={selectedDay} />
+            <PlanDetail spots={spots} selectedDay={selectedDay} />
           ) : (
             <PlanModify spots={spots} selectedDay={selectedDay} />
           )

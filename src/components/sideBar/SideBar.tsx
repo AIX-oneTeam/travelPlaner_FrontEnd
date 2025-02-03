@@ -41,7 +41,7 @@ const SideBar: React.FC<SideBarProps> = ({
       setIsAlertModalOpen(true);
       return;
     }
-    navigate("/plans");
+    navigate("/plans/list");
   };
 
   return (

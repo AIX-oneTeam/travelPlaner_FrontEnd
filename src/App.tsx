@@ -10,7 +10,7 @@ import HjWebTest from "./pages/main/HjWebTest";
 
 import PlanFilterSelector from "./pages/plan/PlanFilterSelector"; // 계획 필터 입력
 import Plan from "./pages/plan/Plan";
-import PlanMember from "./pages/plan/PlanMember"; // PlanList에서 PlanMember로 변경
+import PlanList from "./pages/plan/PlanList";
 
 function App() {
   return (
@@ -25,8 +25,8 @@ function App() {
               path="/plan/filter/selector"
               element={<PlanFilterSelector />}
             />
-            <Route path="/plan/list" element={<Plan />} />
-            <Route path="/plans" element={<PlanMember />} />
+            <Route path="/plans/list" element={<PlanList />} />
+            <Route path="/plans/:planId?" element={<Plan />} />
             {/* <Route path="/plan/modify" element={<PlanModify />} /> */}
           </Routes>
         </Layout>
