@@ -347,7 +347,7 @@ const PlanFilterSelector: React.FC = () => {
       });
 
       // 플랜 페이지로 이동
-      navigate("/plan/list");
+      navigate("/plans/");
     } catch (error) {
       console.error("데이터 저장 중 오류 발생:", error);
       alert("여행 계획 저장 중 오류가 발생했습니다. 다시 시도해주세요.");

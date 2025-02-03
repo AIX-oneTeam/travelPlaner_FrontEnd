@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./PlanList.module.css";
+import styles from "./PlanDetail.module.css";
 
 interface spotResponse {
   kor_name: string;
