@@ -154,9 +154,7 @@ const Plan: React.FC = () => {
 
   const fetchPlanData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/plan_spots/${planId}`
-      );
+      const response = await axios.get(`${API_BASE_URL}/plan_spots/${planId}`);
       const newPlan = response.data.data.plan;
       setPlan(newPlan);
 
