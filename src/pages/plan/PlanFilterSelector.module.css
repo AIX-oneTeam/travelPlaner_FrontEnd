@@ -1,7 +1,7 @@
 /* 공통 스타일 */
 .travel_plan_container {
   width: 100%;
-  padding: 50px 0px;
+  padding: 50px 24px;
   box-sizing: border-box;
   min-height: 100vh;
 }
