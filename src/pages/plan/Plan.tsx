@@ -145,6 +145,7 @@ const Plan: React.FC = () => {
       console.error("에이전트 요청 중 오류 발생:", err);
       setMessage("일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
       setIsOpen(true);
+      navigate("/plan/filter/selector");
       return;
     } finally {
       // 일정 요청 완료 후 스토어와 로컬스토리지 초기화
