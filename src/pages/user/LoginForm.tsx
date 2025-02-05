@@ -99,7 +99,8 @@ const LoginForm = () => {
         {/* 카카오 로그인 */}
         <div className="kakao-login-button">
           <button onClick={handleKakaoLogin}>
-            <img src="/images/kakao_login_btn.jpg" alt="카카오 로그인 버튼" />
+            <img src="/images/kakao-logo.png" alt="카카오 로그인 버튼" />
+            <span>카카오 로그인</span>
           </button>
         </div>
 

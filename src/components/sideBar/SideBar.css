@@ -99,6 +99,9 @@
 @media (max-width: 470px) {
     .sideBar-1 {
         font-size: var(--font-size-5);
+        img{
+            transform: translateY(10%);
+        }
     }
     .sideBar-2 {
         font-size: var(--font-size-6);
