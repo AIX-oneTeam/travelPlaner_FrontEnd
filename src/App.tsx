@@ -8,9 +8,9 @@ import Home from "./pages/main/home"; // 메인화면
 import LoginForm from "./pages/user/LoginForm"; // 로그인폼
 import HjWebTest from "./pages/main/HjWebTest";
 
-import PlanFilterSelector from "./pages/plan/PlanFilterSelector"; // 계획 필터 입력
 import Plan from "./pages/plan/Plan";
 import PlanList from "./pages/plan/PlanList";
+import PlanFilter from "./pages/plan/PlanFilter";
 
 function App() {
   return (
@@ -21,10 +21,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/loginform" element={<LoginForm />} />
             <Route path="/hj" element={<HjWebTest />} />
-            <Route
-              path="/plan/filter/selector"
-              element={<PlanFilterSelector />}
-            />
+            <Route path="/plan/filter/" element={<PlanFilter />} />
             <Route path="/plans/list" element={<PlanList />} />
             <Route path="/plans/:planId?" element={<Plan />} />
             {/* <Route path="/plan/modify" element={<PlanModify />} /> */}

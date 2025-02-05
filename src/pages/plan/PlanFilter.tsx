@@ -10,7 +10,7 @@ import usePlanStore from "../../stores/PlanStore";
 
 //css import
 import "react-calendar/dist/Calendar.css";
-import styles from "./PlanFilterSelector.module.css";
+import styles from "./PlanFilter.module.css";
 import AlertModal from "../../components/modal/AlertModal";
 
 // 가능한 날씨 상태
@@ -72,14 +72,16 @@ const DateSelector: React.FC<DateSelectorProps> = ({
   };
 
   // 이전 달로 이동
-  const handlePrevMonth = () => {
+  const handlePrevMonth = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     setActiveStartDate(
       new Date(activeStartDate.getFullYear(), activeStartDate.getMonth() - 1, 1)
     );
   };
 
   // 다음 달로 이동
-  const handleNextMonth = () => {
+  const handleNextMonth = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     setActiveStartDate(
       new Date(activeStartDate.getFullYear(), activeStartDate.getMonth() + 1, 1)
     );
@@ -89,16 +91,15 @@ const DateSelector: React.FC<DateSelectorProps> = ({
     <div className={styles.travel_schedule_section}>
       <h2 className={styles.section_title}>2. 일정</h2>
       <div className={styles.calendar_container}>
-        {/* 이전 달 버튼 */}
-        <button
-          className={`${styles.calendar_nav_button} ${styles.prev_button}`}
-          onClick={handlePrevMonth}
-        >
-          {"<"}
-        </button>
-
         {/* 달력 */}
         <div className={styles.calendar_wrapper}>
+          {/* 이전 달 버튼 */}
+          <button
+            className={`${styles.calendar_nav_button} ${styles.prev_button}`}
+            onClick={handlePrevMonth}
+          >
+            <img src={"/icons/arrow_back.jpg"} alt="이전 달" />
+          </button>
           <Calendar
             onChange={handleDateChange}
             selectRange
@@ -113,30 +114,30 @@ const DateSelector: React.FC<DateSelectorProps> = ({
             formatDay={(locale, date) => date.getDate().toString()} // 날짜에서 "일" 제거
             showFixedNumberOfWeeks={true}
           />
+          {/* 다음 달 버튼 */}
+          <button
+            className={`${styles.calendar_nav_button} ${styles.next_button}`}
+            onClick={handleNextMonth}
+          >
+            <img src="/icons/arrow_forward.jpg" alt="다음 달"></img>
+          </button>
         </div>
-
-        {/* 다음 달 버튼 */}
-        <button
-          className={`${styles.calendar_nav_button} ${styles.next_button}`}
-          onClick={handleNextMonth}
-        >
-          {">"}
-        </button>
       </div>
 
       {/* 선택된 날짜 표시 */}
       {selectedDateRange && (
         <p className={styles.selected_date}>
-          선택된 날짜:{" "}
-          {`${selectedDateRange[0].toLocaleDateString("ko-KR", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })} ~ ${selectedDateRange[1].toLocaleDateString("ko-KR", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}`}
+          <span>
+            {`${selectedDateRange[0].toLocaleDateString("ko-KR", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })} ~ ${selectedDateRange[1].toLocaleDateString("ko-KR", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}`}
+          </span>
         </p>
       )}
     </div>
@@ -456,13 +457,23 @@ const PlanFilterSelector: React.FC = () => {
                 >
                   +
                 </button>
-                <span className={styles.companion_count}>
-                  {label === "반려견"
-                    ? `총 ${count} 마리`
-                    : index === 0
-                    ? `(본인 포함) 총 ${count}명`
-                    : `총 ${count}명`}
-                </span>
+                <p className={styles.companion_count}>
+                  {label === "반려견" ? (
+                    <>
+                      총 <span className={styles.count_number}>{count}</span>
+                      마리
+                    </>
+                  ) : index === 0 ? (
+                    <>
+                      (<span>본인</span> 포함) 총{" "}
+                      <span className={styles.count_number}>{count}</span>명
+                    </>
+                  ) : (
+                    <>
+                      총 <span className={styles.count_number}>{count}</span>명
+                    </>
+                  )}
+                </p>
               </div>
             </div>
           ))}
@@ -497,7 +508,9 @@ const PlanFilterSelector: React.FC = () => {
         <AlertModal
           isOpen={isOpen}
           content={message}
-          onConfirm={() => setIsOpen(false)}
+          onConfirm={() => {
+            setIsOpen(false);
+          }}
         />
       </div>
     </form>

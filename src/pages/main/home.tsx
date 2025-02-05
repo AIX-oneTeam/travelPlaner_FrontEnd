@@ -24,7 +24,7 @@ const Home: React.FC = () => {
           <div className="travel-plan-button">
             <ShortBtn
               content="텍스트로 시작"
-              onClick={() => navigate("/plan/filter/selector")}
+              onClick={() => navigate("/plan/filter")}
             />
           </div>
         </div>

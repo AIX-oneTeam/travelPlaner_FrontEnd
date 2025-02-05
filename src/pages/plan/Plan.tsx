@@ -11,6 +11,7 @@ import useMemberStore from "../../stores/MemberStore";
 import { API_BASE_URL } from "../../config";
 import AlertModal from "../../components/modal/AlertModal";
 import PlanDetail from "./include/PlanDetail";
+import AgentSelectModal from "../../components/modal/AgentSelectModal";
 
 interface spotResponse {
   kor_name: string;
@@ -117,6 +118,32 @@ const Plan: React.FC = () => {
     setPlan({ ...plan, name: newName });
   };
 
+  //에이전트 선택
+  const [showAgentModal, setShowAgentModal] = useState<boolean>(true);
+
+  // 에이전트 선택 핸들러
+  const handleAgentSelect = async (agentType: string[]) => {
+    setShowAgentModal(false);
+    setIsLoading(true);
+    try {
+      const planData = planStore.getPlan();
+      // agentType을 API 요청에 포함
+      const response = await axios.post(`${API_BASE_URL}/agents/plan`, {
+        ...planData,
+        agent_type: agentType,
+      });
+      const spotInfos = response.data.data.spots.spots;
+      setSpots(spotInfos);
+    } catch (err) {
+      console.error("에이전트 요청 중 오류 발생:", err);
+      setMessage("일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
+      setIsOpen(true);
+    } finally {
+      setIsLoading(false);
+      planStore.initPlanInfo();
+    }
+  };
+
   const fetchPlanDataFromAgent = async () => {
     try {
       setIsLoading(true); // 로딩 시작
@@ -145,7 +172,6 @@ const Plan: React.FC = () => {
       console.error("에이전트 요청 중 오류 발생:", err);
       setMessage("일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
       setIsOpen(true);
-      navigate("/plan/filter/selector");
       return;
     } finally {
       // 일정 요청 완료 후 스토어와 로컬스토리지 초기화
@@ -170,15 +196,15 @@ const Plan: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    // planId가 있으면 저장된 플랜 데이터를 가져오고
-    // 없으면 새로운 플랜을 생성하는 로직
-    if (planId) {
-      fetchPlanData();
-    } else {
-      fetchPlanDataFromAgent();
-    }
-  }, [planId]);
+  // useEffect(() => {
+  //   // planId가 있으면 저장된 플랜 데이터를 가져오고
+  //   // 없으면 새로운 플랜을 생성하는 로직
+  //   if (planId) {
+  //     fetchPlanData();
+  //   } else {
+  //     fetchPlanDataFromAgent();
+  //   }
+  // }, [planId]);
 
   useEffect(() => {
     console.log("useEffect spots", spots);
@@ -343,6 +369,11 @@ const Plan: React.FC = () => {
         </div>
       </form>
 
+      <AgentSelectModal
+        isOpen={showAgentModal && !planId}
+        onSelect={handleAgentSelect}
+      />
+
       {/* 저장 확인 모달 */}
       <ConfirmModal
         isOpen={isModalOpen}
@@ -358,6 +389,12 @@ const Plan: React.FC = () => {
         content={message}
         onConfirm={() => {
           setIsOpen(false);
+          if (
+            message ===
+            "일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요"
+          ) {
+            navigate("/plan/filter");
+          }
         }}
       />
     </>

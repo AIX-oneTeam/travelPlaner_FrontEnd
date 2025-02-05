@@ -13,6 +13,13 @@
   margin-bottom: 10px;
 }
 
+@media (max-width: 400px) {
+  .travel_plan_header {
+    font-size: var(--font-size-4);
+  }
+}
+
+
 .travel_plan_description {
   font-size: var(--font-size-5);
   color: #b1b1b1;
@@ -93,10 +100,14 @@
 /* 달력 */
 .calendar_wrapper {
   flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 366px;
+  gap: 10px;
   /* wrapper의 높이 고정 */
 }
 
@@ -112,33 +123,26 @@
 
 /* 버튼 스타일 공통 */
 .calendar_nav_button {
-  background: var(--grey-3);
-  border: 1px solid var(--grey-1);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: none;
+  background-color: transparent;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
   font-size: var(--font-size-5);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  img {
+    width: 40px;  
+  }
 }
 
-/* 왼쪽 버튼 */
-.prev_button {
-  margin-right: 10px;
-}
 
-/* 오른쪽 버튼 */
-.next_button {
-  margin-left: 10px;
-}
-
-/* 버튼 hover 효과 */
-.calendar_nav_button:hover {
-  background-color: var(--sub-color-1);
-}
 
 /* react-calendar 커스텀 스타일 */
 .react-calendar__navigation__label__labelText {
@@ -214,15 +218,21 @@
   margin-top: 10px;
   font-size: var(--font-size-6);
   text-align: center;
+
+  span {
+    font-weight: var(--semibold);
+  }
 }
 
 /* 날씨 정보 */
+
 .weather_container {
-  max-width: 35%;
-  margin: 50px auto 50px auto;
+  margin: 70px auto;
+  max-width: 400px;
 }
 
 .weather_alert_card {
+  width: 100%;
   background-color: var(--white);
   border-radius: var(--border-radius-2);
   box-shadow: var(--shadow-basic);
@@ -274,7 +284,7 @@
 .age_button {
   width: 60px;
   height: 40px;
-  border: 1px solid var(--grey-1);
+  border: none;
   border-radius: var(--border-radius-2);
   text-align: center;
   line-height: 40px;
@@ -282,12 +292,19 @@
   background-color: var(--grey-3);
   color: var(--text-main);
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: var(--semibold);
+}
+
+.age_button:hover {
+  background-color: var(--sub-color-1);
 }
 
 .age_button.active {
-  background-color: var(--sub-color-1);
+  background-color: var(--main-color-1);
   border-color: #76adec;
 }
+
 
 /* 일행 섹션 */
 .travel_companions_section {
@@ -314,7 +331,10 @@
   gap: 10px;
   flex-grow: 1;
   /* 가운데 공간을 확보 */
+
+  
 }
+
 
 .companion_minus,
 .companion_plus {
@@ -360,9 +380,14 @@
   color: var(--text-main);
   margin-left: auto;
   text-align: right;
+
+  .count_number {
+    font-weight: var(--semibold);
+  }
 }
 
 /* 목적 섹션 */
+
 .travel_purpose_section {
   margin-bottom: 50px;
 }
@@ -378,16 +403,20 @@
   padding: 8px 12px;
   font-size: var(--font-size-6);
   font-weight: var(--bold);
-  border: 1px solid var(--grey-1);
+  border: none;
   border-radius: var(--border-radius-2);
   color: var(--text-main);
   background-color: var(--grey-3);
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.purpose_button:hover {
+  background-color: var(--sub-color-2);
 }
 
 .purpose_button.active {
-  background-color: #ffe2ab;
-  border-color: #f2a413;
+  background-color: var(--main-color-2);
 }
 
 .travel_plan_complete_button {
