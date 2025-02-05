@@ -26,9 +26,22 @@
         }
     }
 
+
     .footer-text-3{
         font-size: var(--font-size-7);
         font-weight: var(--semibold);
     }
+
+    @media (max-width: 550px) {
+        .footer-text-2{
+            flex-direction: column;
+            gap: 5px;
+            font-size: var(--font-size-7);
+            font-weight: var(--medium);
+        }
+    }
 }
+
+    
+
 
