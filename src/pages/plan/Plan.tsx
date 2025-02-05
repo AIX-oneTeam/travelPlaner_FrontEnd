@@ -121,17 +121,34 @@ const Plan: React.FC = () => {
   //에이전트 선택
   const [showAgentModal, setShowAgentModal] = useState<boolean>(true);
 
-  // 에이전트 선택 핸들러
+  // 에이전트 선택 및 요청
   const handleAgentSelect = async (agentType: string[]) => {
     setShowAgentModal(false);
     setIsLoading(true);
     try {
-      const planData = planStore.getPlan();
+      let planData = planStore.getPlan();
+      // 화면에 출력하기 위해 플랜 데이터 형식 변환
+      const planDataforPrint = {
+        name: planData.name,
+        start_date: new Date(planData.start_date),
+        end_date: new Date(planData.end_date),
+        main_location: planData.main_location,
+        ages: parseInt(planData.ages),
+        companion_count: planData.companion_count,
+        concepts: planData.concepts,
+      };
+      setPlan(planDataforPrint);
       // agentType을 API 요청에 포함
-      const response = await axios.post(`${API_BASE_URL}/agents/plan`, {
-        ...planData,
-        agent_type: agentType,
-      });
+      const response = await axios.post(
+        `${API_BASE_URL}/agents/plan`,
+        planData,
+        {
+          params: {
+            agent_type: agentType,
+          },
+        }
+      );
+
       const spotInfos = response.data.data.spots.spots;
       setSpots(spotInfos);
     } catch (err) {
@@ -196,15 +213,12 @@ const Plan: React.FC = () => {
     }
   };
 
-  // useEffect(() => {
-  //   // planId가 있으면 저장된 플랜 데이터를 가져오고
-  //   // 없으면 새로운 플랜을 생성하는 로직
-  //   if (planId) {
-  //     fetchPlanData();
-  //   } else {
-  //     fetchPlanDataFromAgent();
-  //   }
-  // }, [planId]);
+  useEffect(() => {
+    // planId가 있으면 저장된 플랜 데이터를 가져옴
+    if (planId) {
+      fetchPlanData();
+    }
+  }, [planId]);
 
   useEffect(() => {
     console.log("useEffect spots", spots);
