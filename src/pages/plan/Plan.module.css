@@ -12,7 +12,7 @@
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  background-color: var(--grey-3);
+  background-color: var(--white);
   min-height: 100vh;
   position: relative;
   max-width: var(--max-width);
@@ -85,6 +85,7 @@
   border-radius: 50%;
   overflow: hidden;
   box-shadow: var(--shadow-basic);
+  z-index: 99999;
 }
 
 .travel_plan_list_icon:hover {
@@ -105,15 +106,32 @@
   justify-content: space-around;
   align-items: center;
   width: 100%;
+  position: sticky;
+  top:0;
+  z-index: 99;
+  background-color: var(--white);
 
   .travel_plan_tab_item{
+    box-sizing: border-box;
     cursor: pointer;
-    height: 24px;
-    padding: 24px 24px;
-    border-bottom: 4px solid var(--sub-color-2);
+    height: 80px;
+    padding: 30px 14px;
+    border-bottom: 4px solid var(--grey-3);
+    font-size: var(--font-size-3);
   }
 
-  .travel_plan_tab_item .active {
-    border-bottom: 4px solid var(--main-color-1);
+  @media (max-width: 768px) {
+    .travel_plan_tab_item{
+      font-size: var(--font-size-5);
+      height: 60px;
+      padding: 20px 14px;
+    }
   }
+
+
+  .active {
+    border-bottom: 4px solid var(--sub-color-1);
+    font-weight: var(--bold);
+  }
+
 }

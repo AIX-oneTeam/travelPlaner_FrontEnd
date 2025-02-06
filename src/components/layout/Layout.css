@@ -6,6 +6,5 @@
     width: 100%;
     min-height: 100vh;
     max-width: var(--max-width);
-    overflow: hidden;
 }
 

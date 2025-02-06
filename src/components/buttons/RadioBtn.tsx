@@ -6,6 +6,7 @@ const RadioBtn = ({
   contents = ["버튼 예시1", "버튼 예시2", "버튼 예시3"],
   type = "radio",
   disabled = false,
+  onChange = () => {},
 }) => {
   /*---라우터 관련-------------------------------*/
 
@@ -44,7 +45,6 @@ const RadioBtn = ({
           </li>
         ))}
       </ul>
-      <p>selected: {selected}</p>
     </div>
   );
 };

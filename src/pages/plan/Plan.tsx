@@ -87,11 +87,12 @@ interface PlanModifyProps {
 }
 
 const Plan: React.FC = () => {
-  const [isModifying, setModifying] = useState<boolean>(false);
+  const [currentTab, setCurrentTab] = useState<string>("detail");
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태 추가
   const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+
   const memberStore = useMemberStore();
 
   const { planId } = useParams();
@@ -321,20 +322,27 @@ const Plan: React.FC = () => {
     <div className={styles.travel_plan_container}>
       <div className={styles.travel_plan_tab_container}>
         <div
-          className={styles.travel_plan_tab_item}
-          onClick={() => setModifying(false)}
+          className={`${styles.travel_plan_tab_item} ${
+            currentTab === "detail" ? styles.active : ""
+          }`}
+          onClick={() => setCurrentTab("detail")}
         >
           일정 확인
         </div>
+
         <div
-          className={styles.travel_plan_tab_item}
-          onClick={() => setModifying(true)}
+          className={`${styles.travel_plan_tab_item} ${
+            currentTab === "modify" ? styles.active : ""
+          }`}
+          onClick={() => setCurrentTab("modify")}
         >
           일정 수정
         </div>
         <div
-          className={styles.travel_plan_tab_item}
-          onClick={() => setModifying(true)}
+          className={`${styles.travel_plan_tab_item} ${
+            currentTab === "map" ? styles.active : ""
+          }`}
+          onClick={() => setCurrentTab("map")}
         >
           지도 확인
         </div>
@@ -359,15 +367,18 @@ const Plan: React.FC = () => {
             <p>AI가 여행 일정을 생성하고 있습니다...</p>
           </div>
         ) : isDataLoaded ? (
-          !isModifying ? (
+          currentTab === "detail" ? (
             <PlanDetail spots={spots} selectedDay={selectedDay} />
-          ) : (
+          ) : currentTab === "modify" ? (
             <PlanModify
               spots={spots}
               selectedDay={selectedDay}
               onSpotsUpdate={handleSpotsUpdate}
             />
-          )
+          ) : currentTab === "map" ? (
+            // <PlanMap spots={spots} selectedDay={selectedDay} />
+            <div>카카오 맵</div>
+          ) : null
         ) : (
           <div className={styles.loading_container}>
             <div className={styles.loading_spinner}></div>
