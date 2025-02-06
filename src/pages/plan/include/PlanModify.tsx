@@ -8,6 +8,7 @@ import PromptModal from "../../../components/modal/PromptModal";
 
 // css
 import styles from "./PlanModify.module.css";
+import SpotDetail from "../../../components/modal/SpotDetail";
 
 interface spotResponse {
   kor_name: string;
@@ -46,6 +47,10 @@ const PlanModify: React.FC<PlanListProps> = ({
   const [isPromptOpen, setPromptOpen] = useState<boolean>(false); // PromptModal 상태 추가
   const containerRef = useRef<HTMLDivElement>(null);
   const [modalWidth, setModalWidth] = useState<string>("100%"); // css의 fixed는 width가 뷰포트를 기준임 -> 너비 조정이 힘들어서 상태 관리로 해결
+  const [selectedSpot, setSelectedSpot] = useState<spotResponse | null>(null);
+  const handleSpotClick = (spot: spotResponse) => {
+    setSelectedSpot(spot);
+  };
   const planStore = usePlanStore();
 
   useEffect(() => {
@@ -153,7 +158,11 @@ const PlanModify: React.FC<PlanListProps> = ({
         {spots
           .filter((spot) => spot.day_x === selectedDay)
           .map((spot, index) => (
-            <div className={styles.travel_plan_card_section} key={index}>
+            <div
+              className={styles.travel_plan_card_section}
+              key={index}
+              onClick={() => handleSpotClick(spot)}
+            >
               <div className={styles.travel_plan_card_container}>
                 <div className={styles.teavel_plan_check}>
                   <input
@@ -204,6 +213,12 @@ const PlanModify: React.FC<PlanListProps> = ({
         cancelText="취소"
         onConfirm={handleModalConfirm}
         onCancel={handleModalCancel}
+      />
+      <SpotDetail
+        isOpen={!!selectedSpot}
+        onClose={() => setSelectedSpot(null)}
+        spot={selectedSpot!}
+        button_purpose="website"
       />
     </>
   );

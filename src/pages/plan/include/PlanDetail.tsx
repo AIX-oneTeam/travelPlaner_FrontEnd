@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./PlanDetail.module.css";
+import SpotDetail from "../../../components/modal/SpotDetail";
 
 interface spotResponse {
   kor_name: string;
@@ -27,14 +28,24 @@ interface PlanListProps {
   selectedDay: number;
 }
 
-const PlanList: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
+const PlanDetail: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
+  const [selectedSpot, setSelectedSpot] = useState<spotResponse | null>(null);
+
+  const handleSpotClick = (spot: spotResponse) => {
+    setSelectedSpot(spot);
+  };
+
   return (
     <div className={styles.travel_plan_list_container}>
       {/* 일정 요소 list */}
       {spots
         .filter((spot) => spot.day_x === selectedDay)
         .map((spot, index) => (
-          <div className={styles.travel_plan_card_section} key={index}>
+          <div
+            className={styles.travel_plan_card_section}
+            key={index}
+            onClick={() => handleSpotClick(spot)}
+          >
             <div className={styles.travel_plan_card_container}>
               <div className={styles.timeline_indicator}>
                 <div className={styles.circle}></div>
@@ -61,8 +72,15 @@ const PlanList: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
             </div>
           </div>
         ))}
+
+      <SpotDetail
+        isOpen={!!selectedSpot}
+        onClose={() => setSelectedSpot(null)}
+        spot={selectedSpot!}
+        button_purpose="website"
+      />
     </div>
   );
 };
 
-export default PlanList;
+export default PlanDetail;

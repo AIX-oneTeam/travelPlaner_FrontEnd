@@ -8,3 +8,9 @@
     max-width: var(--max-width);
 }
 
+.side-bar-container {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
