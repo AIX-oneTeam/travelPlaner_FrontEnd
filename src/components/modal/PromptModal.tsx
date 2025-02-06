@@ -49,7 +49,7 @@ const PromptModal: React.FC<PromptModalProps> = ({ onClose, onSelect }) => {
 
       try {
         const response = await axios.post(
-          `/agent/${selectedAgent}?prompt=${promptText}`,
+          `/agents/${selectedAgent}?prompt=${promptText}`,
           planData,
           {
             withCredentials: true,
