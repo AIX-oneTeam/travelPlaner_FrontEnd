@@ -43,19 +43,19 @@ const PlanList: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
                   <img src="/icons/car.jpg" alt="운전 아이콘" />
                   <p>{spot.drivingTime}</p>
                 </div>
-              </div>
-              <div className={styles.travel_time_container}>
                 <div className={styles.travel_time}>{spot.spot_time}</div>
               </div>
               <div className={styles.travle_image_container}>
                 <div className={styles.travle_image}>
                   <img src={spot.image_url} alt={spot.eng_name} />
                 </div>
-                <div className={styles.place_description}>
+                <div className={styles.place_info_container}>
                   <h2>{spot.kor_name}</h2>
-                  <p>{spot.eng_name}</p>
-                  <p>{spot.address}</p>
-                  <p>{spot.description}</p>
+                  <h3>{spot.eng_name}</h3>
+                  <p className={styles.place_additional_info}>{spot.address}</p>
+                  <div className={styles.place_description}>
+                    <span>{spot.description} </span>
+                  </div>
                 </div>
               </div>
             </div>

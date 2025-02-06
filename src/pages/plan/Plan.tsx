@@ -318,7 +318,27 @@ const Plan: React.FC = () => {
   };
 
   return (
-    <>
+    <div className={styles.travel_plan_container}>
+      <div className={styles.travel_plan_tab_container}>
+        <div
+          className={styles.travel_plan_tab_item}
+          onClick={() => setModifying(false)}
+        >
+          일정 확인
+        </div>
+        <div
+          className={styles.travel_plan_tab_item}
+          onClick={() => setModifying(true)}
+        >
+          일정 수정
+        </div>
+        <div
+          className={styles.travel_plan_tab_item}
+          onClick={() => setModifying(true)}
+        >
+          지도 확인
+        </div>
+      </div>
       <form className={styles.travel_plan_list_container}>
         {/* PlanHeader 컴포넌트 */}
         <PlanHeader
@@ -365,19 +385,6 @@ const Plan: React.FC = () => {
                   onClick={handleSaveClick}
                 />
               </div>
-              <div className={styles.travle_modify_btn}>
-                {!isModifying ? (
-                  <LongBtn
-                    content="일정 변경하기"
-                    onClick={() => setModifying(true)}
-                  />
-                ) : (
-                  <LongBtn
-                    content="일정 확인 하기"
-                    onClick={() => setModifying(false)}
-                  />
-                )}
-              </div>
             </>
           ) : null}
         </div>
@@ -411,7 +418,7 @@ const Plan: React.FC = () => {
           }
         }}
       />
-    </>
+    </div>
   );
 };
 

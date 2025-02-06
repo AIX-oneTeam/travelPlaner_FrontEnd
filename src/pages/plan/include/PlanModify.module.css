@@ -139,3 +139,14 @@
     width: calc(100% - 0px);
   }
 }
+
+@media (max-width: 768px) {
+  .travel_plan_card_container {
+    padding: 30px 24px 30px 24px;
+  }
+
+  .travel_plan_controls{
+    padding: 30px 24px 0px 0px;
+  }
+}
+

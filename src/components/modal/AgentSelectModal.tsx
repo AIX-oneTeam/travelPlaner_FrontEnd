@@ -31,17 +31,17 @@ const AgentSelectModal: React.FC<AgentSelectModalProps> = ({
   };
 
   const agents = [
-    { type: "cafe", name: "카페 에이전트", icon: "/icons/cafe_agent.png" },
+    { type: "cafe", name: "카페 에이전트", icon: "/icons/cafe_agent.jpg" },
     {
       type: "restaurant",
       name: "맛집 에이전트",
-      icon: "/icons/restaurant_agent.png",
+      icon: "/icons/restaurant_agent.jpg",
     },
-    { type: "site", name: "관광지 에이전트", icon: "/icons/site_agent.png" },
+    { type: "site", name: "관광지 에이전트", icon: "/icons/site_agent.jpg" },
     {
       type: "accommodation",
       name: "숙소 에이전트",
-      icon: "/icons/accommodation_agent.png",
+      icon: "/icons/accommodation_agent.jpg",
     },
   ];
 
