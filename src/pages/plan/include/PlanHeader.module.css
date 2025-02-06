@@ -96,3 +96,18 @@
   display: flex;
   gap: 20px;
 }
+
+
+@media (max-width: 768px) {
+  .travel_plan_list_dates_wrapper {
+  width: calc(100% - 20px);
+}
+
+.travel_plan_list_sub_info {
+  padding: 0px 20px;
+}
+
+
+}
+
+

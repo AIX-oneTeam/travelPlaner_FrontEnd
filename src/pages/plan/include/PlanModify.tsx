@@ -185,18 +185,14 @@ const PlanModify: React.FC<PlanListProps> = ({
             onClick={handleOpenModalClick}
           >
             <div className={styles.top_btn}>
-              <img src="/icons/arrow-top-white.png" alt="open"></img>
+              <img src="/icons/arrow-top-white.jpg" alt="open"></img>
             </div>
           </div>
         )}
 
         {/* 프롬프트 모달 */}
         {isPromptOpen && (
-          <PromptModal
-            title="장소"
-            message="원하시는 장소를 직접 검색하거나 예를 들어주세요. AI가 찾아서 추천해드려요!"
-            onClose={handlePromptClose}
-          />
+          <PromptModal onClose={handlePromptClose} onSelect={() => {}} />
         )}
       </div>
 

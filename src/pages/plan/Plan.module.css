@@ -1,3 +1,10 @@
+.travel_plan_container{
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+
 .travel_plan_list_container {
   width: 100%;
   margin-top: 50px;
@@ -5,7 +12,7 @@
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  background-color: var(--grey-3);
+  background-color: var(--white);
   min-height: 100vh;
   position: relative;
   max-width: var(--max-width);
@@ -78,6 +85,7 @@
   border-radius: 50%;
   overflow: hidden;
   box-shadow: var(--shadow-basic);
+  z-index: 99999;
 }
 
 .travel_plan_list_icon:hover {
@@ -92,4 +100,38 @@
   left: 60%;
   transform: translate(-50%, -50%);
   width: 70%;
+}
+.travel_plan_tab_container{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  position: sticky;
+  top:0;
+  z-index: 99;
+  background-color: var(--white);
+
+  .travel_plan_tab_item{
+    box-sizing: border-box;
+    cursor: pointer;
+    height: 80px;
+    padding: 30px 14px;
+    border-bottom: 4px solid var(--grey-3);
+    font-size: var(--font-size-3);
+  }
+
+  @media (max-width: 768px) {
+    .travel_plan_tab_item{
+      font-size: var(--font-size-5);
+      height: 60px;
+      padding: 20px 14px;
+    }
+  }
+
+
+  .active {
+    border-bottom: 4px solid var(--sub-color-1);
+    font-weight: var(--bold);
+  }
+
 }

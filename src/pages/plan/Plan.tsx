@@ -87,11 +87,12 @@ interface PlanModifyProps {
 }
 
 const Plan: React.FC = () => {
-  const [isModifying, setModifying] = useState<boolean>(false);
+  const [currentTab, setCurrentTab] = useState<string>("detail");
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태 추가
   const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+
   const memberStore = useMemberStore();
 
   const { planId } = useParams();
@@ -121,17 +122,34 @@ const Plan: React.FC = () => {
   //에이전트 선택
   const [showAgentModal, setShowAgentModal] = useState<boolean>(true);
 
-  // 에이전트 선택 핸들러
+  // 에이전트 선택 및 요청
   const handleAgentSelect = async (agentType: string[]) => {
     setShowAgentModal(false);
     setIsLoading(true);
     try {
-      const planData = planStore.getPlan();
+      let planData = planStore.getPlan();
+      // 화면에 출력하기 위해 플랜 데이터 형식 변환
+      const planDataforPrint = {
+        name: planData.name,
+        start_date: new Date(planData.start_date),
+        end_date: new Date(planData.end_date),
+        main_location: planData.main_location,
+        ages: parseInt(planData.ages),
+        companion_count: planData.companion_count,
+        concepts: planData.concepts,
+      };
+      setPlan(planDataforPrint);
       // agentType을 API 요청에 포함
-      const response = await axios.post(`${API_BASE_URL}/agents/plan`, {
-        ...planData,
-        agent_type: agentType,
-      });
+      const response = await axios.post(
+        `${API_BASE_URL}/agents/plan`,
+        planData,
+        {
+          params: {
+            agent_type: agentType,
+          },
+        }
+      );
+
       const spotInfos = response.data.data.spots.spots;
       setSpots(spotInfos);
     } catch (err) {
@@ -196,15 +214,12 @@ const Plan: React.FC = () => {
     }
   };
 
-  // useEffect(() => {
-  //   // planId가 있으면 저장된 플랜 데이터를 가져오고
-  //   // 없으면 새로운 플랜을 생성하는 로직
-  //   if (planId) {
-  //     fetchPlanData();
-  //   } else {
-  //     fetchPlanDataFromAgent();
-  //   }
-  // }, [planId]);
+  useEffect(() => {
+    // planId가 있으면 저장된 플랜 데이터를 가져옴
+    if (planId) {
+      fetchPlanData();
+    }
+  }, [planId]);
 
   useEffect(() => {
     console.log("useEffect spots", spots);
@@ -304,7 +319,34 @@ const Plan: React.FC = () => {
   };
 
   return (
-    <>
+    <div className={styles.travel_plan_container}>
+      <div className={styles.travel_plan_tab_container}>
+        <div
+          className={`${styles.travel_plan_tab_item} ${
+            currentTab === "detail" ? styles.active : ""
+          }`}
+          onClick={() => setCurrentTab("detail")}
+        >
+          일정 확인
+        </div>
+
+        <div
+          className={`${styles.travel_plan_tab_item} ${
+            currentTab === "modify" ? styles.active : ""
+          }`}
+          onClick={() => setCurrentTab("modify")}
+        >
+          일정 수정
+        </div>
+        <div
+          className={`${styles.travel_plan_tab_item} ${
+            currentTab === "map" ? styles.active : ""
+          }`}
+          onClick={() => setCurrentTab("map")}
+        >
+          지도 확인
+        </div>
+      </div>
       <form className={styles.travel_plan_list_container}>
         {/* PlanHeader 컴포넌트 */}
         <PlanHeader
@@ -325,15 +367,18 @@ const Plan: React.FC = () => {
             <p>AI가 여행 일정을 생성하고 있습니다...</p>
           </div>
         ) : isDataLoaded ? (
-          !isModifying ? (
+          currentTab === "detail" ? (
             <PlanDetail spots={spots} selectedDay={selectedDay} />
-          ) : (
+          ) : currentTab === "modify" ? (
             <PlanModify
               spots={spots}
               selectedDay={selectedDay}
               onSpotsUpdate={handleSpotsUpdate}
             />
-          )
+          ) : currentTab === "map" ? (
+            // <PlanMap spots={spots} selectedDay={selectedDay} />
+            <div>카카오 맵</div>
+          ) : null
         ) : (
           <div className={styles.loading_container}>
             <div className={styles.loading_spinner}></div>
@@ -350,19 +395,6 @@ const Plan: React.FC = () => {
                   content="일정 저장하기"
                   onClick={handleSaveClick}
                 />
-              </div>
-              <div className={styles.travle_modify_btn}>
-                {!isModifying ? (
-                  <LongBtn
-                    content="일정 변경하기"
-                    onClick={() => setModifying(true)}
-                  />
-                ) : (
-                  <LongBtn
-                    content="일정 확인 하기"
-                    onClick={() => setModifying(false)}
-                  />
-                )}
               </div>
             </>
           ) : null}
@@ -397,7 +429,7 @@ const Plan: React.FC = () => {
           }
         }}
       />
-    </>
+    </div>
   );
 };
 
