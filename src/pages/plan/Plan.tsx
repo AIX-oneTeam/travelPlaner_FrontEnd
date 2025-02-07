@@ -38,7 +38,7 @@ interface planInterface {
   start_date: Date;
   end_date: Date;
   main_location: string;
-  ages: number;
+  ages: string;
   companion_count: {
     label: string;
     count: number;
@@ -102,7 +102,7 @@ const Plan: React.FC = () => {
     start_date: new Date(),
     end_date: new Date(new Date().setDate(new Date().getDate() + 1)),
     main_location: "",
-    ages: 20,
+    ages: "20대",
     companion_count: [
       {
         label: "",
@@ -119,7 +119,7 @@ const Plan: React.FC = () => {
     setPlan({ ...plan, name: newName });
   };
 
-  //에이전트 선택
+  //에이전트 선택 후 일정 생성
   const [showAgentModal, setShowAgentModal] = useState<boolean>(true);
 
   // 에이전트 선택 및 요청
@@ -134,7 +134,7 @@ const Plan: React.FC = () => {
         start_date: new Date(planData.start_date),
         end_date: new Date(planData.end_date),
         main_location: planData.main_location,
-        ages: parseInt(planData.ages),
+        ages: planData.ages,
         companion_count: planData.companion_count,
         concepts: planData.concepts,
       };
@@ -162,48 +162,37 @@ const Plan: React.FC = () => {
     }
   };
 
-  const fetchPlanDataFromAgent = async () => {
-    try {
-      setIsLoading(true); // 로딩 시작
-
-      const planData = planStore.getPlan();
-      const planDataforPrint = {
-        name: planData.name,
-        start_date: new Date(planData.start_date),
-        end_date: new Date(planData.end_date),
-        main_location: planData.main_location,
-        ages: parseInt(planData.ages),
-        companion_count: planData.companion_count,
-        concepts: planData.concepts,
-      };
-      setPlan(planDataforPrint);
-      console.log("planData", planData);
-
-      const response = await axios.post(
-        `${API_BASE_URL}/agents/plan`,
-        planData
-      );
-      const spotInfos = response.data.data.spots.spots;
-      setSpots(spotInfos);
-      setIsLoading(false); // 로딩 종료
-    } catch (err) {
-      console.error("에이전트 요청 중 오류 발생:", err);
-      setMessage("일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
-      setIsOpen(true);
-      return;
-    } finally {
-      // 일정 요청 완료 후 스토어와 로컬스토리지 초기화
-      planStore.initPlanInfo();
-    }
-  };
-
+  // 일정 조회용
   const fetchPlanData = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/plan_spots/${planId}`);
-      const newPlan = response.data.data.plan;
-      setPlan(newPlan);
-      planStore.setPlan(newPlan);
+      // 서버에서 반환한 일정 데이터 중 ages는 int타입임.
+      // 서버의 pydantic에서는 요청받을때는 string, 저장하는 pydantic에서는 int타입임.
+      // 프론트의 PlanStore(상태 관리)에서는 string으로 사용중임.
+      const planResponse = response.data.data.plan;
 
+      const planDataforStore = {
+        name: planResponse.name,
+        start_date: new Date(planResponse.start_date),
+        end_date: new Date(planResponse.end_date),
+        main_location: planResponse.main_location,
+        ages: `${planResponse.ages}대`,
+        // planResponse.companion_count는 문자열이므로, dict으로 변환해서 저장함.
+        companion_count: JSON.parse(planResponse.companion_count),
+        // planResponse.concepts는 문자열이므로, 배열로 변환해서 저장함.
+        concepts: JSON.parse(planResponse.concepts),
+      };
+      setPlan(planDataforStore);
+      //여기서 끔찍한 사실: 현재 페이지의 PlanInterface에서는 date타입인데, Store 객체에서는 string타입으로 저장함.
+      //그래서 Store에 저장할때 아래와 같은 끔찍한 일을 거쳐야 함.
+      planStore.setPlan({
+        ...planDataforStore,
+        start_date: planDataforStore.start_date.toISOString(),
+        end_date: planDataforStore.end_date.toISOString(),
+      });
+
+      // 이 아래 프론트 상태 관리 객체에 저장된 일정 정보로, 후에 프론트가 수정 페이지에서 각 에이전트에게 요청할때도 사용됨.
+      // 프론트의 PlanStore(상태 관리)에서는 companion_count와 concepts를 배열과 사전형으로 저장하고 있음.
       const spotInfos = response.data.data.detail;
       const updatedSpots = spotInfos.map((spotInfo: any) => ({
         ...spotInfo.spot,

@@ -3,6 +3,7 @@ import "./PromptModal.css";
 import SearchTextArea from "../input/SearchTextArea";
 import axios from "axios";
 import usePlanStore from "../../stores/PlanStore";
+import { API_BASE_URL } from "../../config";
 
 interface PromptModalProps {
   onClose: () => void;
@@ -44,17 +45,24 @@ const PromptModal: React.FC<PromptModalProps> = ({ onClose, onSelect }) => {
         return;
       }
 
-      const planData = planStore.getPlan();
+      const planInfo = planStore.getPlan();
+      //planInfo의 start_date와 end_date는 문자열이므로, date타입으로 변환해야 함.
+      const planData = {
+        ...planInfo,
+        start_date: new Date(planInfo.start_date),
+        end_date: new Date(planInfo.end_date),
+      };
       console.log("planData: ", planData);
 
       try {
         const response = await axios.post(
-          `/agents/${selectedAgent}?prompt=${promptText}`,
+          `${API_BASE_URL}/agents/${selectedAgent}?prompt=${promptText}`,
           planData,
           {
             withCredentials: true,
           }
         );
+
         console.log("에이전트 응답 결과: ", response);
         onClose();
       } catch (error) {
