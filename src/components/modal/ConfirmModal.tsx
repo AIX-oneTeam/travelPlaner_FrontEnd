@@ -9,8 +9,8 @@ interface ModalProps {
   content: string;
   confirmText?: string;
   cancelText?: string;
-  onConfirm: () => void; // 확인 버튼 클릭 이벤트
-  onCancel: () => void; // 취소 버튼 클릭 이벤트
+  onConfirm: (e: React.MouseEvent) => void; // 확인 버튼 클릭 이벤트
+  onCancel: (e: React.MouseEvent) => void; // 취소 버튼 클릭 이벤트
 }
 
 const ConfirmModal: React.FC<ModalProps> = ({

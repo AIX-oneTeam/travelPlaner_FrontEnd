@@ -65,13 +65,6 @@ const generateDaysArray = (startDate: Date, endDate: Date) => {
   return daysArray;
 };
 
-// PlanModify props 인터페이스 수정
-interface PlanModifyProps {
-  spots: spotResponse[];
-  selectedDay: number;
-  onSpotsUpdate: (updatedSpots: spotResponse[]) => void;
-}
-
 const Plan: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<string>("detail");
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태 추가
@@ -294,6 +287,17 @@ const Plan: React.FC = () => {
     setSpots(updatedSpots);
   };
 
+  const handleAddSpot = (newSpot: spotResponse) => {
+    // 현재 선택된 날짜(selectedDay)에 새로운 spot 추가
+    const updatedSpot = {
+      ...newSpot,
+      day_x: selectedDay,
+      order: spots.filter((spot) => spot.day_x === selectedDay).length + 1,
+    };
+
+    setSpots((prevSpots) => [...prevSpots, updatedSpot]);
+  };
+
   return (
     <div className={styles.travel_plan_container}>
       <div className={styles.travel_plan_tab_container}>
@@ -323,7 +327,7 @@ const Plan: React.FC = () => {
           지도 확인
         </div>
       </div>
-      <form className={styles.travel_plan_list_container}>
+      <div className={styles.travel_plan_list_container}>
         {/* PlanHeader 컴포넌트 */}
         <PlanHeader
           destination={plan.main_location}
@@ -350,6 +354,8 @@ const Plan: React.FC = () => {
               spots={spots}
               selectedDay={selectedDay}
               onSpotsUpdate={handleSpotsUpdate}
+              //일정에 추가 메서드 전달
+              onAddSpot={handleAddSpot}
             />
           ) : currentTab === "map" ? (
             // <PlanMap spots={spots} selectedDay={selectedDay} />
@@ -375,7 +381,7 @@ const Plan: React.FC = () => {
             </>
           ) : null}
         </div>
-      </form>
+      </div>
 
       <AgentSelectModal
         isOpen={showAgentModal && !planId}

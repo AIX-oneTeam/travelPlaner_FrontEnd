@@ -137,14 +137,16 @@
 
 .spot-item {
   display: flex;
-  gap: 20px;
-  padding: 20px;
+  gap: 14px;
+  padding: 14px;
   background: #ffffff;
   border-radius: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
   animation: spot-item-up 0.7s ease;
+  align-items: center;
+  position: relative;
 }
 
 @keyframes spot-item-up {
@@ -170,8 +172,8 @@
 }
 
 .spot-image {
-  width: 120px;
-  height: 120px;
+  width: 84px;
+  height: 84px;
   flex-shrink: 0;
 }
 
@@ -184,19 +186,26 @@
 
 .spot-info {
   flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.spot-content {
+  flex: 1;
 }
 
 .spot-name {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
   color: #333;
 }
 
 .spot-description {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: #666;
-  margin: 0 0 12px 0;
+  margin: 0 0 8px 0;
   line-height: 1.4;
 }
 
@@ -233,6 +242,25 @@
   color: var(--text-main);
   margin-bottom: 15px;
   text-align: center;
+}
+
+.add-spot-btn {
+  margin-top: 0;
+  padding: 6px 12px;
+  background-color: var(--main-color-1);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-2);
+  cursor: pointer;
+  font-size: var(--font-size-6);
+  transition: all 0.2s ease;
+  align-self: center;
+  white-space: nowrap;
+}
+
+.add-spot-btn:hover {
+  background-color: var(--sub-color-1);
+  transform: translateY(-2px);
 }
 
 

@@ -6,9 +6,12 @@ import usePlanStore from "../../stores/PlanStore";
 import { API_BASE_URL } from "../../config";
 import { CiPhone } from "react-icons/ci";
 import { CiLocationOn } from "react-icons/ci";
+import ConfirmModal from "./ConfirmModal";
+import AlertModal from "./AlertModal";
+
 interface PromptModalProps {
   onClose: () => void;
-  onSelect: (agentType: string, prompt: string) => void;
+  onAddSpot: (spot: spotInterface) => void;
 }
 
 interface spotInterface {
@@ -32,7 +35,28 @@ interface spotInterface {
   drivingTime?: string;
 }
 
-const SpotList: React.FC<{ spots: spotInterface[] }> = ({ spots }) => {
+const SpotList: React.FC<{
+  spots: spotInterface[];
+  onAddSpot: (spot: spotInterface) => void;
+}> = ({ spots, onAddSpot }) => {
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  const [selectedSpot, setSelectedSpot] = useState<spotInterface | null>(null);
+  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
+
+  const handleAddClick = (e: React.MouseEvent, spot: spotInterface) => {
+    e.stopPropagation();
+    setSelectedSpot(spot);
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirm = () => {
+    if (selectedSpot) {
+      onAddSpot(selectedSpot);
+    }
+    setShowConfirmModal(false);
+    setIsAlertOpen(true);
+  };
+
   return (
     <div className="spot-list-container">
       <ul className="spot-list">
@@ -42,27 +66,56 @@ const SpotList: React.FC<{ spots: spotInterface[] }> = ({ spots }) => {
               <img src={spot.image_url} alt={spot.kor_name} />
             </div>
             <div className="spot-info">
-              <h3 className="spot-name">{spot.kor_name}</h3>
-              <p className="spot-description">{spot.description}</p>
-              <div className="spot-details">
-                <CiLocationOn />
-                <p className="spot-address">{spot.address}</p>
-                {spot.phone_number && (
-                  <p className="spot-phone">
-                    <CiPhone />
-                    {spot.phone_number}
+              <div className="spot-content">
+                <h3 className="spot-name">{spot.kor_name}</h3>
+                <p className="spot-description">{spot.description}</p>
+                <div className="spot-details">
+                  <p className="spot-address">
+                    <CiLocationOn /> {spot.address}
                   </p>
-                )}
+                  {spot.phone_number && (
+                    <p className="spot-phone">
+                      <CiPhone />
+                      {spot.phone_number}
+                    </p>
+                  )}
+                </div>
               </div>
+              <button
+                className="add-spot-btn"
+                onClick={(e) => handleAddClick(e, spot)}
+              >
+                일정에 추가
+              </button>
             </div>
           </li>
         ))}
       </ul>
+
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        content="일정에 추가하시겠습니까?"
+        confirmText="추가"
+        cancelText="취소"
+        onConfirm={(e) => {
+          e.stopPropagation();
+          handleConfirm();
+        }}
+        onCancel={(e) => {
+          e.stopPropagation();
+          setShowConfirmModal(false);
+        }}
+      />
+      <AlertModal
+        isOpen={isAlertOpen}
+        content={"저장 되었습니다."}
+        onConfirm={() => setIsAlertOpen(false)}
+      />
     </div>
   );
 };
 
-const PromptModal: React.FC<PromptModalProps> = ({ onClose, onSelect }) => {
+const PromptModal: React.FC<PromptModalProps> = ({ onClose, onAddSpot }) => {
   const [selectedAgent, setSelectedAgent] = useState<string>("");
   const [selectedAgentName, setSelectedAgentName] = useState<string>("");
   const [promptText, setPromptText] = useState<string>("");
@@ -139,7 +192,7 @@ const PromptModal: React.FC<PromptModalProps> = ({ onClose, onSelect }) => {
         <img src="/icons/arrow-bottom-white.jpg" alt="close" />
       </div>
       <div>
-        <div className="modal-title-container">
+        <div className={`modal-title-container`}>
           <div className="radio-group">
             {agents.map((agent) => (
               <label
@@ -173,7 +226,7 @@ const PromptModal: React.FC<PromptModalProps> = ({ onClose, onSelect }) => {
         {isDataLoaded ? (
           <div className="spots_container">
             <p className="prev_prompt_text">{promptText}에 대한 응답입니다.</p>
-            <SpotList spots={spots} />
+            <SpotList spots={spots} onAddSpot={onAddSpot} />
           </div>
         ) : (
           <div></div>
@@ -191,7 +244,6 @@ const PromptModal: React.FC<PromptModalProps> = ({ onClose, onSelect }) => {
               src="/images/loading.gif"
               alt="loading"
             />
-            <SearchTextArea setPromptText={setPromptText} readOnly={true} />
           </div>
         ) : (
           <div>
