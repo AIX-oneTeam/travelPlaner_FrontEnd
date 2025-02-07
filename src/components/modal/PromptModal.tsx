@@ -45,7 +45,13 @@ const PromptModal: React.FC<PromptModalProps> = ({ onClose, onSelect }) => {
         return;
       }
 
-      const planData = planStore.getPlan();
+      const planInfo = planStore.getPlan();
+      //planInfo의 start_date와 end_date는 문자열이므로, date타입으로 변환해야 함.
+      const planData = {
+        ...planInfo,
+        start_date: new Date(planInfo.start_date),
+        end_date: new Date(planInfo.end_date),
+      };
       console.log("planData: ", planData);
 
       try {
