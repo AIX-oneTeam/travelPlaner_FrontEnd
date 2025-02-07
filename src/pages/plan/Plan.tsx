@@ -45,20 +45,6 @@ interface planInterface {
   }[];
   concepts: string[];
 }
-interface spotInterface {
-  kor_name: string;
-  eng_name?: string;
-  description: string;
-  address: string;
-  map_url?: string;
-  image_url: string;
-  day_x: number;
-  time: string;
-  // TODO: 지도 API 이용해야 할지?
-  drivingTime?: string;
-  isParkingLot?: boolean;
-  isPet?: boolean;
-}
 
 //
 const generateDaysArray = (startDate: Date, endDate: Date) => {
