@@ -202,6 +202,7 @@ const Plan: React.FC = () => {
       const response = await axios.get(`${API_BASE_URL}/plan_spots/${planId}`);
       const newPlan = response.data.data.plan;
       setPlan(newPlan);
+      planStore.setPlan(newPlan);
 
       const spotInfos = response.data.data.detail;
       const updatedSpots = spotInfos.map((spotInfo: any) => ({
