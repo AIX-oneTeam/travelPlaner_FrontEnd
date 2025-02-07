@@ -53,11 +53,25 @@
   padding: 0px 20px;
 }
 
+@media (max-width: 768px) {
+  .travel_plan_list_header{
+    gap: 15px;
+  }
+  .travel_plan_list_name{
+    font-size: var(--font-size-3);
+  }
+  .travel_plan_list_destination{
+    font-size: var(--font-size-5);
+  }
+}
+
+
 
 
 .travel_plan_list_dates_wrapper {
   width: calc(100% - 60px);
 }
+
 
 .travel_plan_list_date {
   display: flex;
