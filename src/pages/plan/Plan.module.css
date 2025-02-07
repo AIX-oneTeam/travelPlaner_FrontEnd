@@ -85,8 +85,19 @@
   border-radius: 50%;
   overflow: hidden;
   box-shadow: var(--shadow-basic);
-  z-index: 99999;
+  z-index: 99;
 }
+
+@media (max-width: 1024px) {
+  .travel_plan_list_icon {
+    width: 60px;
+    height: 60px;
+    bottom: 24px;
+    right: 24px;
+  }
+
+}
+
 
 .travel_plan_list_icon:hover {
   box-shadow: var(--shadow-hover);
