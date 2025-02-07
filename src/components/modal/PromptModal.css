@@ -144,6 +144,25 @@
   margin-bottom: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
+  animation: spot-item-up 0.7s ease;
+}
+
+@keyframes spot-item-up {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+
 }
 
 .spot-item:hover {
@@ -202,6 +221,22 @@
   height: 16px;
   opacity: 0.7;
 }
+
+.spots_container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prev_prompt_text {
+  font-size: var(--font-size-4);
+  color: var(--text-main);
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+
+
 
 
 

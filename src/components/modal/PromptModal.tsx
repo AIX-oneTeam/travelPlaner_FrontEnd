@@ -4,7 +4,8 @@ import SearchTextArea from "../input/SearchTextArea";
 import axios from "axios";
 import usePlanStore from "../../stores/PlanStore";
 import { API_BASE_URL } from "../../config";
-
+import { CiPhone } from "react-icons/ci";
+import { CiLocationOn } from "react-icons/ci";
 interface PromptModalProps {
   onClose: () => void;
   onSelect: (agentType: string, prompt: string) => void;
@@ -44,13 +45,11 @@ const SpotList: React.FC<{ spots: spotInterface[] }> = ({ spots }) => {
               <h3 className="spot-name">{spot.kor_name}</h3>
               <p className="spot-description">{spot.description}</p>
               <div className="spot-details">
-                <p className="spot-address">
-                  <img src="/icons/location.png" alt="location" />
-                  {spot.address}
-                </p>
+                <CiLocationOn />
+                <p className="spot-address">{spot.address}</p>
                 {spot.phone_number && (
                   <p className="spot-phone">
-                    <img src="/icons/phone.png" alt="phone" />
+                    <CiPhone />
                     {spot.phone_number}
                   </p>
                 )}
@@ -120,11 +119,9 @@ const PromptModal: React.FC<PromptModalProps> = ({ onClose, onSelect }) => {
           }
         );
 
-        console.log("에이전트 응답 결과: ", response);
         const spots = response.data.data.spots;
         setSpots(spots);
-        console.log("spots: ", spots);
-        setIsLoading(false);
+
         setIsDataLoaded(true);
       } catch (error) {
         console.error("Error:", error);
@@ -174,8 +171,8 @@ const PromptModal: React.FC<PromptModalProps> = ({ onClose, onSelect }) => {
           </div>
         </div>
         {isDataLoaded ? (
-          <div className="spots_list_container">
-            <p className="prev_prompt_text">{promptText}</p>
+          <div className="spots_container">
+            <p className="prev_prompt_text">{promptText}에 대한 응답입니다.</p>
             <SpotList spots={spots} />
           </div>
         ) : (
