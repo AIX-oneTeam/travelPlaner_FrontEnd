@@ -35,12 +35,14 @@ interface PlanListProps {
   spots: spotResponse[];
   selectedDay: number;
   onSpotsUpdate: (updatedSpots: spotResponse[]) => void;
+  onAddSpot: (newSpot: spotResponse) => void;
 }
 
 const PlanModify: React.FC<PlanListProps> = ({
   spots,
   selectedDay,
   onSpotsUpdate,
+  onAddSpot,
 }) => {
   const [selectedPlans, setSelectedPlans] = useState<number[]>([]); // 선택된 일정 관리
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
@@ -201,7 +203,7 @@ const PlanModify: React.FC<PlanListProps> = ({
 
         {/* 프롬프트 모달 */}
         {isPromptOpen && (
-          <PromptModal onClose={handlePromptClose} onSelect={() => {}} />
+          <PromptModal onClose={handlePromptClose} onAddSpot={onAddSpot} />
         )}
       </div>
 
