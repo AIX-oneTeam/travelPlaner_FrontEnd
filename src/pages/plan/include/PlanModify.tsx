@@ -151,7 +151,7 @@ const PlanModify: React.FC<PlanListProps> = ({
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                style={{ width: "100%" }} // 기존 레이아웃 유지를 위한 최소한의 스타일
+                style={{ width: "100%" }}
               >
                 {/* 일정 요소 list */}
                 {spots
@@ -162,13 +162,19 @@ const PlanModify: React.FC<PlanListProps> = ({
                       draggableId={`${spot.order}-${spot.eng_name}`}
                       index={index}
                     >
-                      {(dragProvided) => (
+                      {(dragProvided, snapshot) => (
                         <div
                           ref={dragProvided.innerRef}
                           {...dragProvided.draggableProps}
                           {...dragProvided.dragHandleProps}
                           className={styles.travel_plan_card_section}
                           onClick={() => handleSpotClick(spot)}
+                          style={{
+                            ...dragProvided.draggableProps.style,
+                            backgroundColor: snapshot.isDragging
+                              ? "rgba(0, 0, 0, 0.05)"
+                              : "transparent",
+                          }}
                         >
                           <div className={styles.travel_plan_card_container}>
                             <div className={styles.teavel_plan_delete}>
