@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import PlanHeader from "./PlanHeader"; // 일정 날짜 헤더 컴포넌트
 import usePlanStore from "../../../stores/PlanStore";
+import { Trash2 } from "lucide-react"; // 휴지통 아이콘 import
 
 // 모달 컴포넌트
 import ConfirmModal from "../../../components/modal/ConfirmModal";
@@ -44,12 +45,14 @@ const PlanModify: React.FC<PlanListProps> = ({
   onSpotsUpdate,
   onAddSpot,
 }) => {
-  const [selectedPlans, setSelectedPlans] = useState<number[]>([]); // 선택된 일정 관리
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [isPromptOpen, setPromptOpen] = useState<boolean>(false); // PromptModal 상태 추가
+  const [isPromptOpen, setPromptOpen] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [modalWidth, setModalWidth] = useState<string>("100%"); // css의 fixed는 width가 뷰포트를 기준임 -> 너비 조정이 힘들어서 상태 관리로 해결
+  const [modalWidth, setModalWidth] = useState<string>("100%");
   const [selectedSpot, setSelectedSpot] = useState<spotResponse | null>(null);
+  const [selectedForDelete, setSelectedForDelete] = useState<number | null>(
+    null
+  );
   const handleSpotClick = (spot: spotResponse) => {
     setSelectedSpot(spot);
   };
@@ -62,67 +65,42 @@ const PlanModify: React.FC<PlanListProps> = ({
       }
     };
 
-    // 초기 너비 설정
     handleResize();
-
-    // 윈도우 리사이즈 이벤트 추가
     window.addEventListener("resize", handleResize);
-
-    // 리사이즈 이벤트 제거
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
-  // 체크 박스 상태 관리
-  const handleCheckboxChange = (index: number) => {
-    setSelectedPlans((prevSelected) => {
-      if (prevSelected.includes(index)) {
-        return prevSelected.filter((i) => i !== index); // 선택 해제
-      } else {
-        return [...prevSelected, index]; // 선택 추가
-      }
-    });
-  };
-
-  // 전체 선택
-  const handleSelectAll = () => {
-    const allIndexes = spots
-      .filter((spot) => spot.day_x === selectedDay)
-      .map((_, index) => index);
-
-    // 현재 선택 상태와 모든 인덱스 비교
-    if (selectedPlans.length === allIndexes.length) {
-      setSelectedPlans([]); // 모두 선택되어 있으면 해제
-    } else {
-      setSelectedPlans(allIndexes); // 모두 선택
-    }
-  };
-
   // 삭제 버튼 클릭 시 모달 열기
-  const handleDelete = () => {
+  const handleDeleteClick = (index: number) => {
+    setSelectedForDelete(index);
     setModalOpen(true);
   };
 
-  // 모달 안에서 저장 버튼 클릭했을때
+  // 모달 안에서 삭제 확인 시
   const handleModalConfirm = () => {
-    // 선택된 인덱스들을 현재 날짜의 spots에서 제외
-    const currentDaySpots = spots.filter((spot) => spot.day_x === selectedDay);
-    const updatedSpots = spots.filter((spot, globalIndex) => {
-      const currentDayIndex = currentDaySpots.indexOf(spot);
-      return (
-        spot.day_x !== selectedDay || !selectedPlans.includes(currentDayIndex)
+    if (selectedForDelete !== null) {
+      const currentDaySpots = spots.filter(
+        (spot) => spot.day_x === selectedDay
       );
-    });
+      const updatedSpots = spots.filter((spot, globalIndex) => {
+        const currentDayIndex = currentDaySpots.indexOf(spot);
+        return (
+          spot.day_x !== selectedDay || currentDayIndex !== selectedForDelete
+        );
+      });
 
-    onSpotsUpdate(updatedSpots);
+      onSpotsUpdate(updatedSpots);
+    }
     setModalOpen(false);
-    setSelectedPlans([]); // 선택 초기화
+    setSelectedForDelete(null);
   };
 
   // 모달 닫기
   const handleModalCancel = () => {
     setModalOpen(false);
+    setSelectedForDelete(null);
   };
 
   // OpenModal 클릭 시 PromptModal 열기
@@ -143,19 +121,6 @@ const PlanModify: React.FC<PlanListProps> = ({
           !isPromptOpen ? styles.with_padding_bottom : ""
         }`}
       >
-        <div
-          className={styles.travel_plan_controls}
-          style={{ textAlign: "right" }}
-        >
-          <span onClick={handleSelectAll} style={{ cursor: "pointer" }}>
-            전체선택
-          </span>
-          <span>&nbsp;|&nbsp;</span>
-          <span onClick={handleDelete} style={{ cursor: "pointer" }}>
-            삭제
-          </span>
-        </div>
-
         {/* 일정 요소 list */}
         {spots
           .filter((spot) => spot.day_x === selectedDay)
@@ -166,11 +131,14 @@ const PlanModify: React.FC<PlanListProps> = ({
               onClick={() => handleSpotClick(spot)}
             >
               <div className={styles.travel_plan_card_container}>
-                <div className={styles.teavel_plan_check}>
-                  <input
-                    type="checkbox"
-                    checked={selectedPlans.includes(index)}
-                    onChange={() => handleCheckboxChange(index)}
+                <div className={styles.teavel_plan_delete}>
+                  <Trash2
+                    size={30}
+                    className={styles.trash_icon}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteClick(index);
+                    }}
                   />
                 </div>
                 <div className={styles.travle_image_container}>
@@ -210,7 +178,7 @@ const PlanModify: React.FC<PlanListProps> = ({
       {/* 삭제 확인 모달 */}
       <ConfirmModal
         isOpen={isModalOpen}
-        content={"선택하신 일정들을 삭제할까요?"}
+        content={"선택하신 일정을 삭제할까요?"}
         confirmText={"삭제"}
         cancelText="취소"
         onConfirm={handleModalConfirm}
