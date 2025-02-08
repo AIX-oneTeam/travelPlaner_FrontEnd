@@ -1,5 +1,6 @@
 #searchTextArea-container{
     width:100%;
+    padding: 0px 20px 25px 20px;
     label{
         display: block;
         width:100%;
@@ -42,7 +43,13 @@
     bottom: 0;
     transform: translateY(-50%);
     cursor: pointer;
-    background-color: var(--black);
     border-radius: 50%;
+    background-color: var(--black);
+    background-image: url(/public/icons/arrow_up_white.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
 }
+
 

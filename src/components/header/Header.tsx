@@ -1,6 +1,7 @@
 import React from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
+import MemberStore from "../../stores/MemberStore";
 
 interface HeaderProps {
   openSideBar: () => void;
@@ -9,8 +10,8 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ openSideBar }) => {
   /*---라우터 관련-------------------------------*/
 
-  /*---상태관리 변수들(값이 변화면 화면 랜더링 )---*/
-  const [username, setUsername] = React.useState("홍길동");
+  /*---상태관리 변수들(값이 변화하면 화면 렌더링 )---*/
+  const memberInfo = MemberStore((state: any) => state.memberInfo);
 
   /*---일반 변수--------------------------------*/
 
@@ -28,9 +29,17 @@ const Header: React.FC<HeaderProps> = ({ openSideBar }) => {
         </div>
 
         <div className="text-container">
-          <div className="member-profile"></div>
+          <img
+            className="profile_img"
+            src={
+              memberInfo.profile_url
+                ? memberInfo.profile_url
+                : "/images/default_profile_img.png"
+            }
+            alt="프로필 이미지"
+          />
           <p className="member-nickname">
-            {username}
+            {memberInfo.nickname}
             <span>님</span>
           </p>
           <img

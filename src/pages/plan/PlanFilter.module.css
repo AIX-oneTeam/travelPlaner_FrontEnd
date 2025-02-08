@@ -1,24 +1,32 @@
 /* 공통 스타일 */
-.travel-plan-container {
-  width: 70%;
-  padding: 50px 0px;
+.travel_plan_container {
+  width: 100%;
+  padding: 50px 24px;
   box-sizing: border-box;
+  min-height: 100vh;
 }
 
-.travel-plan-header {
+.travel_plan_header {
   font-size: var(--font-size-3);
   font-weight: var(--bold);
   color: #000;
   margin-bottom: 10px;
 }
 
-.travel-plan-description {
+@media (max-width: 400px) {
+  .travel_plan_header {
+    font-size: var(--font-size-4);
+  }
+}
+
+
+.travel_plan_description {
   font-size: var(--font-size-5);
   color: #b1b1b1;
   margin-bottom: 20px;
 }
 
-.section-title {
+.section_title {
   font-size: var(--font-size-5);
   font-weight: var(--bold);
   color: #000;
@@ -26,16 +34,17 @@
 }
 
 /* 지역 섹션 */
-.travel-region-section {
+.travel_region_section {
   margin-bottom: 50px;
 }
 
-.region-input-container {
+.region_input_container {
+  position: relative;
   width: 98%;
-  margin: 20px 0px 20px 15px;
+  margin: 20px 0px 0px 15px;
 }
 
-.region-input {
+.region_input {
   flex: 1;
   height: 40px;
   border: 1px solid #e0dede;
@@ -44,83 +53,96 @@
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 }
 
-.region-search-button {
-  width: 40px;
-  height: 40px;
-  background-color: #fff;
-  border: 1px solid #e0dede;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.filtered_region_list {
+  width: 98%;
+  max-height: 200px;
+  overflow-y: auto;
+  border-left: 1px solid var(--grey-1);
+  border-right: 1px solid var(--grey-1);
+  border-bottom: 1px solid var(--grey-1);
+  border-top: none;
+  margin-left: 15px;
+  padding: 4px 0px;
+  background-color: var(--white);
+  border-radius: 0 0 var(--border-radius-2) var(--border-radius-2);
+  font-size: var(--font-size-5);
+}
+
+.filtered_region_list li {
+  padding: 7px 12px;
   cursor: pointer;
 }
 
+.filtered_region_list li:hover {
+  background-color: var(--grey-3);
+}
+
 /* 일정 섹션 */
-.travel-schedule-section {
+.travel_schedule_section {
   display: flex;
   flex-direction: column;
   margin: 20px 0;
-  height: 390px; /* 일정 높이 고정 */
+  height: 390px;
+  /* 일정 높이 고정 */
 }
 
 /* 달력 컨테이너 */
-.calendar-container {
+.calendar_container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 390px; /* 일정 높이 고정 */
+  height: 390px;
+  /* 일정 높이 고정 */
   position: relative;
 }
 
 /* 달력 */
-.calendar-wrapper {
+.calendar_wrapper {
   flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 366px; /* wrapper의 높이 고정 */
+  height: 366px;
+  gap: 10px;
+  /* wrapper의 높이 고정 */
 }
 
 /* react-calendar */
-.custom-calendar {
+.custom_calendar {
   padding: 10px 10px;
-  height: 366px; /* react-calendar 높이 고정 */
+  height: 366px;
+  /* react-calendar 높이 고정 */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
 /* 버튼 스타일 공통 */
-.calendar-nav-button {
-  background: var(--grey-3);
-  border: 1px solid var(--grey-1);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.calendar_nav_button {
+  border: none;
+  background-color: transparent;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
   font-size: var(--font-size-5);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  img {
+    width: 40px;  
+  }
 }
 
-/* 왼쪽 버튼 */
-.prev-button {
-  margin-right: 10px;
-}
 
-/* 오른쪽 버튼 */
-.next-button {
-  margin-left: 10px;
-}
-
-/* 버튼 hover 효과 */
-.calendar-nav-button:hover {
-  background-color: var(--sub-color-1);
-}
 
 /* react-calendar 커스텀 스타일 */
 .react-calendar__navigation__label__labelText {
@@ -192,19 +214,25 @@
 }
 
 /* 선택된 날짜 */
-.selected-date {
+.selected_date {
   margin-top: 10px;
   font-size: var(--font-size-6);
   text-align: center;
+
+  span {
+    font-weight: var(--semibold);
+  }
 }
 
 /* 날씨 정보 */
-.weather-container {
-  max-width: 49%;
-  margin: 50px auto 50px auto;
+
+.weather_container {
+  margin: 70px auto;
+  max-width: 400px;
 }
 
-.weather-alert-card {
+.weather_alert_card {
+  width: 100%;
   background-color: var(--white);
   border-radius: var(--border-radius-2);
   box-shadow: var(--shadow-basic);
@@ -214,49 +242,49 @@
   gap: 0.75rem;
 }
 
-.weather-icon-wrapper {
+.weather_icon_wrapper {
   flex-shrink: 0;
 }
 
-.weather-icon {
+.weather_icon {
   width: 2.5rem;
   height: 1.8rem;
   color: var(--text-sub);
 }
 
-.weather-content {
+.weather_content {
   flex: 1;
 }
 
-.weather-title {
+.weather_title {
   font-size: var(--font-size-6);
   line-height: 1.5rem;
   font-weight: var(--medium);
   color: var(--text-main);
 }
 
-.weather-update-time {
+.weather_update_time {
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: var(--text-sub);
 }
 
 /* 나이 섹션 */
-.travel-age-section {
+.travel_age_section {
   margin-bottom: 50px;
 }
 
-.age-selection-container {
+.age_selection_container {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   margin: 20px 0px 20px 15px;
 }
 
-.age-button {
+.age_button {
   width: 60px;
   height: 40px;
-  border: 1px solid var(--grey-1);
+  border: none;
   border-radius: var(--border-radius-2);
   text-align: center;
   line-height: 40px;
@@ -264,40 +292,52 @@
   background-color: var(--grey-3);
   color: var(--text-main);
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: var(--semibold);
 }
 
-.age-button.active {
+.age_button:hover {
   background-color: var(--sub-color-1);
+}
+
+.age_button.active {
+  background-color: var(--main-color-1);
   border-color: #76adec;
 }
 
+
 /* 일행 섹션 */
-.travel-companions-section {
+.travel_companions_section {
   margin-bottom: 50px;
 }
 
-.companions-selection-container {
+.companions_selection_container {
   display: flex;
   flex-direction: column;
   gap: 15px;
   margin: 20px 0px 20px 15px;
 }
 
-.companion-group {
+.companion_group {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 좌우 정렬 */
+  justify-content: space-between;
+  /* 좌우 정렬 */
 }
 
-.companion-controls {
+.companion_controls {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-grow: 1; /* 가운데 공간을 확보 */
+  flex-grow: 1;
+  /* 가운데 공간을 확보 */
+
+  
 }
 
-.companion-minus,
-.companion-plus {
+
+.companion_minus,
+.companion_plus {
   width: 30px;
   height: 30px;
   border: 1px solid var(--grey-1);
@@ -308,59 +348,86 @@
   cursor: pointer;
   font-size: var(--font-size-6);
   color: #000;
-  background-color: #fff; /* 버튼 배경색 */
+  background-color: #fff;
+  /* 버튼 배경색 */
   transition: background-color 0.2s ease, border-color 0.2s ease,
-    color 0.2s ease; /* 클릭 시 애니메이션 */
+    color 0.2s ease;
+  /* 클릭 시 애니메이션 */
 }
 
-.companion-minus:hover {
-  background-color: var(--sub-color-2); /* 호버 시 하늘색에 가까운 배경 */
+.companion_minus:hover {
+  background-color: var(--sub-color-2);
+  /* 호버 시 하늘색에 가까운 배경 */
 }
 
-.companion-plus:hover {
-  background-color: var(--sub-color-1); /* 호버 시 하늘색에 가까운 배경 */
+.companion_plus:hover {
+  background-color: var(--sub-color-1);
+  /* 호버 시 하늘색에 가까운 배경 */
 }
 
-.companion-label {
+.companion_label {
   font-size: var(--font-size-6);
   font-weight: var(--semibold);
   color: var(--text-main);
   text-align: center;
   padding: 0 10px;
-  width: 70px; /* 고정 너비로 일관된 정렬 유지 */
+  width: 70px;
+  /* 고정 너비로 일관된 정렬 유지 */
 }
 
-.companion-count {
+.companion_count {
   font-size: var(--font-size-6);
   color: var(--text-main);
   margin-left: auto;
   text-align: right;
+
+  .count_number {
+    font-weight: var(--semibold);
+  }
 }
 
 /* 목적 섹션 */
-.travel-purpose-section {
+
+.travel_purpose_section {
   margin-bottom: 50px;
 }
 
-.purpose-selection-container {
+.purpose_selection_container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin: 20px 0px 20px 15px;
 }
 
-.purpose-button {
+.purpose_button {
   padding: 8px 12px;
   font-size: var(--font-size-6);
   font-weight: var(--bold);
-  border: 1px solid var(--grey-1);
+  border: none;
   border-radius: var(--border-radius-2);
   color: var(--text-main);
   background-color: var(--grey-3);
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.purpose-button.active {
-  background-color: #ffe2ab;
-  border-color: #f2a413;
+.purpose_button:hover {
+  background-color: var(--sub-color-2);
 }
+
+.purpose_button.active {
+  background-color: var(--main-color-2);
+}
+
+.travel_plan_complete_button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.travel_plan_complete_button>* {
+  max-width: 50%;
+  width: 100%;
+}
+

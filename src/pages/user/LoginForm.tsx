@@ -1,50 +1,93 @@
-import React from "react";
 import "./LoginForm.css";
-import API_BASE_URL from '../../config';  // config.ts에서 API_BASE_URL을 임포트
+import { v4 as uuidv4 } from "uuid";
+import {
+  API_BASE_URL,
+  GOOGLE_CLIENT_ID,
+  NAVER_CLIENT_ID,
+  KAKAO_CLIENT_ID,
+  CLIENT_CALLBACK_URL,
+} from "../../config"; // config.ts에서 API_BASE_URL을 임포트
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
+import MemberStore from "../../stores/MemberStore";
 
-
-
-
-
+// Authorization Code Flow
+// 1. 프론트는 각 인증서버에 API키를 이용해 인증 코드를 받고 이를 백엔드로 전송
+// 2. 백엔드는 인증 코드를 사용해 액세스 토큰을 요청
+// 3. 백엔드는 액세스 토큰을 통해 ID토큰을 받고, JWT토큰을 발행해 프론트에 전송
+// 4. 프론트는 JWT토큰을 저장해 인증된 사용자임을 유지
+// 5. 백엔드는 JWT토큰을 검증해 사용자 인증(상태는 저장하지 않음)
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const setMemberInfo = MemberStore((state: any) => state.setMemberInfo);
+  const state = uuidv4();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const authCode = urlParams.get("code");
+    const domain = urlParams.get("domain");
+
+    if (authCode) {
+      console.log(authCode);
+      axios
+        .get(
+          `${API_BASE_URL}/oauths/${domain}/callback?code=${authCode}&state=${state}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+            data: {
+              code: authCode,
+            },
+          }
+        )
+        .then((response) => {
+          //후처리
+          console.log("response: ", response); // 토큰 정보 출력
+
+          console.log("로그인 성공");
+
+          //zustand 스토어에 저장
+          setMemberInfo(response.data);
+
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      console.log("인증코드가 없습니다.");
+    }
+  });
+
   // 일반 메소드 (로그인 이벤트 핸들러)
   const handleKakaoLogin = () => {
-    console.log("카카오 로그인 클릭");
-    // 카카오 로그인 로직 추가
+    const kakaoClientId: string = KAKAO_CLIENT_ID;
+    const kakaoRedirectUrl = `${CLIENT_CALLBACK_URL}?domain=kakao`;
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUrl}&response_type=code&state=${state}`;
+
+    window.location.href = kakaoAuthUrl;
   };
 
-  // 네이버 로그인 로직 (백엔드 API 호출)
-
+  // 네이버 로그인 로직
   const handleNaverLogin = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/naver/login`, {
-        method: "GET",
-        credentials: "include", // 쿠키를 전송하도록 설정
-      });
-      const data = await response.json();
-  
-      console.log("네이버 로그인 데이터:", data); // 서버에서 받은 데이터 출력
-  
-      if (data.naver_auth_url) {
-        localStorage.setItem("state", data.state); // state 값 저장 (옵션)
-        window.location.href = data.naver_auth_url; // 네이버 로그인 URL로 리디렉션
-      } else {
-        alert("네이버 로그인 URL을 가져오지 못했습니다.");
-      }
-    } catch (error) {
-      console.error("네이버 로그인 API 호출 오류:", error);
-      alert("네이버 로그인 API 호출에 실패했습니다.");
-    }
+    const naverClientId: string = NAVER_CLIENT_ID;
+    const redirectUri = `${CLIENT_CALLBACK_URL}?domain=naver`;
+    const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&redirect_uri=${redirectUri}&response_type=code&state=${state}`;
+
+    window.location.href = naverAuthUrl;
   };
 
+  const handleGoogleLogin = async () => {
+    const googleClientId: string = GOOGLE_CLIENT_ID;
+    const googleRedirectUrl: string = `${CLIENT_CALLBACK_URL}?domain=google`;
+    const googleScope = "openid email profile";
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${googleRedirectUrl}&scope=${googleScope}&response_type=code&state=${state}`;
 
-  
-
-
-  const handleGoogleLogin = () => {
-    console.log("Google 로그인 클릭");
-    // Google 로그인 로직 추가
+    window.location.href = googleAuthUrl;
   };
 
   return (
@@ -55,11 +98,10 @@ const LoginForm = () => {
         </div>
         {/* 카카오 로그인 */}
         <div className="kakao-login-button">
-          <img
-            src="/images/kakao_login_btn.jpg"
-            alt="카카오 로그인 버튼"
-            onClick={handleKakaoLogin}
-          />
+          <button onClick={handleKakaoLogin}>
+            <img src="/images/kakao-logo.png" alt="카카오 로그인 버튼" />
+            <span>카카오 로그인</span>
+          </button>
         </div>
 
         {/* 네이버 로그인 */}

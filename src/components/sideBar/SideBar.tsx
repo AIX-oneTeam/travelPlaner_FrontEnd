@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import "./SideBar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import MemberStore from "../../stores/MemberStore";
+import { API_BASE_URL } from "../../config";
+import axios from "axios";
+import AlertModal from "../modal/AlertModal";
 
 interface SideBarProps {
   closeSideBar: () => void;
@@ -11,10 +15,34 @@ const SideBar: React.FC<SideBarProps> = ({
   isSideBarVisible,
   closeSideBar,
 }) => {
+  const isAnonymous = MemberStore((state: any) => state.isAnonymous);
+  const initMemberInfo = MemberStore((state: any) => state.initMemberInfo);
+  const navigate = useNavigate();
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [alertModalContent, setAlertModalContent] = useState("");
+
+  //로그아웃 처리
+  // TODO: 서버에 요청보내서 쿠키까지 지우는 로직 필요
+  const handleLogout = () => {
+    initMemberInfo();
+    axios.get(`${API_BASE_URL}/members/logout`, { withCredentials: true });
+    closeSideBar();
+  };
+
   // false면 렌더링 하지 않음
   if (!isSideBarVisible) {
     return null;
   }
+
+  const handleMyPlans = () => {
+    if (isAnonymous()) {
+      navigate("/loginForm");
+      setAlertModalContent("로그인 후 이용해주세요.");
+      setIsAlertModalOpen(true);
+      return;
+    }
+    navigate("/plans/list");
+  };
 
   return (
     <aside id="sideBar-container">
@@ -29,17 +57,25 @@ const SideBar: React.FC<SideBarProps> = ({
               onClick={closeSideBar}
             ></img>
           </div>
-          <Link className="sideBar-1" to="/loginForm">
-            로그인<img src="/icons/arrow_forward.jpg" alt="login"></img>
-          </Link>
+          {isAnonymous() ? (
+            <Link className="sideBar-1" to="/loginForm">
+              로그인
+              <img src="/icons/arrow_forward.jpg" alt="login"></img>
+            </Link>
+          ) : (
+            <div className="sideBar-1" onClick={handleLogout}>
+              로그아웃
+              <img src="/icons/arrow_forward.jpg" alt="login"></img>
+            </div>
+          )}
         </li>
         <li>
           <div className="sideBar-2 border-yellow">
             나의 일정
-            <Link className="sideBar-3" to="/myPlan">
+            <div className="sideBar-3" onClick={handleMyPlans}>
               나의 일정 확인
               <img src="/icons/arrow_forward.jpg" alt="MyPlan"></img>
-            </Link>
+            </div>
           </div>
         </li>
         <li>
@@ -65,6 +101,13 @@ const SideBar: React.FC<SideBarProps> = ({
           </div>
         </li>
       </ul>
+      <AlertModal
+        isOpen={isAlertModalOpen}
+        content={alertModalContent}
+        onConfirm={() => {
+          setIsAlertModalOpen(false);
+        }}
+      />
     </aside>
   );
 };

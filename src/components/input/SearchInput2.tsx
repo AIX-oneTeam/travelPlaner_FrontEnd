@@ -1,26 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import "./SearchInput2.css";
 
 interface NormalInputProps {
   type?: "text" | "password" | "email" | "number" | "tel";
   placeholder?: string;
+  value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const SearchInput2: React.FC<NormalInputProps> = ({
   type = "text",
   placeholder = "입력해주세요",
+  value,
   onChange = () => {},
 }) => {
-  const [inputValue, setInputValue] = useState<string>("");
-
-  const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    if (onChange) {
-      onChange(e); // 외부에서 전달된 onChange를 실행
-    }
-  };
-
   return (
     <div id="searchInput2-container">
       <label htmlFor="input" className="searchInput2-wrapper">
@@ -29,8 +22,9 @@ const SearchInput2: React.FC<NormalInputProps> = ({
           name="input"
           type={type}
           placeholder={placeholder}
-          value={inputValue}
-          onChange={inputHandler}
+          autoComplete="off"
+          value={value}
+          onChange={onChange}
         />
         <span
           className="searchInput2-icon"
