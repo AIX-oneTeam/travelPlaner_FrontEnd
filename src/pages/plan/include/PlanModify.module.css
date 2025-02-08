@@ -154,3 +154,7 @@
   }
 }
 
+.dragging {
+  background: var(--grey-1);
+  opacity: 0.8;
+}

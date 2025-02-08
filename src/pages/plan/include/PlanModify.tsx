@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import PlanHeader from "./PlanHeader"; // 일정 날짜 헤더 컴포넌트
 import usePlanStore from "../../../stores/PlanStore";
 import { Trash2 } from "lucide-react"; // 휴지통 아이콘 import
@@ -72,6 +73,29 @@ const PlanModify: React.FC<PlanListProps> = ({
     };
   }, []);
 
+  // 드래그 앤 드롭 종료 시 처리
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return;
+
+    const currentDaySpots = spots.filter((spot) => spot.day_x === selectedDay);
+    const reorderedSpots = Array.from(currentDaySpots);
+    const [removed] = reorderedSpots.splice(result.source.index, 1);
+    reorderedSpots.splice(result.destination.index, 0, removed);
+
+    // order 값 업데이트
+    const updatedSpots = spots.map((spot) => {
+      if (spot.day_x !== selectedDay) return spot;
+      const index = currentDaySpots.indexOf(spot);
+      if (index === -1) return spot;
+      return {
+        ...reorderedSpots[currentDaySpots.indexOf(spot)],
+        order: currentDaySpots.indexOf(spot),
+      };
+    });
+
+    onSpotsUpdate(updatedSpots);
+  };
+
   // 삭제 버튼 클릭 시 모달 열기
   const handleDeleteClick = (index: number) => {
     setSelectedForDelete(index);
@@ -121,38 +145,61 @@ const PlanModify: React.FC<PlanListProps> = ({
           !isPromptOpen ? styles.with_padding_bottom : ""
         }`}
       >
-        {/* 일정 요소 list */}
-        {spots
-          .filter((spot) => spot.day_x === selectedDay)
-          .map((spot, index) => (
-            <div
-              className={styles.travel_plan_card_section}
-              key={index}
-              onClick={() => handleSpotClick(spot)}
-            >
-              <div className={styles.travel_plan_card_container}>
-                <div className={styles.teavel_plan_delete}>
-                  <Trash2
-                    size={30}
-                    className={styles.trash_icon}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteClick(index);
-                    }}
-                  />
-                </div>
-                <div className={styles.travle_image_container}>
-                  <div className={styles.travle_image}>
-                    <img src={spot.image_url} alt={spot.eng_name} />
-                  </div>
-                  <div className={styles.place_description}>
-                    <h2>{spot.kor_name}</h2>
-                    <p>{spot.description}</p>
-                  </div>
-                </div>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="droppable">
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{ width: "100%" }} // 기존 레이아웃 유지를 위한 최소한의 스타일
+              >
+                {/* 일정 요소 list */}
+                {spots
+                  .filter((spot) => spot.day_x === selectedDay)
+                  .map((spot, index) => (
+                    <Draggable
+                      key={`${spot.order}-${spot.eng_name}`}
+                      draggableId={`${spot.order}-${spot.eng_name}`}
+                      index={index}
+                    >
+                      {(dragProvided) => (
+                        <div
+                          ref={dragProvided.innerRef}
+                          {...dragProvided.draggableProps}
+                          {...dragProvided.dragHandleProps}
+                          className={styles.travel_plan_card_section}
+                          onClick={() => handleSpotClick(spot)}
+                        >
+                          <div className={styles.travel_plan_card_container}>
+                            <div className={styles.teavel_plan_delete}>
+                              <Trash2
+                                size={30}
+                                className={styles.trash_icon}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteClick(index);
+                                }}
+                              />
+                            </div>
+                            <div className={styles.travle_image_container}>
+                              <div className={styles.travle_image}>
+                                <img src={spot.image_url} alt={spot.eng_name} />
+                              </div>
+                              <div className={styles.place_description}>
+                                <h2>{spot.kor_name}</h2>
+                                <p>{spot.description}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                {provided.placeholder}
               </div>
-            </div>
-          ))}
+            )}
+          </Droppable>
+        </DragDropContext>
 
         {/* 모달 열기 */}
         {!isPromptOpen && (
