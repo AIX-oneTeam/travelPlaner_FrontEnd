@@ -21,6 +21,7 @@ interface spotResponse {
   day_x: number;
   spot_time: string;
   drivingTime?: string;
+ 
 }
 
 interface PlanListProps {
