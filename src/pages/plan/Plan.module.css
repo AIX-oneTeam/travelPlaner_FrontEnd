@@ -114,7 +114,7 @@
 }
 .travel_plan_tab_container{
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   position: sticky;
@@ -146,3 +146,15 @@
   }
 
 }
+
+.list_btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--border-radius-2);
+  color: var(--text-main);
+  transition: all 0.2s ease;
+  padding: 8px 0 8px 0;
+  transform: translateY(20%);
+}
+ 

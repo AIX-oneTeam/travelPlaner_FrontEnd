@@ -4,7 +4,7 @@ import axios from "axios";
 import styles from "./PlanList.module.css";
 import { API_BASE_URL } from "../../config";
 import ConfirmModal from "../../components/modal/ConfirmModal";
-import { Trash2 } from "lucide-react"; // 휴지통 아이콘 import
+import { Trash2 } from "lucide-react"; // List 아이콘 추가
 import AlertModal from "../../components/modal/AlertModal";
 
 interface SavedPlan {
@@ -61,7 +61,9 @@ const PlanMember: React.FC = () => {
   const handleDeleteConfirm = async () => {
     if (selectedPlanId) {
       try {
-        await axios.delete(`${API_BASE_URL}/plans/${selectedPlanId}`);
+        await axios.delete(`${API_BASE_URL}/plans/${selectedPlanId}`, {
+          withCredentials: true,
+        });
         setPlans(plans.filter((plan) => plan.id !== selectedPlanId));
         setAlertMessage("일정이 성공적으로 삭제되었습니다.");
         setShowAlertModal(true);

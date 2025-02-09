@@ -12,6 +12,7 @@ import { API_BASE_URL } from "../../config";
 import AlertModal from "../../components/modal/AlertModal";
 import PlanDetail from "./include/PlanDetail";
 import AgentSelectModal from "../../components/modal/AgentSelectModal";
+import { List } from "lucide-react";
 
 interface spotResponse {
   kor_name: string;
@@ -101,6 +102,11 @@ const Plan: React.FC = () => {
   //에이전트 선택 후 일정 생성
   const [showAgentModal, setShowAgentModal] = useState<boolean>(true);
 
+  // 일정 목록 페이지로 이동
+  const handleListClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate("/plans/list");
+  };
   // 에이전트 선택 및 요청
   const handleAgentSelect = async (agentType: string[]) => {
     setShowAgentModal(false);
@@ -248,6 +254,7 @@ const Plan: React.FC = () => {
             companion_count,
           },
           spots: spots,
+          withCredentials: true,
           email: memberStore.getMemberInfo().email,
         });
         console.log("savePlanData", response.data);
@@ -262,7 +269,6 @@ const Plan: React.FC = () => {
             concepts,
             companion_count,
           },
-
           spots: spots,
           // TODO: HTTPS 환경에서 쿠키로 전달하게끔 변경해야 함.
           // 현재는 HTTP환경이라 POST요청시 HttpOnly 쿠키가 전달되지 않아 임시방편임.
@@ -304,6 +310,9 @@ const Plan: React.FC = () => {
   return (
     <div className={styles.travel_plan_container}>
       <div className={styles.travel_plan_tab_container}>
+        <button className={styles.list_btn} onClick={handleListClick}>
+          <List size={32} />
+        </button>
         <div
           className={`${styles.travel_plan_tab_item} ${
             currentTab === "detail" ? styles.active : ""
