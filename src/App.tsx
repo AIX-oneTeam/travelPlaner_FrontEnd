@@ -7,6 +7,7 @@ import Layout from "./components/layout/Layout";
 import Home from "./pages/main/home"; // 메인화면
 import LoginForm from "./pages/user/LoginForm"; // 로그인폼
 import HjWebTest from "./pages/main/HjWebTest";
+import MyPage from "./pages/member/MyPage"; 
 
 import Plan from "./pages/plan/Plan";
 import PlanList from "./pages/plan/PlanList";
