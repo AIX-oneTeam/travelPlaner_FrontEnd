@@ -37,6 +37,7 @@ function CheckList() {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+        //1. 엔터 클릭 시 
         if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
             e.preventDefault(); // 기본 동작 방지
             const newItem = { text: "", id: Date.now(), checked: false };
@@ -48,9 +49,15 @@ function CheckList() {
                 const nextInput = document.querySelector(`input[type="text"][data-index="${index + 1}"]`) as HTMLInputElement;
                 if (nextInput) nextInput.focus();
             }, 0); //다음 인풋으로 커서 이동 
+            
         } else if (e.key === "Backspace" && items[index].text === "" && items.length > 1) {
+            // 백스페이스 클릭 시
             e.preventDefault();
-            const updatedItems = items.filter((_, i) => i !== index);
+            const updatedItems = [];
+            for (let i = 0; i < items.length; i++) {
+                if (i !== index) {
+                    updatedItems.push(items[i]);
+                }}
             setItems(updatedItems);
             if (index > 0) {
                 setTimeout(() => {
@@ -61,14 +68,14 @@ function CheckList() {
         }
     };
 
-    // 입력 값 변경 처리
+    // onchange
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const updatedItems = [...items];
         updatedItems[index].text = e.target.value;
         setItems(updatedItems);
     };
 
-    // 항목 삭제 처리
+    // 삭제 클릭 시 
     const handleDelete = (index: number) => {
         if (items.length > 1) {
             const updatedItems = [];
@@ -83,11 +90,13 @@ function CheckList() {
         }
     };
 
+    //체크 박스 클릭 시 
     const handleCheckboxChange = (index: number) => {
         const updatedItems = [...items];
         updatedItems[index].checked = !updatedItems[index].checked;
         setItems(updatedItems);
     };
+
 
     return (
         <div className={styles.checkList_container}>
