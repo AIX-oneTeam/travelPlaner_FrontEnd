@@ -16,6 +16,8 @@ import PlanMap from "./include/PlanMap";
 
 
 interface spotResponse {
+  latitude: number;
+  longitude: number;
   kor_name: string;
   eng_name: string;
   description: string;

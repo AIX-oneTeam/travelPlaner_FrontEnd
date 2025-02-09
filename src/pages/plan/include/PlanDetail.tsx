@@ -3,6 +3,8 @@ import styles from "./PlanDetail.module.css";
 import SpotDetail from "../../../components/modal/SpotDetail";
 
 interface spotResponse {
+  latitude: number;
+  longitude: number;
   kor_name: string;
   eng_name: string;
   description: string;

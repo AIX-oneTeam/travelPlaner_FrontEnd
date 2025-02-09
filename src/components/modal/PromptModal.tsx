@@ -15,6 +15,8 @@ interface PromptModalProps {
 }
 
 interface spotInterface {
+  latitude: number;
+  longitude: number;
   kor_name: string;
   eng_name: string;
   description: string;
