@@ -147,7 +147,7 @@ const PlanModify: React.FC<PlanListProps> = ({
       >
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="droppable">
-            {(provided) => (
+            {(provided: any) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
@@ -162,7 +162,7 @@ const PlanModify: React.FC<PlanListProps> = ({
                       draggableId={`${spot.order}-${spot.eng_name}`}
                       index={index}
                     >
-                      {(dragProvided, snapshot) => (
+                      {(dragProvided: any, snapshot: any) => (
                         <div
                           ref={dragProvided.innerRef}
                           {...dragProvided.draggableProps}

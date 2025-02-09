@@ -144,8 +144,11 @@ const Plan: React.FC = () => {
   // 일정 조회용
   const fetchPlanData = async () => {
     try {
+      //스팟 데이터 초기화
+      setSpots([]);
       const response = await axios.get(`${API_BASE_URL}/plan_spots/${planId}`);
       // 서버에서 반환한 일정 데이터 중 ages는 int타입임.
+
       // 서버의 pydantic에서는 요청받을때는 string, 저장하는 pydantic에서는 int타입임.
       // 프론트의 PlanStore(상태 관리)에서는 string으로 사용중임.
       const planResponse = response.data.data.plan;

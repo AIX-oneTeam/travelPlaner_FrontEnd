@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./PlanList.module.css";
 import { API_BASE_URL } from "../../config";
+import ConfirmModal from "../../components/modal/ConfirmModal";
+import { Trash2 } from "lucide-react"; // 휴지통 아이콘 import
+import AlertModal from "../../components/modal/AlertModal";
 
 interface SavedPlan {
   id: number;
@@ -16,6 +19,11 @@ interface SavedPlan {
 const PlanMember: React.FC = () => {
   const [plans, setPlans] = useState<SavedPlan[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectedPlanId, setSelectedPlanId] = useState<number | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,36 +52,42 @@ const PlanMember: React.FC = () => {
     navigate(`/plans/${planId}`);
   };
 
-  const handleEditClick = (e: React.MouseEvent, planId: number) => {
+  const handleDeleteClick = (e: React.MouseEvent, planId: number) => {
     e.stopPropagation();
-    navigate(`/plan/edit/${planId}`);
+    setSelectedPlanId(planId);
+    setShowDeleteModal(true);
   };
 
-  const handleDeleteClick = async (e: React.MouseEvent, planId: number) => {
-    e.stopPropagation();
-    if (window.confirm("정말로 이 일정을 삭제하시겠습니까?")) {
+  const handleDeleteConfirm = async () => {
+    if (selectedPlanId) {
       try {
-        await axios.delete(`${API_BASE_URL}/plans/${planId}`);
-        setPlans(plans.filter((plan) => plan.id !== planId));
+        await axios.delete(`${API_BASE_URL}/plans/${selectedPlanId}`);
+        setPlans(plans.filter((plan) => plan.id !== selectedPlanId));
+        setAlertMessage("일정이 성공적으로 삭제되었습니다.");
+        setShowAlertModal(true);
       } catch (error) {
         console.error("일정 삭제 중 오류 발생:", error);
+        setAlertMessage("일정 삭제 중 오류가 발생했습니다.");
+        setShowAlertModal(true);
       }
     }
+    setShowDeleteModal(false);
   };
 
-  if (isLoading) {
-    return (
-      <div className={styles.loading_container}>
-        <div className={styles.loading_spinner}></div>
-        <p>일정 목록을 불러오는 중입니다...</p>
-      </div>
-    );
-  }
+  const handleDeleteCancel = () => {
+    setSelectedPlanId(null);
+    setShowDeleteModal(false);
+  };
 
   return (
     <div className={styles.plan_member_container}>
       <h1 className={styles.title}>내 여행 일정</h1>
-      {plans.length === 0 ? (
+      {isLoading ? (
+        <div className={styles.loading_container}>
+          <div className={styles.loading_spinner}></div>
+          <p>일정 목록을 불러오는 중입니다...</p>
+        </div>
+      ) : plans.length === 0 ? (
         <div className={styles.empty_plans}>저장된 여행 일정이 없습니다.</div>
       ) : (
         <div className={styles.plan_grid}>
@@ -95,22 +109,29 @@ const PlanMember: React.FC = () => {
               </div>
               <div className={styles.plan_actions}>
                 <button
-                  className={styles.edit_btn}
-                  onClick={(e) => handleEditClick(e, plan.id)}
-                >
-                  수정
-                </button>
-                <button
                   className={styles.delete_btn}
                   onClick={(e) => handleDeleteClick(e, plan.id)}
                 >
-                  삭제
+                  <Trash2 />
                 </button>
               </div>
             </div>
           ))}
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        content={"이 일정을 삭제하시겠습니까?"}
+        onConfirm={() => handleDeleteConfirm()}
+        onCancel={() => handleDeleteCancel()}
+      />
+
+      <AlertModal
+        isOpen={showAlertModal}
+        content={alertMessage}
+        onConfirm={() => setShowAlertModal(false)}
+      />
     </div>
   );
 };
