@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import PlanHeader from "./PlanHeader"; // 일정 날짜 헤더 컴포넌트
 import usePlanStore from "../../../stores/PlanStore";
 import { Trash2 } from "lucide-react"; // 휴지통 아이콘 import
 
@@ -11,7 +10,7 @@ import PromptModal from "../../../components/modal/PromptModal";
 // css
 import styles from "./PlanModify.module.css";
 import SpotDetail from "../../../components/modal/SpotDetail";
-import { isVisible } from "@testing-library/user-event/dist/utils";
+import AlertModal from "../../../components/modal/AlertModal";
 
 interface spotResponse {
   latitude: number;
@@ -57,6 +56,8 @@ const PlanModify: React.FC<PlanListProps> = ({
   const [selectedForDelete, setSelectedForDelete] = useState<number | null>(
     null
   );
+  const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
+  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
   const handleSpotClick = (spot: spotResponse) => {
     setSelectedSpot(spot);
   };
@@ -76,7 +77,14 @@ const PlanModify: React.FC<PlanListProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (!isPromptVisible && isDataLoaded) {
+      setIsAlertOpen(true);
+    }
+  }, [isDataLoaded]);
+
   // 드래그 앤 드롭 종료 시 처리
+
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
 
@@ -229,9 +237,19 @@ const PlanModify: React.FC<PlanListProps> = ({
             isPromptVisible ? "visible" : "none"
           }`}
         >
-          <PromptModal onClose={handlePromptClose} onAddSpot={onAddSpot} />
+          <PromptModal
+            onClose={handlePromptClose}
+            onAddSpot={onAddSpot}
+            isDataLoadedProps={setIsDataLoaded}
+          />
         </div>
       </div>
+
+      <AlertModal
+        isOpen={isAlertOpen}
+        content={"에이전트가 일을 끝마쳤어요!"}
+        onConfirm={() => setIsAlertOpen(false)}
+      />
 
       {/* 삭제 확인 모달 */}
       <ConfirmModal
