@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LongBtn from "../../components/buttons/LongBtn";
 import ConfirmModal from "../../components/modal/ConfirmModal"; // 모달 컴포넌트
 import PlanHeader from "./include/PlanHeader"; // 일정 날짜 헤더 컴포넌트
@@ -13,8 +13,11 @@ import AlertModal from "../../components/modal/AlertModal";
 import PlanDetail from "./include/PlanDetail";
 import AgentSelectModal from "../../components/modal/AgentSelectModal";
 import { List } from "lucide-react";
+import PlanMap from "./include/PlanMap";
 
 interface spotResponse {
+  latitude: number;
+  longitude: number;
   kor_name: string;
   eng_name: string;
   description: string;
@@ -33,7 +36,9 @@ interface spotResponse {
   day_x: number;
   spot_time: string;
   drivingTime?: string;
+
 }
+
 interface planInterface {
   name: string;
   start_date: Date;
@@ -47,7 +52,6 @@ interface planInterface {
   concepts: string[];
 }
 
-//
 const generateDaysArray = (startDate: Date, endDate: Date) => {
   const daysArray = [];
   let currentDate = new Date(startDate);
@@ -68,13 +72,12 @@ const generateDaysArray = (startDate: Date, endDate: Date) => {
 
 const Plan: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<string>("detail");
-  const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태 추가
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
 
   const memberStore = useMemberStore();
-
   const { planId } = useParams();
 
   const [plan, setPlan] = useState<planInterface>({
@@ -99,7 +102,7 @@ const Plan: React.FC = () => {
     setPlan({ ...plan, name: newName });
   };
 
-  //에이전트 선택 후 일정 생성
+  // 에이전트 선택 후 일정 생성 관련 상태
   const [showAgentModal, setShowAgentModal] = useState<boolean>(true);
 
   // 일정 목록 페이지로 이동
@@ -113,7 +116,7 @@ const Plan: React.FC = () => {
     setIsLoading(true);
     try {
       let planData = planStore.getPlan();
-      // 화면에 출력하기 위해 플랜 데이터 형식 변환
+      // 화면에 출력하기 위한 형식 변환
       const planDataforPrint = {
         name: planData.name,
         start_date: new Date(planData.start_date),
@@ -124,7 +127,7 @@ const Plan: React.FC = () => {
         concepts: planData.concepts,
       };
       setPlan(planDataforPrint);
-      // agentType을 API 요청에 포함
+      // agentType 포함 API 요청
       const response = await axios.post(
         `${API_BASE_URL}/agents/plan`,
         planData,
@@ -147,7 +150,7 @@ const Plan: React.FC = () => {
     }
   };
 
-  // 일정 조회용
+  // 저장된 일정 조회용
   const fetchPlanData = async () => {
     try {
       //스팟 데이터 초기화
@@ -158,29 +161,22 @@ const Plan: React.FC = () => {
       // 서버의 pydantic에서는 요청받을때는 string, 저장하는 pydantic에서는 int타입임.
       // 프론트의 PlanStore(상태 관리)에서는 string으로 사용중임.
       const planResponse = response.data.data.plan;
-
       const planDataforStore = {
         name: planResponse.name,
         start_date: new Date(planResponse.start_date),
         end_date: new Date(planResponse.end_date),
         main_location: planResponse.main_location,
         ages: `${planResponse.ages}대`,
-        // planResponse.companion_count는 문자열이므로, dict으로 변환해서 저장함.
         companion_count: JSON.parse(planResponse.companion_count),
-        // planResponse.concepts는 문자열이므로, 배열로 변환해서 저장함.
         concepts: JSON.parse(planResponse.concepts),
       };
       setPlan(planDataforStore);
-      //여기서 끔찍한 사실: 현재 페이지의 PlanInterface에서는 date타입인데, Store 객체에서는 string타입으로 저장함.
-      //그래서 Store에 저장할때 아래와 같은 끔찍한 일을 거쳐야 함.
       planStore.setPlan({
         ...planDataforStore,
         start_date: planDataforStore.start_date.toISOString(),
         end_date: planDataforStore.end_date.toISOString(),
       });
 
-      // 이 아래 프론트 상태 관리 객체에 저장된 일정 정보로, 후에 프론트가 수정 페이지에서 각 에이전트에게 요청할때도 사용됨.
-      // 프론트의 PlanStore(상태 관리)에서는 companion_count와 concepts를 배열과 사전형으로 저장하고 있음.
       const spotInfos = response.data.data.detail;
       const updatedSpots = spotInfos.map((spotInfo: any) => ({
         ...spotInfo.spot,
@@ -193,14 +189,12 @@ const Plan: React.FC = () => {
   };
 
   useEffect(() => {
-    // planId가 있으면 저장된 플랜 데이터를 가져옴
     if (planId) {
       fetchPlanData();
     }
   }, [planId]);
 
   useEffect(() => {
-    console.log("useEffect spots", spots);
     if (spots.length > 0) {
       setIsDataLoaded(true);
     }
@@ -212,40 +206,32 @@ const Plan: React.FC = () => {
   );
 
   const navigate = useNavigate();
-
   const [selectedDay, setSelectedDay] = useState<number>(1);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
-  // 헤더 날짜 선택
+  // 날짜 헤더 클릭
   const handleDayClick = (day: number) => {
     setSelectedDay(day);
   };
 
-  // 모달 열기
+  // 저장 모달 열기
   const handleSaveClick = async () => {
     setModalOpen(true);
   };
 
-  // 모달 안에서 저장 버튼 클릭했을때
+  // 모달에서 저장 버튼 클릭 시
   const handleModalConfirm = async () => {
     setModalOpen(false);
-    // 저장 로직 추가
-    let concepts = "";
-    let companion_count = "";
-    if (typeof plan.concepts !== "string") {
-      concepts = JSON.stringify(plan.concepts);
-    } else {
-      concepts = plan.concepts;
-    }
-
-    if (typeof plan.companion_count !== "string") {
-      companion_count = JSON.stringify(plan.companion_count);
-    } else {
-      companion_count = plan.companion_count;
-    }
+    let concepts =
+      typeof plan.concepts !== "string"
+        ? JSON.stringify(plan.concepts)
+        : plan.concepts;
+    let companion_count =
+      typeof plan.companion_count !== "string"
+        ? JSON.stringify(plan.companion_count)
+        : plan.companion_count;
     try {
-      // 일정 수정인 경우
-
+      // 일정 수정
       if (planId) {
         const response = await axios.post(`${API_BASE_URL}/plans/${planId}`, {
           plan: {
@@ -261,7 +247,7 @@ const Plan: React.FC = () => {
         setMessage("일정 수정 완료");
         setIsOpen(true);
       }
-      // 일정 생성인 경우
+      // 일정 생성
       else {
         const response = await axios.post(`${API_BASE_URL}/plans`, {
           plan: {
@@ -270,8 +256,6 @@ const Plan: React.FC = () => {
             companion_count,
           },
           spots: spots,
-          // TODO: HTTPS 환경에서 쿠키로 전달하게끔 변경해야 함.
-          // 현재는 HTTP환경이라 POST요청시 HttpOnly 쿠키가 전달되지 않아 임시방편임.
           email: memberStore.getMemberInfo().email,
           withCredentials: true,
         });
@@ -286,24 +270,22 @@ const Plan: React.FC = () => {
     }
   };
 
-  // 모달 닫기
+  // 모달 취소
   const handleModalCancel = () => {
     setModalOpen(false);
   };
 
-  // spots 업데이트 함수 추가
+  // spots 업데이트 함수
   const handleSpotsUpdate = (updatedSpots: spotResponse[]) => {
     setSpots(updatedSpots);
   };
 
   const handleAddSpot = (newSpot: spotResponse) => {
-    // 현재 선택된 날짜(selectedDay)에 새로운 spot 추가
     const updatedSpot = {
       ...newSpot,
       day_x: selectedDay,
       order: spots.filter((spot) => spot.day_x === selectedDay).length + 1,
     };
-
     setSpots((prevSpots) => [...prevSpots, updatedSpot]);
   };
 
@@ -321,7 +303,6 @@ const Plan: React.FC = () => {
         >
           일정 확인
         </div>
-
         <div
           className={`${styles.travel_plan_tab_item} ${
             currentTab === "modify" ? styles.active : ""
@@ -344,10 +325,10 @@ const Plan: React.FC = () => {
         <PlanHeader
           destination={plan.main_location}
           name={plan.name}
-          days={days} // days 배열 전달
+          days={days}
           selectedDay={selectedDay}
-          onDayClick={handleDayClick} // DAY 변경 핸들러 전달
-          onNameChange={handlePlanName} // 이름 변경 핸들러 전달
+          onDayClick={handleDayClick}
+          onNameChange={handlePlanName}
         />
         <div className={styles.travel_plan_list_icon}>
           <img src="/icons/memo.jpg" alt="Icon" />
@@ -366,12 +347,10 @@ const Plan: React.FC = () => {
               spots={spots}
               selectedDay={selectedDay}
               onSpotsUpdate={handleSpotsUpdate}
-              //일정에 추가 메서드 전달
               onAddSpot={handleAddSpot}
             />
           ) : currentTab === "map" ? (
-            // <PlanMap spots={spots} selectedDay={selectedDay} />
-            <div>카카오 맵</div>
+            <PlanMap spots={spots} selectedDay={selectedDay} />
           ) : null
         ) : (
           <div className={styles.loading_container}>
@@ -382,15 +361,13 @@ const Plan: React.FC = () => {
 
         <div className={styles.form_actions_btns}>
           {!isLoading && isDataLoaded ? (
-            <>
-              <div className={styles.travle_save_btn}>
-                <LongBtn
-                  type="button"
-                  content="일정 저장하기"
-                  onClick={handleSaveClick}
-                />
-              </div>
-            </>
+            <div className={styles.travle_save_btn}>
+              <LongBtn
+                type="button"
+                content="일정 저장하기"
+                onClick={handleSaveClick}
+              />
+            </div>
           ) : null}
         </div>
       </div>
@@ -400,7 +377,6 @@ const Plan: React.FC = () => {
         onSelect={handleAgentSelect}
       />
 
-      {/* 저장 확인 모달 */}
       <ConfirmModal
         isOpen={isModalOpen}
         content={"해당 플랜을 저장할까요?"}
