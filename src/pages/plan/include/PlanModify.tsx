@@ -11,6 +11,7 @@ import PromptModal from "../../../components/modal/PromptModal";
 // css
 import styles from "./PlanModify.module.css";
 import SpotDetail from "../../../components/modal/SpotDetail";
+import { isVisible } from "@testing-library/user-event/dist/utils";
 
 interface spotResponse {
   latitude: number;
@@ -49,7 +50,7 @@ const PlanModify: React.FC<PlanListProps> = ({
   onAddSpot,
 }) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [isPromptOpen, setPromptOpen] = useState<boolean>(false);
+  const [isPromptVisible, setPromptVisible] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [modalWidth, setModalWidth] = useState<string>("100%");
   const [selectedSpot, setSelectedSpot] = useState<spotResponse | null>(null);
@@ -131,12 +132,12 @@ const PlanModify: React.FC<PlanListProps> = ({
 
   // OpenModal 클릭 시 PromptModal 열기
   const handleOpenModalClick = () => {
-    setPromptOpen(true);
+    setPromptVisible(true);
   };
 
   // PromptModal 닫기
   const handlePromptClose = () => {
-    setPromptOpen(false);
+    setPromptVisible(false);
   };
 
   return (
@@ -144,7 +145,7 @@ const PlanModify: React.FC<PlanListProps> = ({
       <div
         ref={containerRef}
         className={`${styles.travel_plan_list_container} ${
-          !isPromptOpen ? styles.with_padding_bottom : ""
+          !isPromptVisible ? styles.with_padding_bottom : ""
         }`}
       >
         <DragDropContext onDragEnd={handleDragEnd}>
@@ -210,24 +211,26 @@ const PlanModify: React.FC<PlanListProps> = ({
         </DragDropContext>
 
         {/* 모달 열기 */}
-        {!isPromptOpen && (
-          <div
-            className={styles.open_modal_cotanier}
-            style={{
-              width: modalWidth,
-            }}
-            onClick={handleOpenModalClick}
-          >
-            <div className={styles.top_btn}>
-              <img src="/icons/arrow-top-white.jpg" alt="open"></img>
-            </div>
+        <div
+          className={styles.open_modal_cotanier}
+          style={{
+            width: modalWidth,
+          }}
+          onClick={handleOpenModalClick}
+        >
+          <div className={styles.top_btn}>
+            <img src="/icons/arrow-top-white.jpg" alt="open"></img>
           </div>
-        )}
+        </div>
 
         {/* 프롬프트 모달 */}
-        {isPromptOpen && (
+        <div
+          className={`${styles.prompt_modal_container} ${
+            isPromptVisible ? "visible" : "none"
+          }`}
+        >
           <PromptModal onClose={handlePromptClose} onAddSpot={onAddSpot} />
-        )}
+        </div>
       </div>
 
       {/* 삭제 확인 모달 */}

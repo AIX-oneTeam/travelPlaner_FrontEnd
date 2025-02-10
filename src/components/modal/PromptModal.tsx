@@ -9,12 +9,6 @@ import { CiLocationOn } from "react-icons/ci";
 import ConfirmModal from "./ConfirmModal";
 import AlertModal from "./AlertModal";
 
-interface PromptModalProps {
-  onClose?: () => void;
-  isVisible?: () => void;
-  onAddSpot: (spot: spotInterface) => void;
-}
-
 interface spotInterface {
   latitude: number;
   longitude: number;
@@ -118,12 +112,12 @@ const SpotList: React.FC<{
     </div>
   );
 };
+interface PromptModalProps {
+  onClose?: () => void;
+  onAddSpot: (spot: spotInterface) => void;
+}
 
-const PromptModal: React.FC<PromptModalProps> = ({
-  onClose,
-  onAddSpot,
-  isVisible,
-}) => {
+const PromptModal: React.FC<PromptModalProps> = ({ onClose, onAddSpot }) => {
   const [selectedAgent, setSelectedAgent] = useState<string>("");
   const [selectedAgentName, setSelectedAgentName] = useState<string>("");
   const [promptText, setPromptText] = useState<string>("");
