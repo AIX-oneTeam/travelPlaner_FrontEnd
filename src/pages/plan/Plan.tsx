@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import LongBtn from "../../components/buttons/LongBtn";
 import ConfirmModal from "../../components/modal/ConfirmModal"; // 모달 컴포넌트
 import PlanHeader from "./include/PlanHeader"; // 일정 날짜 헤더 컴포넌트
@@ -36,7 +36,6 @@ interface spotResponse {
   day_x: number;
   spot_time: string;
   drivingTime?: string;
-
 }
 
 interface planInterface {
@@ -331,7 +330,9 @@ const Plan: React.FC = () => {
           onNameChange={handlePlanName}
         />
         <div className={styles.travel_plan_list_icon}>
-          <img src="/icons/memo.jpg" alt="Icon" />
+          <Link to="/checkList">
+            <img src="/icons/memo.jpg" alt="Icon" />
+          </Link>
         </div>
 
         {isLoading ? (

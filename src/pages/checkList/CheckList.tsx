@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import styles from "./checkList.module.css";
+// git 대소문자 변경용 주석
+import styles from "./CheckList.module.css";
 
 function CheckList() {
   const [items, setItems] = useState<

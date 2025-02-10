@@ -11,7 +11,8 @@ import HjWebTest from "./pages/main/HjWebTest";
 import Plan from "./pages/plan/Plan";
 import PlanList from "./pages/plan/PlanList";
 import PlanFilter from "./pages/plan/PlanFilter";
-import CheckList from "./pages/checkList/checkList";
+// git 대소문자 변경용 주석
+import CheckList from "./pages/checkList/CheckList";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
             <Route path="/plan/filter/" element={<PlanFilter />} />
             <Route path="/plans/list" element={<PlanList />} />
             <Route path="/plans/:planId?" element={<Plan />} />
-            <Route path="/checkList/" element={<CheckList />} />
+            <Route path="/checkList" element={<CheckList />} />
             {/* <Route path="/plan/modify" element={<PlanModify />} /> */}
           </Routes>
         </Layout>
