@@ -12,8 +12,8 @@ import { API_BASE_URL } from "../../config";
 import AlertModal from "../../components/modal/AlertModal";
 import PlanDetail from "./include/PlanDetail";
 import AgentSelectModal from "../../components/modal/AgentSelectModal";
+import { List } from "lucide-react";
 import PlanMap from "./include/PlanMap";
-
 
 interface spotResponse {
   latitude: number;
@@ -105,6 +105,11 @@ const Plan: React.FC = () => {
   // 에이전트 선택 후 일정 생성 관련 상태
   const [showAgentModal, setShowAgentModal] = useState<boolean>(true);
 
+  // 일정 목록 페이지로 이동
+  const handleListClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate("/plans/list");
+  };
   // 에이전트 선택 및 요청
   const handleAgentSelect = async (agentType: string[]) => {
     setShowAgentModal(false);
@@ -148,7 +153,13 @@ const Plan: React.FC = () => {
   // 저장된 일정 조회용
   const fetchPlanData = async () => {
     try {
+      //스팟 데이터 초기화
+      setSpots([]);
       const response = await axios.get(`${API_BASE_URL}/plan_spots/${planId}`);
+      // 서버에서 반환한 일정 데이터 중 ages는 int타입임.
+
+      // 서버의 pydantic에서는 요청받을때는 string, 저장하는 pydantic에서는 int타입임.
+      // 프론트의 PlanStore(상태 관리)에서는 string으로 사용중임.
       const planResponse = response.data.data.plan;
       const planDataforStore = {
         name: planResponse.name,
@@ -229,6 +240,7 @@ const Plan: React.FC = () => {
             companion_count,
           },
           spots: spots,
+          withCredentials: true,
           email: memberStore.getMemberInfo().email,
         });
         console.log("savePlanData", response.data);
@@ -280,6 +292,9 @@ const Plan: React.FC = () => {
   return (
     <div className={styles.travel_plan_container}>
       <div className={styles.travel_plan_tab_container}>
+        <button className={styles.list_btn} onClick={handleListClick}>
+          <List size={32} />
+        </button>
         <div
           className={`${styles.travel_plan_tab_item} ${
             currentTab === "detail" ? styles.active : ""
