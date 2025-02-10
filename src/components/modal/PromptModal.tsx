@@ -10,7 +10,8 @@ import ConfirmModal from "./ConfirmModal";
 import AlertModal from "./AlertModal";
 
 interface PromptModalProps {
-  onClose: () => void;
+  onClose?: () => void;
+  isVisible?: () => void;
   onAddSpot: (spot: spotInterface) => void;
 }
 
@@ -40,6 +41,7 @@ interface spotInterface {
 const SpotList: React.FC<{
   spots: spotInterface[];
   onAddSpot: (spot: spotInterface) => void;
+  isVisible?: () => void;
 }> = ({ spots, onAddSpot }) => {
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const [selectedSpot, setSelectedSpot] = useState<spotInterface | null>(null);
@@ -117,7 +119,11 @@ const SpotList: React.FC<{
   );
 };
 
-const PromptModal: React.FC<PromptModalProps> = ({ onClose, onAddSpot }) => {
+const PromptModal: React.FC<PromptModalProps> = ({
+  onClose,
+  onAddSpot,
+  isVisible,
+}) => {
   const [selectedAgent, setSelectedAgent] = useState<string>("");
   const [selectedAgentName, setSelectedAgentName] = useState<string>("");
   const [promptText, setPromptText] = useState<string>("");
