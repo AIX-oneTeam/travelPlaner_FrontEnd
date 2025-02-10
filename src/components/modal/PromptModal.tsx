@@ -9,11 +9,6 @@ import { CiLocationOn } from "react-icons/ci";
 import ConfirmModal from "./ConfirmModal";
 import AlertModal from "./AlertModal";
 
-interface PromptModalProps {
-  onClose: () => void;
-  onAddSpot: (spot: spotInterface) => void;
-}
-
 interface spotInterface {
   latitude: number;
   longitude: number;
@@ -40,6 +35,7 @@ interface spotInterface {
 const SpotList: React.FC<{
   spots: spotInterface[];
   onAddSpot: (spot: spotInterface) => void;
+  isVisible?: () => void;
 }> = ({ spots, onAddSpot }) => {
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const [selectedSpot, setSelectedSpot] = useState<spotInterface | null>(null);
@@ -110,14 +106,24 @@ const SpotList: React.FC<{
       />
       <AlertModal
         isOpen={isAlertOpen}
-        content={"저장 되었습니다."}
+        content={"추가 되었습니다."}
         onConfirm={() => setIsAlertOpen(false)}
       />
     </div>
   );
 };
+interface PromptModalProps {
+  onClose?: () => void;
+  onAddSpot: (spot: spotInterface) => void;
+  // 데이터 로드 여부를 부모 컴포넌트에 전달하는 함수 (알림 기능 구현 위함.)
+  isDataLoadedProps: (isDataLoaded: boolean) => void;
+}
 
-const PromptModal: React.FC<PromptModalProps> = ({ onClose, onAddSpot }) => {
+const PromptModal: React.FC<PromptModalProps> = ({
+  onClose,
+  onAddSpot,
+  isDataLoadedProps,
+}) => {
   const [selectedAgent, setSelectedAgent] = useState<string>("");
   const [selectedAgentName, setSelectedAgentName] = useState<string>("");
   const [promptText, setPromptText] = useState<string>("");
@@ -166,6 +172,8 @@ const PromptModal: React.FC<PromptModalProps> = ({ onClose, onAddSpot }) => {
 
       try {
         setIsLoading(true);
+        setIsDataLoaded(false);
+        isDataLoadedProps(false);
         const response = await axios.post(
           `${API_BASE_URL}/agents/${selectedAgent}?prompt=${promptText}`,
           planData,
@@ -176,8 +184,8 @@ const PromptModal: React.FC<PromptModalProps> = ({ onClose, onAddSpot }) => {
 
         const spots = response.data.data.spots;
         setSpots(spots);
-
         setIsDataLoaded(true);
+        isDataLoadedProps(true);
       } catch (error) {
         console.error("Error:", error);
         setAlertMessage("서버 요청 중 오류가 발생했습니다");
@@ -248,7 +256,7 @@ const PromptModal: React.FC<PromptModalProps> = ({ onClose, onAddSpot }) => {
             />
           </div>
         ) : (
-          <div>
+          <div className="prompt-message-content">
             <p className="modal-message">
               {selectedAgent === ""
                 ? `${alertMessage}`

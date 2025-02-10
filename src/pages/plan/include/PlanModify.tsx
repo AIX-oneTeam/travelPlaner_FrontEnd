@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import PlanHeader from "./PlanHeader"; // 일정 날짜 헤더 컴포넌트
 import usePlanStore from "../../../stores/PlanStore";
 import { Trash2 } from "lucide-react"; // 휴지통 아이콘 import
 
@@ -11,6 +10,7 @@ import PromptModal from "../../../components/modal/PromptModal";
 // css
 import styles from "./PlanModify.module.css";
 import SpotDetail from "../../../components/modal/SpotDetail";
+import AlertModal from "../../../components/modal/AlertModal";
 
 interface spotResponse {
   latitude: number;
@@ -49,13 +49,15 @@ const PlanModify: React.FC<PlanListProps> = ({
   onAddSpot,
 }) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [isPromptOpen, setPromptOpen] = useState<boolean>(false);
+  const [isPromptVisible, setPromptVisible] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [modalWidth, setModalWidth] = useState<string>("100%");
   const [selectedSpot, setSelectedSpot] = useState<spotResponse | null>(null);
   const [selectedForDelete, setSelectedForDelete] = useState<number | null>(
     null
   );
+  const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
+  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
   const handleSpotClick = (spot: spotResponse) => {
     setSelectedSpot(spot);
   };
@@ -75,7 +77,14 @@ const PlanModify: React.FC<PlanListProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (!isPromptVisible && isDataLoaded) {
+      setIsAlertOpen(true);
+    }
+  }, [isDataLoaded]);
+
   // 드래그 앤 드롭 종료 시 처리
+
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
 
@@ -131,12 +140,12 @@ const PlanModify: React.FC<PlanListProps> = ({
 
   // OpenModal 클릭 시 PromptModal 열기
   const handleOpenModalClick = () => {
-    setPromptOpen(true);
+    setPromptVisible(true);
   };
 
   // PromptModal 닫기
   const handlePromptClose = () => {
-    setPromptOpen(false);
+    setPromptVisible(false);
   };
 
   return (
@@ -144,7 +153,7 @@ const PlanModify: React.FC<PlanListProps> = ({
       <div
         ref={containerRef}
         className={`${styles.travel_plan_list_container} ${
-          !isPromptOpen ? styles.with_padding_bottom : ""
+          !isPromptVisible ? styles.with_padding_bottom : ""
         }`}
       >
         <DragDropContext onDragEnd={handleDragEnd}>
@@ -210,25 +219,37 @@ const PlanModify: React.FC<PlanListProps> = ({
         </DragDropContext>
 
         {/* 모달 열기 */}
-        {!isPromptOpen && (
-          <div
-            className={styles.open_modal_cotanier}
-            style={{
-              width: modalWidth,
-            }}
-            onClick={handleOpenModalClick}
-          >
-            <div className={styles.top_btn}>
-              <img src="/icons/arrow-top-white.jpg" alt="open"></img>
-            </div>
+        <div
+          className={styles.open_modal_cotanier}
+          style={{
+            width: modalWidth,
+          }}
+          onClick={handleOpenModalClick}
+        >
+          <div className={styles.top_btn}>
+            <img src="/icons/arrow-top-white.jpg" alt="open"></img>
           </div>
-        )}
+        </div>
 
         {/* 프롬프트 모달 */}
-        {isPromptOpen && (
-          <PromptModal onClose={handlePromptClose} onAddSpot={onAddSpot} />
-        )}
+        <div
+          className={`${styles.prompt_modal_container} ${
+            isPromptVisible ? "visible" : "none"
+          }`}
+        >
+          <PromptModal
+            onClose={handlePromptClose}
+            onAddSpot={onAddSpot}
+            isDataLoadedProps={setIsDataLoaded}
+          />
+        </div>
       </div>
+
+      <AlertModal
+        isOpen={isAlertOpen}
+        content={"에이전트가 일을 끝마쳤어요!"}
+        onConfirm={() => setIsAlertOpen(false)}
+      />
 
       {/* 삭제 확인 모달 */}
       <ConfirmModal
