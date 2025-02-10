@@ -106,7 +106,7 @@ const SpotList: React.FC<{
       />
       <AlertModal
         isOpen={isAlertOpen}
-        content={"저장 되었습니다."}
+        content={"추가 되었습니다."}
         onConfirm={() => setIsAlertOpen(false)}
       />
     </div>
@@ -256,7 +256,7 @@ const PromptModal: React.FC<PromptModalProps> = ({
             />
           </div>
         ) : (
-          <div>
+          <div className="prompt-message-content">
             <p className="modal-message">
               {selectedAgent === ""
                 ? `${alertMessage}`
