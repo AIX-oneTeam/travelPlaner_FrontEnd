@@ -156,9 +156,6 @@
   .travel_plan_controls{
     padding: 30px 24px 0px 0px;
   }
-  .travel_image_container{
-    max-width: 250px;
-  }
   .travel_image{
     max-height: 150px;
     width: 100%;

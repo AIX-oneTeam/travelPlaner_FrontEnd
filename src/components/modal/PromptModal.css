@@ -2,13 +2,14 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  max-height: 90vh;
+  max-height: 100vh;
   max-width: var(--max-width);
   background-color: white;
   border-radius: 20px 20px 0 0;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   animation: prompt-modal-open 0.4s ease-in-out;
+  overflow-y: auto;
 }
 
 
@@ -23,8 +24,9 @@
 
 
 .top-btn {
+  position: sticky;
+  top: 0;
   width: 100%;
-
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
@@ -32,6 +34,7 @@
   background-color: var(--black);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+  z-index: 1001;
 }
 
 .top-btn img {
@@ -40,6 +43,7 @@
 }
 
 .modal-title-container {
+  width: 100%;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
@@ -49,8 +53,8 @@
 .radio-group {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-wrap: nowrap;
+  gap: 30px;
   margin-bottom: 20px;
   padding: 0 24px;
   max-width: 80%;
@@ -86,21 +90,16 @@
 
 .button-container {
   margin-top: 20px;
-
-
   width: 100%;
   max-width: 400px;
   margin-left: auto;
   margin-right: auto;
 }
 
-@media (max-width: 768px) {
-  .modal-message {
-    font-size: var(--font-size-6);
-  }
-}
+
 
 .agent_radio_btn {
+  width: 100px;
   gap: 5px;
   display: flex;
   flex-direction: column;
@@ -118,24 +117,29 @@
 }
 
 
+
+
 .agent_radio_icon {
   width: 30px;
   height: 30px;
 }
 
 .spot-list-container {
+  width: 100%;
   padding: 20px;
   max-height: 60vh;
   overflow-y: auto;
 }
 
 .spot-list {
+  width: 100%;
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
 .spot-item {
+  width: 100%;
   display: flex;
   gap: 14px;
   padding: 14px;
@@ -145,7 +149,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
   animation: spot-item-up 0.7s ease;
-  align-items: center;
   position: relative;
 }
 
@@ -185,13 +188,14 @@
 }
 
 .spot-info {
+  max-width: 100%;
   flex: 1;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 .spot-content {
+  max-width: 100%;
   flex: 1;
 }
 
@@ -203,6 +207,7 @@
 }
 
 .spot-description {
+  max-width: 100%;
   font-size: 0.8rem;
   color: #666;
   margin: 0 0 8px 0;
@@ -242,6 +247,7 @@
   color: var(--text-main);
   margin-bottom: 15px;
   text-align: center;
+  padding: 0 24px;
 }
 
 .add-spot-btn {
@@ -267,6 +273,34 @@
   min-height: 20vh;
 }
 
+
+@media (max-width: 768px) {
+  .modal-message {
+    font-size: var(--font-size-6);
+  }
+  .radio-group{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    gap:10px;
+    max-width: 100%;
+    font-size: var(--font-size-7);
+  }
+  .agent_radio_btn{
+    width: 80px;
+  }
+  .spot-info{
+    display: inline-block;
+  }
+  .add-spot-btn{
+    margin-top: 10px;
+  }
+  .spot-content{
+    max-width: 100%;
+    overflow: hidden;
+  }
+}
 
 
 

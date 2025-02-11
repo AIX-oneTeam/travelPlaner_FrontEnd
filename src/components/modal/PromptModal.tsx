@@ -136,16 +136,16 @@ const PromptModal: React.FC<PromptModalProps> = ({
   const planStore = usePlanStore();
 
   const agents = [
-    { id: "cafe", label: "카페 에이전트", icon: "/icons/cafe_agent.jpg" },
+    { id: "cafe", label: "카페", icon: "/icons/cafe_agent.jpg" },
     {
       id: "restaurant",
-      label: "맛집 에이전트",
+      label: "맛집",
       icon: "/icons/restaurant_agent.jpg",
     },
-    { id: "site", label: "관광지 에이전트", icon: "/icons/site_agent.jpg" },
+    { id: "site", label: "관광", icon: "/icons/site_agent.jpg" },
     {
       id: "accommodation",
-      label: "숙소 에이전트",
+      label: "숙소",
       icon: "/icons/accommodation_agent.jpg",
     },
   ];
@@ -201,7 +201,7 @@ const PromptModal: React.FC<PromptModalProps> = ({
       <div className="top-btn" onClick={onClose}>
         <img src="/icons/arrow-bottom-white.jpg" alt="close" />
       </div>
-      <div>
+      <div className="cotent-container">
         <div className={`modal-title-container`}>
           <div className="radio-group">
             {agents.map((agent) => (
@@ -247,7 +247,7 @@ const PromptModal: React.FC<PromptModalProps> = ({
             <p className="modal-message">
               {selectedAgent === ""
                 ? `${alertMessage}`
-                : `${selectedAgentName}가 정보를 찾고 있어요...`}
+                : `${selectedAgentName} 에이전트가 정보를 찾고 있어요...`}
             </p>
             <img
               className="loading-gif"
@@ -260,7 +260,7 @@ const PromptModal: React.FC<PromptModalProps> = ({
             <p className="modal-message">
               {selectedAgent === ""
                 ? `${alertMessage}`
-                : `${selectedAgentName}에게 원하시는 정보를 전달해보세요!`}
+                : `${selectedAgentName} 에이전트에게 원하시는 정보를 전달해보세요!`}
             </p>
             <SearchTextArea setPromptText={setPromptText} />
           </div>
