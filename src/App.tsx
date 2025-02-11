@@ -13,10 +13,12 @@ import PlanList from "./pages/plan/PlanList";
 import PlanFilter from "./pages/plan/PlanFilter";
 // git 대소문자 변경용 주석
 import CheckList from "./pages/checkList/CheckList";
+import LoadKakaoMap from "./pages/plan/include/LoadPlanMap";
 
 function App() {
   return (
     <div>
+      <LoadKakaoMap />
       <BrowserRouter>
         <Layout>
           <Routes>
