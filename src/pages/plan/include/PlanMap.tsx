@@ -100,12 +100,12 @@ const PlanMap: React.FC<PlanMapProps> = ({ spots, selectedDay }) => {
 
   // 지도 표시할 div
   return (
-    <div id="kakaomap" style={{ width: "100%", height: "500px" }}>
+    <div id="kakaomap" style={{ width: "100%", height: "600px" }}>
       <div
         ref={mapRef}
         style={{
           width: "100%",
-          height: "500px",
+          height: "100%",
           // 필요 시 배경색을 지정해 컨테이너 크기 확인
           backgroundColor: "rgba(0, 255, 0, 0.3)",
         }}

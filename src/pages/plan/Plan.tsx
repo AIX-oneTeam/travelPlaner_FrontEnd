@@ -360,8 +360,8 @@ const Plan: React.FC = () => {
           </div>
         )}
 
-        <div className={styles.form_actions_btns}>
-          {!isLoading && isDataLoaded ? (
+        {!isLoading && isDataLoaded && currentTab !== "map" ? (
+          <div className={styles.form_actions_btns}>
             <div className={styles.travle_save_btn}>
               <LongBtn
                 type="button"
@@ -369,8 +369,8 @@ const Plan: React.FC = () => {
                 onClick={handleSaveClick}
               />
             </div>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </div>
 
       <AgentSelectModal
