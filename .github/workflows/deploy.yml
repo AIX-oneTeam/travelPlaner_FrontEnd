@@ -92,6 +92,17 @@ jobs:
             fi
             echo "Amazon ECR에서 최신 이미지를 가져오는 중입니다..."
             docker pull ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
+
+            echo "AWS SSM에서 환경 변수를 가져와 .env 파일 생성 중입니다..."
+            aws ssm get-parameters-by-path \
+              --path "/frontend/" \
+              --with-decryption \
+              --region ${{ secrets.AWS_REGION }} \
+              --query "Parameters[*].[Name,Value]" \
+              --output text | while read -r name value; do
+              echo "${name##*/}=$value" >> .env
+            done
+
             echo "새 컨테이너를 시작합니다..."
             docker run -d --name frontend -p 3000:3000 ${{ secrets.ECR_REPOSITORY_URI }}/frontend:latest
             echo "배포가 성공적으로 완료되었습니다."
