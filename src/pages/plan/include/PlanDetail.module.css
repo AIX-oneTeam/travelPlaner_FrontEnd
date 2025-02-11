@@ -94,7 +94,9 @@
 /* 여행지 이미지 컨테이너 */
 .travle_image_container {
   flex: 1;
+  width: 100%;
   max-width: 500px;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

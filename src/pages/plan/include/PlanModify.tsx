@@ -198,13 +198,12 @@ const PlanModify: React.FC<PlanListProps> = ({
                                 }}
                               />
                             </div>
-                            <div className={styles.travle_image_container}>
-                              <div className={styles.travle_image}>
+                            <div className={styles.travel_image_container}>
+                              <div className={styles.travel_image}>
                                 <img src={spot.image_url} alt={spot.eng_name} />
                               </div>
                               <div className={styles.place_description}>
                                 <h2>{spot.kor_name}</h2>
-                                <p>{spot.description}</p>
                               </div>
                             </div>
                           </div>

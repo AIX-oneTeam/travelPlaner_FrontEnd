@@ -63,9 +63,11 @@
 }
 
 /* 여행지 이미지 컨테이너 */
-.travle_image_container {
+.travel_image_container {
   flex: 1;
+  width: 100%;
   max-width: 500px;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -74,7 +76,7 @@
 }
 
 /* 이미지 */
-.travle_image {
+.travel_image {
   width: 100%;
   height: 300px;
   overflow: hidden;
@@ -82,7 +84,7 @@
   box-shadow: var(--shadow-1);
 }
 
-.travle_image img {
+.travel_image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -93,6 +95,7 @@
 .place_description {
   width: 100%;
   text-align: left;
+  margin-top: 10px;
 }
 
 .place_description h2 {
@@ -147,11 +150,21 @@
 
 @media (max-width: 768px) {
   .travel_plan_card_container {
-    padding: 30px 24px 30px 24px;
+    padding: 0px 24px 24px 24px;
   }
 
   .travel_plan_controls{
     padding: 30px 24px 0px 0px;
+  }
+  .travel_image_container{
+    max-width: 250px;
+  }
+  .travel_image{
+    max-height: 150px;
+    width: 100%;
+  }
+  .place_description{
+    font-size: var(--font-size-7);
   }
 }
 
