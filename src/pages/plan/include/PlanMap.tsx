@@ -1,11 +1,5 @@
 import React, { useEffect, useRef } from "react";
-
-
-declare global {
-  interface Window {
-    kakao?: any;
-  }
-}
+import LoadKakaoMap from "./LoadPlanMap";
 
 // Plan.tsx 등에서 사용하는 동일한 spotResponse 타입
 interface spotResponse {
@@ -42,78 +36,81 @@ const PlanMap: React.FC<PlanMapProps> = ({ spots, selectedDay }) => {
   const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log("===== PlanMap useEffect called =====");
-    console.log("1) spots:", spots);
-    console.log("2) selectedDay:", selectedDay);
-    console.log("3) window.kakao:", window.kakao);
-    console.log("4) mapRef:", mapRef.current);
+    // kakao 객체가 로드될 때까지 대기
+    const initMap = () => {
+      if (!window.kakao?.maps || !mapRef.current) {
+        setTimeout(initMap, 100);
+        return;
+      }
 
-    // kakao 객체가 없거나, mapRef가 아직 할당되지 않았다면 지도 생성 중단
-    if (!window.kakao) {
-      console.warn("Kakao object not found. Check if the script is loaded in index.html.");
-      return;
-    }
-    if (!mapRef.current) {
-      console.warn("mapRef is null. The div might not be rendered yet.");
-      return;
-    }
-
-    // 1) 지도 생성
-    const map = new window.kakao.maps.Map(mapRef.current, {
-      center: new window.kakao.maps.LatLng(37.5665, 126.9780), // 서울시청 좌표
-      level: 8, // 지도의 확대 레벨
-    });
-    console.log("5) Map created successfully:", map);
-
-    // 2) 현재 선택된 일자(day_x)에 해당하는 spots만 필터링
-    const daySpots = spots.filter((spot) => spot.day_x === selectedDay);
-    const bounds = new window.kakao.maps.LatLngBounds();
-
-    // 3) 마커 생성
-    daySpots.forEach((spot, index) => {
-      console.log(`Creating marker #${index} for`, spot.kor_name);
-
-      const markerPosition = new window.kakao.maps.LatLng(spot.latitude, spot.longitude);
-      const marker = new window.kakao.maps.Marker({
-        position: markerPosition,
+      const map = new window.kakao.maps.Map(mapRef.current, {
+        center: new window.kakao.maps.LatLng(37.5665, 126.978),
+        level: 8,
       });
-      marker.setMap(map);
 
-      // 지도의 범위(bounds)에 마커 좌표를 포함
-      bounds.extend(markerPosition);
+      console.log("===== PlanMap useEffect called =====");
+      console.log("1) spots:", spots);
+      console.log("2) selectedDay:", selectedDay);
+      console.log("3) window.kakao:", window.kakao);
+      console.log("4) mapRef:", mapRef.current);
 
-      // (선택) 마커 호버 시 인포윈도우 표시
-      const infowindow = new window.kakao.maps.InfoWindow({
-        content: `<div style="padding:5px; font-size:12px;">${spot.kor_name}</div>`,
-      });
-      window.kakao.maps.event.addListener(marker, "mouseover", () => {
-        infowindow.open(map, marker);
-      });
-      window.kakao.maps.event.addListener(marker, "mouseout", () => {
-        infowindow.close();
-      });
-    });
+      // 2) 현재 선택된 일자(day_x)에 해당하는 spots만 필터링
+      const daySpots = spots.filter((spot) => spot.day_x === selectedDay);
+      const bounds = new window.kakao.maps.LatLngBounds();
 
-    // 4) 표시할 마커가 하나 이상이라면, 모든 마커가 보이도록 지도 범위 조정
-    if (daySpots.length > 0) {
-      console.log("daySpots found:", daySpots.length);
-      map.setBounds(bounds);
-    } else {
-      console.log("No daySpots for selected day:", selectedDay);
-    }
+      // 3) 마커 생성
+      daySpots.forEach((spot, index) => {
+        console.log(`Creating marker #${index} for`, spot.kor_name);
+
+        const markerPosition = new window.kakao.maps.LatLng(
+          spot.latitude,
+          spot.longitude
+        );
+        const marker = new window.kakao.maps.Marker({
+          position: markerPosition,
+        });
+        marker.setMap(map);
+
+        // 지도의 범위(bounds)에 마커 좌표를 포함
+        bounds.extend(markerPosition);
+
+        // (선택) 마커 호버 시 인포윈도우 표시
+        const infowindow = new window.kakao.maps.InfoWindow({
+          content: `<div style="padding:5px; font-size:12px;">${spot.kor_name}</div>`,
+        });
+        window.kakao.maps.event.addListener(marker, "mouseover", () => {
+          infowindow.open(map, marker);
+        });
+        window.kakao.maps.event.addListener(marker, "mouseout", () => {
+          infowindow.close();
+        });
+      });
+
+      // 4) 표시할 마커가 하나 이상이라면, 모든 마커가 보이도록 지도 범위 조정
+      if (daySpots.length > 0) {
+        console.log("daySpots found:", daySpots.length);
+        map.setBounds(bounds);
+      } else {
+        console.log("No daySpots for selected day:", selectedDay);
+      }
+    };
+
+    initMap();
   }, [spots, selectedDay]);
 
   // 지도 표시할 div
   return (
-    <div
-      ref={mapRef}
-      style={{
-        width: "100%",
-        height: "500px",
-        // 필요 시 배경색을 지정해 컨테이너 크기 확인
-        // backgroundColor: "rgba(0, 255, 0, 0.3)"
-      }}
-    />
+    <div id="kakaomap" style={{ width: "100%", height: "600px" }}>
+      <div
+        ref={mapRef}
+        style={{
+          width: "100%",
+          height: "100%",
+          // 필요 시 배경색을 지정해 컨테이너 크기 확인
+          backgroundColor: "rgba(0, 255, 0, 0.3)",
+        }}
+      />
+    </div>
   );
 };
 
