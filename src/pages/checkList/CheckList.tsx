@@ -121,12 +121,12 @@ function CheckList() {
           <div className={styles.checkList_header_title}>
             <div>Check List</div>
           </div>
-          <button className={styles.checkList_header_close_button}>
+          <button className={styles.checkList_header_close_button}
+            onClick={()=> window.history.back()}>
             <img
               className={styles.checkList_header_close_button_img}
               src="/icons/close_gray.jpg"
-              alt="close icon"
-            />
+              alt="close icon"/>
           </button>
         </div>
       </div>
