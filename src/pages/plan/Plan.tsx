@@ -76,11 +76,7 @@ const Plan: React.FC = () => {
   const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-<<<<<<< HEAD
-  const [showMiniGame, setShowMiniGame] = useState<boolean>(false);
-=======
   const [planId, setPlanId] = useState<number>();
->>>>>>> 5e0b87959f91c73b820e8d454267023857309d64
 
   const memberStore = useMemberStore();
   const { planIdFirst } = useParams();

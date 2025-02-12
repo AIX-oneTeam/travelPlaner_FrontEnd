@@ -11,9 +11,9 @@ const MiniGame: React.FC = () => {
     velocity: 0,
     isJumping: false,
     obstacles: [] as { x: number; width: number; height: number }[],
-    speed: 5,
+    speed: 2, // 3에서 2로 더 낮춤
     floorHeight: 300,
-    score: 0, // 게임 상태에 점수 추가
+    score: 0,
   });
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const MiniGame: React.FC = () => {
     const handleJump = () => {
       if (!gameOver && !gameState.current.isJumping) {
         gameState.current.isJumping = true;
-        gameState.current.velocity = -12;
+        gameState.current.velocity = -6; // -8에서 -6으로 수정하여 점프 속도를 더 천천히
       }
     };
 
@@ -73,9 +73,9 @@ const MiniGame: React.FC = () => {
       if (gameOver) return;
 
       if (gameState.current.isJumping) {
-        gameState.current.velocity += 0.6;
+        gameState.current.velocity += 0.15; // 0.3에서 0.15로 수정하여 점프와 낙하를 더 천천히
         gameState.current.playerY += gameState.current.velocity;
-
+    
         if (gameState.current.playerY >= FLOOR_HEIGHT - 50) {
           gameState.current.playerY = FLOOR_HEIGHT - 50;
           gameState.current.isJumping = false;
@@ -96,7 +96,7 @@ const MiniGame: React.FC = () => {
         return;
       }
 
-      gameState.current.speed += 0.001;
+      gameState.current.speed += 0.00001; // 0.00003에서 0.00001로 더 낮춤
       gameState.current.score += 1;
       setScore(gameState.current.score); // 실시간 업데이트 반영
 
