@@ -2,6 +2,7 @@
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  min-height: 100vh;
 }
 
 
@@ -15,6 +16,7 @@
   background-color: var(--white);
   position: relative;
   max-width: var(--max-width);
+  min-height: 70vh;
 }
 
 

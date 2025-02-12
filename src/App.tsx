@@ -28,7 +28,7 @@ function App() {
             <Route path="/hj" element={<HjWebTest />} />
             <Route path="/plan/filter/" element={<PlanFilter />} />
             <Route path="/plans/list" element={<PlanList />} />
-            <Route path="/plans/:planId?" element={<Plan />} />
+            <Route path="/plans/:planIdFirst?" element={<Plan />} />
             <Route path="/checkList" element={<CheckList />} />
             <Route path="/minigame" element={<MiniGame />} /> {/* MiniGame 경로 추가 */}
             {/* <Route path="/plan/modify" element={<PlanModify />} /> */}
