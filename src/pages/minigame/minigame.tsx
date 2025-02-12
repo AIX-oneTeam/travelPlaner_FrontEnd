@@ -13,6 +13,7 @@ const MiniGame: React.FC = () => {
     obstacles: [] as { x: number; width: number; height: number }[],
     speed: 5,
     floorHeight: 300,
+    score: 0, // 게임 상태에 점수 추가
   });
 
   useEffect(() => {
@@ -96,7 +97,8 @@ const MiniGame: React.FC = () => {
       }
 
       gameState.current.speed += 0.001;
-      setScore((prev) => prev + 1);
+      gameState.current.score += 1;
+      setScore(gameState.current.score); // 실시간 업데이트 반영
 
       renderGame(ctx);
       animationFrameId = requestAnimationFrame(updateGame);
@@ -111,7 +113,7 @@ const MiniGame: React.FC = () => {
       });
       ctx.fillStyle = "white";
       ctx.font = "24px Arial";
-      ctx.fillText(`Score: ${score}`, 20, 40);
+      ctx.fillText(`Score: ${gameState.current.score}`, 20, 40);
     };
 
     backgroundImg.onload = () => {
