@@ -14,6 +14,7 @@ import PlanDetail from "./include/PlanDetail";
 import AgentSelectModal from "../../components/modal/AgentSelectModal";
 import { List } from "lucide-react";
 import PlanMap from "./include/PlanMap";
+import MiniGame from "../minigame/minigame";
 
 interface spotResponse {
   latitude: number;
@@ -75,6 +76,7 @@ const Plan: React.FC = () => {
   const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const [showMiniGame, setShowMiniGame] = useState<boolean>(false);
 
   const memberStore = useMemberStore();
   const { planId } = useParams();
@@ -335,9 +337,9 @@ const Plan: React.FC = () => {
           </Link>
         </div>
 
-        {isLoading ? (
+          {isLoading ? (
           <div className={styles.loading_container}>
-            <div className={styles.loading_spinner}></div>
+            <MiniGame />
             <p>AI가 여행 일정을 생성하고 있습니다...</p>
           </div>
         ) : isDataLoaded ? (
