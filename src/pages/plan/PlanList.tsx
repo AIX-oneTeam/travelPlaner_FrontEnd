@@ -48,8 +48,8 @@ const PlanMember: React.FC = () => {
     return `${date.getMonth() + 1}월 ${date.getDate()}일`;
   };
 
-  const handlePlanClick = (planId: number) => {
-    navigate(`/plans/${planId}`);
+  const handlePlanClick = (planIdFirst: number) => {
+    navigate(`/plans/${planIdFirst}`);
   };
 
   const handleDeleteClick = (e: React.MouseEvent, planId: number) => {

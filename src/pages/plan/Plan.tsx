@@ -75,9 +75,10 @@ const Plan: React.FC = () => {
   const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const [planId, setPlanId] = useState<number>();
 
   const memberStore = useMemberStore();
-  const { planId } = useParams();
+  const { planIdFirst } = useParams();
 
   const [plan, setPlan] = useState<planInterface>({
     name: "",
@@ -188,6 +189,12 @@ const Plan: React.FC = () => {
   };
 
   useEffect(() => {
+    if (planIdFirst) {
+      setPlanId(Number(planIdFirst));
+    }
+  }, []);
+
+  useEffect(() => {
     if (planId) {
       fetchPlanData();
     }
@@ -243,6 +250,7 @@ const Plan: React.FC = () => {
           email: memberStore.getMemberInfo().email,
         });
         console.log("savePlanData", response.data);
+        setPlanId(response.data.data.plan_id);
         setMessage("일정 수정 완료");
         setIsOpen(true);
       }
