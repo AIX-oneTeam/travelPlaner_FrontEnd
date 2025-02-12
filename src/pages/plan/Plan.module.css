@@ -15,6 +15,7 @@
   background-color: var(--white);
   position: relative;
   max-width: var(--max-width);
+  min-height: 70vh;
 }
 
 

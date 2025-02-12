@@ -27,7 +27,7 @@ function App() {
             <Route path="/hj" element={<HjWebTest />} />
             <Route path="/plan/filter/" element={<PlanFilter />} />
             <Route path="/plans/list" element={<PlanList />} />
-            <Route path="/plans/:planId?" element={<Plan />} />
+            <Route path="/plans/:planIdFirst?" element={<Plan />} />
             <Route path="/checkList" element={<CheckList />} />
             {/* <Route path="/plan/modify" element={<PlanModify />} /> */}
           </Routes>
