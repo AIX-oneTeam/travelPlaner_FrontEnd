@@ -14,7 +14,7 @@ import PlanFilter from "./pages/plan/PlanFilter";
 // git 대소문자 변경용 주석
 import CheckList from "./pages/checkList/CheckList";
 import LoadKakaoMap from "./pages/plan/include/LoadPlanMap";
-import MiniGame from "./pages/minigame/minigame"; // MiniGame 컴포넌트 임포트
+import MiniGame from "./pages/minigame/MiniGame"; // MiniGame 컴포넌트 임포트
 
 function App() {
   return (

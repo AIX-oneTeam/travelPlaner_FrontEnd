@@ -21,7 +21,7 @@
   background-color: black;
   width: 100%;
   max-width: 500px;
-  height: 280px;
+  height: auto;
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
 }
