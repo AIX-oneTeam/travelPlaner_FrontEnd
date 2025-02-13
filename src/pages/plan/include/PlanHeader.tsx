@@ -107,7 +107,9 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({
             );
           })}
           {ages && <div>#{ages} </div>}
-          {concepts && <div>#{concepts.join(", ")}</div>}
+          {concepts?.map((concept) => {
+            return <div key={concept}>#{concept}</div>;
+          })}
         </div>
       </div>
       {/* 슬라이더 */}

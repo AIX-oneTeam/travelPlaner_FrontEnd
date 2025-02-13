@@ -100,7 +100,7 @@ const PlanMap: React.FC<PlanMapProps> = ({ spots, selectedDay }) => {
 
   // 지도 표시할 div
   return (
-    <div id="kakaomap" style={{ width: "100%", height: "600px" }}>
+    <div id="kakaomap" style={{ width: "100%", height: "500px" }}>
       <div
         ref={mapRef}
         style={{
