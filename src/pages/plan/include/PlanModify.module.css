@@ -49,9 +49,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 30% 0 0 0;
+  padding-top: 10px;
   gap: 10px;
-  width: 80px;
+  width: 50px;
 }
 /* 타임라인: 원 */
 .timeline_indicator .circle {
@@ -195,7 +195,7 @@
   .travel_plan_card_container {
     padding: 24px 24px 24px 0;
     margin-left: 30px;
-    gap: 20px;
+    gap: 10px;
   }
 .place_additional_info {
   font-size: var(--font-size-7);
@@ -219,30 +219,57 @@
 }
 }
 
-.time_input {
-  padding: 5px;
-  font-size: var(--font-size-5);
-  color: var(--text-sub);
-  font-weight: var(--semibold);
-  text-align: center;
-  background-color: var(--white);
-  border: none;
-  background-image: url("/public/icons/clock_icon.png");
-  background-size: 20px;
-  background-position: right 8px center;
-  background-repeat: no-repeat;
-}
-
-.time_input:focus {
-  outline: none;
-}
-
 @media (max-width: 768px) {
   .time_input {
     font-size: var(--font-size-6);
   }
 }
 
-.time_input::-webkit-calendar-picker-indicator {
-  opacity: 0;
+.time_picker {
+  width: 85px !important;
+  margin-left: 10px;
+}
+
+.time_picker input {
+  padding: 8px !important;
+  font-size: var(--font-size-6) !important;
+  color: var(--text-sub) !important;
+  font-weight: var(--semibold) !important;
+  text-align: center !important;
+  background-color: var(--white) !important;
+}
+
+.time_picker fieldset {
+  border: none !important;
+}
+
+.time_picker .MuiInputAdornment-root {
+  display: none !important;
+}
+
+/* MUI TimePicker 팝업 스타일 커스터마이징 */
+:global(.MuiPickersPopper-root) {
+  & .MuiPaper-root {
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-2);
+  }
+
+  & .MuiClockNumber-root {
+    color: var(--text-main);
+  }
+
+  & .MuiClockPointer-root {
+    background-color: var(--main-color-1);
+  }
+
+  & .MuiClock-pin {
+    background-color: var(--main-color-1);
+  }
+}
+
+@media (max-width: 768px) {
+  .time_picker input {
+    font-size: var(--font-size-6) !important;
+  }
 }

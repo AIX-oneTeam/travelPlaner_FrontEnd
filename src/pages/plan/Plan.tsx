@@ -348,20 +348,18 @@ const Plan: React.FC = () => {
             <div className={styles.loading_spinner}></div>
             <p>AI가 여행 일정을 생성하고 있습니다...</p>
           </div>
-        ) : null}
-
-        {isDataLoaded ? (
+        ) : isDataLoaded ? (
           <>
             {currentTab === "detail" ? (
               <div className={styles.plan_time_bar_frame}>
-                <TimeBar />
+                <TimeBar spots={spots} selectedDay={selectedDay} />
                 <PlanDetail spots={spots} selectedDay={selectedDay} />
               </div>
             ) : null}
 
             {currentTab === "modify" ? (
               <div className={styles.plan_time_bar_frame}>
-                <TimeBar />
+                <TimeBar spots={spots} selectedDay={selectedDay} />
                 <PlanModify
                   spots={spots}
                   selectedDay={selectedDay}
