@@ -43,24 +43,87 @@
   background-color: var(--grey-3);
 }
 
-.time_icon {
+.time_text {
+  margin-right: 20px;
+}
+
+.marker_container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.spot_marker {
   position: absolute;
-  width: 50px;
-  height: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0.5;
+  right: -15px;
+  width: 12px;
+  height: 12px;
+  background-color: var(--main-color-1);
+  border-radius: 50%;
+  z-index: 2;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 0 4px rgba(var(--main-color-1-rgb), 0.2);
 }
 
-.morning_icon {
-  top: 0;
+.spot_info {
+  position: absolute;
+  left: 40px;
+  background-color: var(--white);
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-1);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  min-width: 150px;
+  z-index: 3;
 }
 
-.noon_icon {
-  top: 50%;
-  transform: translate(-50%, -50%);
+.marker_container:hover .spot_marker {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 6px rgba(var(--main-color-1-rgb), 0.3);
 }
 
-.night_icon {
-  bottom: 0;
+.marker_container:hover .spot_info {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-10px);
+}
+
+.spot_name {
+  font-size: var(--font-size-6);
+  font-weight: var(--bold);
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.spot_time {
+  font-size: var(--font-size-7);
+  color: var(--text-sub);
+}
+
+@media (max-width: 768px) {
+  .spot_marker {
+    width: 10px;
+    height: 10px;
+    right: -10px;
+  }
+  
+  .time_text {
+    margin-right: 15px;
+  }
+
+  .spot_info {
+    right: 15px;
+    padding: 6px 10px;
+    min-width: 120px;
+  }
+
+  .spot_name {
+    font-size: var(--font-size-7);
+  }
+
+  .spot_time {
+    font-size: var(--font-size-8);
+  }
 }

@@ -358,14 +358,14 @@ const Plan: React.FC = () => {
           <>
             {currentTab === "detail" ? (
               <div className={styles.plan_time_bar_frame}>
-                <TimeBar />
+                <TimeBar spots={spots} selectedDay={selectedDay} />
                 <PlanDetail spots={spots} selectedDay={selectedDay} />
               </div>
             ) : null}
 
             {currentTab === "modify" ? (
               <div className={styles.plan_time_bar_frame}>
-                <TimeBar />
+                <TimeBar spots={spots} selectedDay={selectedDay} />
                 <PlanModify
                   spots={spots}
                   selectedDay={selectedDay}
