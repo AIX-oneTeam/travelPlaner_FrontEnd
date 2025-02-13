@@ -17,18 +17,15 @@ import PlanMap from "./include/PlanMap";
 import TimeBar from "./include/TimeBar";
 
 interface spotResponse {
-  latitude: number;
-  longitude: number;
   kor_name: string;
   eng_name: string;
   description: string;
   address: string;
-  zip: string;
   url: string;
   image_url: string;
   map_url: string;
-  likes: number;
-  satisfaction: number;
+  latitude: number;
+  longitude: number;
   spot_category: number;
   phone_number: string;
   business_status: boolean;
@@ -147,7 +144,6 @@ const Plan: React.FC = () => {
       setIsOpen(true);
     } finally {
       setIsLoading(false);
-      planStore.initPlanInfo();
     }
   };
 
