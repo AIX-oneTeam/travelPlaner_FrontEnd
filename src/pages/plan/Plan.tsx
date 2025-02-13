@@ -333,6 +333,9 @@ const Plan: React.FC = () => {
           destination={plan.main_location}
           name={plan.name}
           days={days}
+          companion_count={plan.companion_count}
+          ages={plan.ages}
+          concepts={plan.concepts}
           selectedDay={selectedDay}
           onDayClick={handleDayClick}
           onNameChange={handlePlanName}
