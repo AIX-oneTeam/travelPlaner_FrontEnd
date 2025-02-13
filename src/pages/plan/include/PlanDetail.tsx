@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./PlanDetail.module.css";
 import SpotDetail from "../../../components/modal/SpotDetail";
+import TimeBar from "./TimeBar";
 
 interface spotResponse {
   latitude: number;
@@ -23,7 +24,6 @@ interface spotResponse {
   day_x: number;
   spot_time: string;
   drivingTime?: string;
- 
 }
 
 interface PlanListProps {
@@ -40,6 +40,7 @@ const PlanDetail: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
 
   return (
     <div className={styles.travel_plan_list_container}>
+      <TimeBar />
       {/* 일정 요소 list */}
       {spots
         .filter((spot) => spot.day_x === selectedDay)
