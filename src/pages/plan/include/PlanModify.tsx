@@ -179,7 +179,6 @@ const PlanModify: React.FC<PlanListProps> = ({
                           {...dragProvided.draggableProps}
                           {...dragProvided.dragHandleProps}
                           className={styles.travel_plan_card_section}
-                          onClick={() => handleSpotClick(spot)}
                           style={{
                             ...dragProvided.draggableProps.style,
                             backgroundColor: snapshot.isDragging
@@ -188,7 +187,11 @@ const PlanModify: React.FC<PlanListProps> = ({
                           }}
                         >
                           <div className={styles.travel_plan_card_container}>
-                            <div className={styles.teavel_plan_delete}>
+                            <div className={styles.timeline_indicator}>
+                              <div className={styles.circle}></div>
+                              <div className={styles.travel_time}>
+                                {spot.spot_time.slice(0, 5)}
+                              </div>
                               <Trash2
                                 size={30}
                                 className={styles.trash_icon}
@@ -198,12 +201,20 @@ const PlanModify: React.FC<PlanListProps> = ({
                                 }}
                               />
                             </div>
-                            <div className={styles.travel_image_container}>
+
+                            <div
+                              className={styles.travel_image_container}
+                              onClick={() => handleSpotClick(spot)}
+                            >
                               <div className={styles.travel_image}>
                                 <img src={spot.image_url} alt={spot.eng_name} />
                               </div>
-                              <div className={styles.place_description}>
+                              <div className={styles.place_info_container}>
                                 <h2>{spot.kor_name}</h2>
+                                <h3>{spot.eng_name}</h3>
+                                <p className={styles.place_additional_info}>
+                                  {spot.address}
+                                </p>
                               </div>
                             </div>
                           </div>

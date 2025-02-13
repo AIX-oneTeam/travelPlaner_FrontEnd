@@ -47,12 +47,9 @@ const PlanDetail: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
             <div className={styles.travel_plan_card_container}>
               <div className={styles.timeline_indicator}>
                 <div className={styles.circle}></div>
-                {/* <div className={styles.line}></div> */}
-                {/* <div className={styles.driving_time}> */}
-                {/* <img src="/icons/car.jpg" alt="운전 아이콘" /> */}
-                {/* <p>{spot.drivingTime}</p> */}
-                {/* </div> */}
-                <div className={styles.travel_time}>{spot.spot_time}</div>
+                <div className={styles.travel_time}>
+                  {spot.spot_time.slice(0, 5)}
+                </div>
               </div>
               <div
                 className={styles.travle_image_container}
