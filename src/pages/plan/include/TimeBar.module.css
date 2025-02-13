@@ -34,12 +34,12 @@
   color: var(--text-sub);
 }
 
-.time_mark::before {
+.time_mark.line::before{
   content: '';
   position: absolute;
-  left: -10px;
-  width: 8px;
-  height: 1px;
+  left: 15px;
+  width: 15px;
+  height: 2px;
   background-color: var(--grey-3);
 }
 
@@ -52,6 +52,11 @@
   display: flex;
   align-items: center;
 }
+
+.odd{
+  margin-left: 55px;
+}
+
 
 .spot_marker {
   position: absolute;

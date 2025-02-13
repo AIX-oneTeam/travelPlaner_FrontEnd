@@ -185,6 +185,70 @@
 
 }
 
+.time_select {
+  padding: 8px;
+  border: 1px solid var(--grey-3);
+  border-radius: 4px;
+  font-size: var(--font-size-6);
+  color: var(--text-main);
+  background-color: var(--white);
+  cursor: pointer;
+}
+
+.time_select:hover {
+  border-color: var(--main-color-1);
+}
+
+.time_select:focus {
+  outline: none;
+  border-color: var(--main-color-1);
+  box-shadow: 0 0 0 2px rgba(var(--main-color-1-rgb), 0.2);
+}
+
+.time_picker {
+  width: 85px !important;
+  margin-left: 10px;
+}
+
+.time_picker input {
+  padding: 8px !important;
+  font-size: var(--font-size-6) !important;
+  color: var(--text-main) !important;
+}
+
+.time_picker fieldset {
+  border-color: var(--grey-3) !important;
+}
+
+.time_picker:hover fieldset {
+  border-color: var(--main-color-1) !important;
+}
+
+.time_picker.Mui-focused fieldset {
+  border-color: var(--main-color-1) !important;
+}
+
+/* MUI TimePicker 팝업 스타일 커스터마이징 */
+:global(.MuiPickersPopper-root) {
+  & .MuiPaper-root {
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-2);
+  }
+
+  & .MuiClockNumber-root {
+    color: var(--text-main);
+  }
+
+  & .MuiClockPointer-root {
+    background-color: var(--main-color-1);
+  }
+
+  & .MuiClock-pin {
+    background-color: var(--main-color-1);
+  }
+}
+
 
 
 

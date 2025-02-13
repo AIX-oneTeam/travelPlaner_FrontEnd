@@ -39,7 +39,9 @@ const TimeBar: React.FC<TimeBarProps> = ({ spots, selectedDay }) => {
             return (
               <div
                 key={i}
-                className={styles.time_mark}
+                className={`${styles.time_mark} ${
+                  i % 2 === 0 ? "" : styles.line
+                }`}
                 style={{ top: `${(i * 100) / 32}%` }}
               >
                 {i % 2 === 0 && (
@@ -61,7 +63,7 @@ const TimeBar: React.FC<TimeBarProps> = ({ spots, selectedDay }) => {
                   </>
                 )}
                 {i % 2 === 1 && currentSpot && (
-                  <div className={styles.marker_container}>
+                  <div className={`${styles.marker_container} ${styles.odd}`}>
                     <div className={styles.spot_marker} />
                     <div className={styles.spot_info}>
                       <p className={styles.spot_name}>{currentSpot.kor_name}</p>
