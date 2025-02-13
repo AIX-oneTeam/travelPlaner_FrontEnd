@@ -1,0 +1,66 @@
+.time_bar_container {
+  width: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 12px;
+  background-color: var(--white);
+  margin-top: 50px;
+  z-index: 1;
+}
+
+.time_bar {
+  position: relative;
+  width: 2px;
+  height: 100%;
+  background-color: var(--grey-3);
+  margin: 10px 0;
+}
+
+.time_marks {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 100%;
+}
+
+.time_mark {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-6);
+  color: var(--text-sub);
+}
+
+.time_mark::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  width: 8px;
+  height: 1px;
+  background-color: var(--grey-3);
+}
+
+.time_icon {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.5;
+}
+
+.morning_icon {
+  top: 0;
+}
+
+.noon_icon {
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.night_icon {
+  bottom: 0;
+}

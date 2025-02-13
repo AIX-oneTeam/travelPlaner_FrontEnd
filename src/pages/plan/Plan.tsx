@@ -14,6 +14,7 @@ import PlanDetail from "./include/PlanDetail";
 import AgentSelectModal from "../../components/modal/AgentSelectModal";
 import { List } from "lucide-react";
 import PlanMap from "./include/PlanMap";
+import TimeBar from "./include/TimeBar";
 
 interface spotResponse {
   latitude: number;
@@ -351,19 +352,33 @@ const Plan: React.FC = () => {
             <div className={styles.loading_spinner}></div>
             <p>AI가 여행 일정을 생성하고 있습니다...</p>
           </div>
-        ) : isDataLoaded ? (
-          currentTab === "detail" ? (
-            <PlanDetail spots={spots} selectedDay={selectedDay} />
-          ) : currentTab === "modify" ? (
-            <PlanModify
-              spots={spots}
-              selectedDay={selectedDay}
-              onSpotsUpdate={handleSpotsUpdate}
-              onAddSpot={handleAddSpot}
-            />
-          ) : currentTab === "map" ? (
-            <PlanMap spots={spots} selectedDay={selectedDay} />
-          ) : null
+        ) : null}
+
+        {isDataLoaded ? (
+          <>
+            {currentTab === "detail" ? (
+              <div className={styles.plan_time_bar_frame}>
+                <TimeBar />
+                <PlanDetail spots={spots} selectedDay={selectedDay} />
+              </div>
+            ) : null}
+
+            {currentTab === "modify" ? (
+              <div className={styles.plan_time_bar_frame}>
+                <TimeBar />
+                <PlanModify
+                  spots={spots}
+                  selectedDay={selectedDay}
+                  onSpotsUpdate={handleSpotsUpdate}
+                  onAddSpot={handleAddSpot}
+                />
+              </div>
+            ) : null}
+
+            {currentTab === "map" ? (
+              <PlanMap spots={spots} selectedDay={selectedDay} />
+            ) : null}
+          </>
         ) : (
           <div className={styles.loading_container}>
             <div className={styles.loading_spinner}></div>
