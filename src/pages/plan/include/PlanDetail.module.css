@@ -28,7 +28,7 @@
   justify-content: space-between;
   padding: 50px 120px 10px 100px;
   box-sizing: border-box;
-  gap: 20px;
+  gap: 50px;
 }
 
 /* 타임라인 인디케이터 */
@@ -180,6 +180,7 @@
 .travel_plan_card_container{
   padding: 24px 24px 24px 0;
   margin-left: 30px;
+  gap: 20px;
 }
 
 }

@@ -148,6 +148,20 @@ const PlanModify: React.FC<PlanListProps> = ({
     setPromptVisible(false);
   };
 
+  const handleTimeChange = (spotIndex: number, newTime: string) => {
+    const currentDaySpots = spots.filter((spot) => spot.day_x === selectedDay);
+    const updatedSpots = spots.map((spot) => {
+      if (spot === currentDaySpots[spotIndex]) {
+        return {
+          ...spot,
+          spot_time: newTime,
+        };
+      }
+      return spot;
+    });
+    onSpotsUpdate(updatedSpots);
+  };
+
   return (
     <>
       <div
@@ -188,10 +202,17 @@ const PlanModify: React.FC<PlanListProps> = ({
                         >
                           <div className={styles.travel_plan_card_container}>
                             <div className={styles.timeline_indicator}>
-                              <div className={styles.circle}></div>
-                              <div className={styles.travel_time}>
-                                {spot.spot_time.slice(0, 5)}
-                              </div>
+                              <input
+                                type="time"
+                                min="00:00"
+                                max="23:59"
+                                step="60"
+                                className={styles.time_input}
+                                value={spot.spot_time.slice(0, 5)}
+                                onChange={(e) =>
+                                  handleTimeChange(index, e.target.value)
+                                }
+                              />
                               <Trash2
                                 size={30}
                                 className={styles.trash_icon}
@@ -231,9 +252,6 @@ const PlanModify: React.FC<PlanListProps> = ({
         {/* 모달 열기 */}
         <div
           className={styles.open_modal_cotanier}
-          style={{
-            width: modalWidth,
-          }}
           onClick={handleOpenModalClick}
         >
           <div className={styles.top_btn}>

@@ -4,21 +4,6 @@ const TimeBar = () => {
   return (
     <div className={styles.time_bar_container}>
       <div className={styles.time_bar}>
-        <img
-          src="/icons/morning_sun.jpg"
-          alt="morning"
-          className={`${styles.time_icon} ${styles.morning_icon}`}
-        />
-        <img
-          src="/icons/day_sun.jpg"
-          alt="noon"
-          className={`${styles.time_icon} ${styles.noon_icon}`}
-        />
-        <img
-          src="/icons/night_moon.jpg"
-          alt="night"
-          className={`${styles.time_icon} ${styles.night_icon}`}
-        />
         <div className={styles.time_marks}>
           {Array.from({ length: 26 }, (_, i) => (
             <div
