@@ -28,7 +28,7 @@ function App() {
             <Route path="/plan/filter/" element={<PlanFilter />} />
             <Route path="/plans/list" element={<PlanList />} />
             <Route path="/plans/:planIdFirst?" element={<Plan />} />
-            <Route path="/checkList" element={<CheckList />} />
+            <Route path="/checkList/:planId" element={<CheckList />} />
             {/* <Route path="/plan/modify" element={<PlanModify />} /> */}
           </Routes>
         </Layout>

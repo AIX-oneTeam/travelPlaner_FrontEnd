@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LongBtn from "../../components/buttons/LongBtn";
 import ConfirmModal from "../../components/modal/ConfirmModal"; // 모달 컴포넌트
 import PlanHeader from "./include/PlanHeader"; // 일정 날짜 헤더 컴포넌트
@@ -211,6 +211,7 @@ const Plan: React.FC = () => {
   const navigate = useNavigate();
   const [selectedDay, setSelectedDay] = useState<number>(1);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [savedPlanId, setSavedPlanId] = useState<number>();
 
   // 날짜 헤더 클릭
   const handleDayClick = (day: number) => {
@@ -266,6 +267,7 @@ const Plan: React.FC = () => {
         console.log("savePlanData", response.data);
         setMessage("일정 저장 완료");
         setIsOpen(true);
+        setSavedPlanId(response.data.data.plan_id);
       }
     } catch (err) {
       console.error(err);
@@ -291,6 +293,50 @@ const Plan: React.FC = () => {
       order: spots.filter((spot) => spot.day_x === selectedDay).length + 1,
     };
     setSpots((prevSpots) => [...prevSpots, updatedSpot]);
+  };
+
+  //체크리스트 이미지 클릭 시 
+  const handleCheckListClick = async () => {
+    // planId가 이미 존재하는지 확인
+    if (planId) {
+      // planId가 존재하면 해당 ID를 사용하여 체크리스트 페이지로 이동
+      navigate(`/checkList/${planId}`);
+    } else {
+      // planId가 존재하지 않으면 새로운 일정 저장 로직 실행
+      let concepts =
+        typeof plan.concepts !== "string"
+          ? JSON.stringify(plan.concepts)
+          : plan.concepts;
+
+      let companion_count =
+        typeof plan.companion_count !== "string"
+          ? JSON.stringify(plan.companion_count)
+          : plan.companion_count;
+      try {
+        const response = await axios.post(`${API_BASE_URL}/plans`, {
+          plan: {
+            ...plan,
+            concepts,
+            companion_count,
+          },
+          spots: spots,
+          email: memberStore.getMemberInfo().email,
+          withCredentials: true,
+        });
+        console.log("savePlanData", response.data);
+        setMessage("일정 저장 완료");
+        //setSavedPlanId(response.data.data.plan_id);
+        //navigate(`/checkList/${response.data.data.plan_id}`);
+        // 저장 후 planId를 업데이트하고 체크리스트 페이지로 이동
+        setPlanId(response.data.data.plan_id);
+        navigate(`/checkList/${response.data.data.plan_id}`);
+      } catch (err) {
+        console.error(err);
+        setMessage(
+          "일정 저장 중 오류가 발생했습니다. 잠시후 다시 시도해주세요"
+        );
+      }
+    }
   };
 
   return (
@@ -337,10 +383,9 @@ const Plan: React.FC = () => {
           onDayClick={handleDayClick}
           onNameChange={handlePlanName}
         />
-        <div className={styles.travel_plan_list_icon}>
-          <Link to="/checkList">
-            <img src="/icons/memo.jpg" alt="Icon" />
-          </Link>
+        <div className={styles.travel_plan_list_icon}
+        onClick={handleCheckListClick}>
+          <img src="/icons/memo.jpg" alt="Icon" />
         </div>
 
         {isLoading ? (
