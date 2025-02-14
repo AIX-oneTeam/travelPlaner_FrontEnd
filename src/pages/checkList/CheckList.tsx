@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent, KeyboardEvent } from "react";
 import styles from "./CheckList.module.css";
 import { API_BASE_URL } from "../../config";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 interface CheckListItem {
-  plan_id: number;
-  id: number;
-  item: string;
-  checked: number;  // 0 또는 1을 사용
+    plan_id: number;
+    id?: number; // ID는 optional로 변경
+    item: string;
+    checked: number; // 0 또는 1을 사용
 }
 
 function CheckList() {
@@ -27,36 +27,38 @@ function CheckList() {
                     if (data && data.length > 0) {
                         setItems(data);
                     } else {
-                        setItems([{ item: "", id: Date.now(), checked: 0, plan_id: parseInt(planId, 10) }]);
+                        // ID를 지정하지 않음
+                        setItems([{ item: "", checked: 0, plan_id: parseInt(planId, 10) }]);
                     }
                 } else {
                     console.warn("Plan ID가 URL 파라미터에 없습니다.");
                 }
             } catch (error) {
                 console.error("Error fetching checklist:", error);
-                setItems([{ item: "", id: Date.now(), checked: 0, plan_id: planId ? parseInt(planId, 10) : 0 }]);
+                // ID를 지정하지 않음
+                setItems([{ item: "", checked: 0, plan_id: planId ? parseInt(planId, 10) : 0 }]);
             }
         };
 
         fetchChecklist();
     }, [planId]);
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
         if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
             e.preventDefault();
             if (!planId) {
                 console.error("Plan ID is missing.");
                 return;
             }
-            const newItem: CheckListItem = {
+            // ID를 지정하지 않음
+            const newItem: Omit<CheckListItem, 'id'> = {
                 plan_id: parseInt(planId, 10),
                 item: "",
-                id: Date.now(),
                 checked: 0,
             };
             const updatedItems = [...items];
             updatedItems[index].item = e.currentTarget.value.trim();
-            updatedItems.splice(index + 1, 0, newItem);
+            updatedItems.splice(index + 1, 0, newItem as CheckListItem); // newItem을 CheckListItem으로 타입 캐스팅
             setItems(updatedItems);
             setTimeout(() => {
                 const nextInput = document.querySelector(
@@ -79,7 +81,7 @@ function CheckList() {
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
         const updatedItems = [...items];
         updatedItems[index].item = e.target.value;
         setItems(updatedItems);
@@ -90,7 +92,8 @@ function CheckList() {
             const updatedItems = items.filter((_, i) => i !== index);
             setItems(updatedItems);
         } else {
-            setItems([{ item: "", id: Date.now(), checked: 0, plan_id: planId ? parseInt(planId, 10) : 0 }]);
+            // ID를 지정하지 않음
+            setItems([{ item: "", checked: 0, plan_id: planId ? parseInt(planId, 10) : 0 }]);
         }
     };
 
@@ -102,17 +105,24 @@ function CheckList() {
 
     const sendItemsToBackend = async () => {
         try {
-            console.log("input data :", JSON.stringify(items));
-            const response = await axios.post(`${API_BASE_URL}/checklist/${planId}`, items);
-            console.log("Success:", response.data);
+            // ID 제거
+            const itemsToSend = items.map(({ id, ...rest }) => rest);
+            console.log("input data :", JSON.stringify(itemsToSend));
+            const response = await axios.post(`${API_BASE_URL}/checklist/${planId}`, itemsToSend);
+            console.log("Success:", response);
         } catch (error) {
             console.error("Error sending data to backend:", error);
         }
     };
 
-    const handleSaveAndGoBack = () => {
-        sendItemsToBackend();
-        navigate(-1);
+    const handleSaveAndGoBack = async () => {
+        try {
+            await sendItemsToBackend();
+            navigate(`/plans/${planId}`);
+        } catch (error) {
+            console.error("Error saving data:", error);
+            // 에러 처리 (예: 사용자에게 알림)
+        }
     };
 
     return (
@@ -137,7 +147,7 @@ function CheckList() {
             <div className={styles.checkList_main_container}>
                 <div className={styles.checkList_main_contents}>
                     {items.map((item, index) => (
-                        <div key={item.id} className={styles.checkList_main_content}>
+                        <div key={item.id || index} className={styles.checkList_main_content}> {/* item.id가 없을 경우 index를 key로 사용 */}
                             <input
                                 type="checkbox"
                                 id={`checkbox-${index}`}
