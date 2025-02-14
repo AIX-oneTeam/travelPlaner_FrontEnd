@@ -300,8 +300,12 @@ const Plan: React.FC = () => {
 
   //체크리스트 이미지 클릭 시 
   const handleCheckListClick = async () => {
-    if (savedPlanId == null) 
-    {
+    // planId가 이미 존재하는지 확인
+    if (planId) {
+      // planId가 존재하면 해당 ID를 사용하여 체크리스트 페이지로 이동
+      navigate(`/checkList/${planId}`);
+    } else {
+      // planId가 존재하지 않으면 새로운 일정 저장 로직 실행
       let concepts =
         typeof plan.concepts !== "string"
           ? JSON.stringify(plan.concepts)
@@ -324,7 +328,10 @@ const Plan: React.FC = () => {
         });
         console.log("savePlanData", response.data);
         setMessage("일정 저장 완료");
-        setSavedPlanId(response.data.data.plan_id);
+        //setSavedPlanId(response.data.data.plan_id);
+        //navigate(`/checkList/${response.data.data.plan_id}`);
+        // 저장 후 planId를 업데이트하고 체크리스트 페이지로 이동
+        setPlanId(response.data.data.plan_id);
         navigate(`/checkList/${response.data.data.plan_id}`);
       } catch (err) {
         console.error(err);
@@ -332,9 +339,7 @@ const Plan: React.FC = () => {
           "일정 저장 중 오류가 발생했습니다. 잠시후 다시 시도해주세요"
         );
       }
-    }else {
-      navigate(`/checkList/${savedPlanId}`);
-   }
+    }
   };
 
   return (
