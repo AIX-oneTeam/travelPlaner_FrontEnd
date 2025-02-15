@@ -23,14 +23,17 @@ import { requestPermission } from "../../firebase-config";
 const LoginForm = () => {
   const navigate = useNavigate();
   const setMemberInfo = MemberStore((state: any) => state.setMemberInfo);
+  const memberInfo = MemberStore((state: any) => state.memberInfo);
   const state = uuidv4();
   const fcmToken = useRef<string | null>(null);
 
+  // TODO: 테스트용으로 email 추가했음. 테스트 마치고 삭제해야 함
   const fetchFcmToken = async () => {
     if (fcmToken.current) {
-      console.log("useEffect:fcmToken: ", fcmToken.current);
+      console.log("fetchFcmToken:fcmToken: ", fcmToken.current);
       axios.post(`${API_BASE_URL}/members/fcmToken`, {
-        fcmToken: fcmToken.current,
+        fcm_token: fcmToken.current,
+        email: "rhkddlr98@naver.com",
       });
     }
   };
