@@ -8,9 +8,10 @@ import {
   CLIENT_CALLBACK_URL,
 } from "../../config"; // config.ts에서 API_BASE_URL을 임포트
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import axios from "axios";
 import MemberStore from "../../stores/MemberStore";
+import { requestPermission } from "../../firebase-config";
 
 // Authorization Code Flow
 // 1. 프론트는 각 인증서버에 API키를 이용해 인증 코드를 받고 이를 백엔드로 전송
@@ -23,6 +24,16 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const setMemberInfo = MemberStore((state: any) => state.setMemberInfo);
   const state = uuidv4();
+  const fcmToken = useRef<string | null>(null);
+
+  const fetchFcmToken = async () => {
+    if (fcmToken.current) {
+      console.log("useEffect:fcmToken: ", fcmToken.current);
+      axios.post(`${API_BASE_URL}/members/fcmToken`, {
+        fcmToken: fcmToken.current,
+      });
+    }
+  };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -44,16 +55,18 @@ const LoginForm = () => {
             },
           }
         )
-        .then((response) => {
+        .then(async (response) => {
           //후처리
           console.log("response: ", response); // 토큰 정보 출력
-
           console.log("로그인 성공");
 
           //zustand 스토어에 저장
           setMemberInfo(response.data);
-
           navigate("/");
+          // fcm 토큰 발급
+          const token = await requestPermission();
+          fcmToken.current = token;
+          fetchFcmToken();
         })
         .catch((error) => {
           console.log(error);
@@ -61,7 +74,7 @@ const LoginForm = () => {
     } else {
       console.log("인증코드가 없습니다.");
     }
-  });
+  }, []);
 
   // 일반 메소드 (로그인 이벤트 핸들러)
   const handleKakaoLogin = () => {

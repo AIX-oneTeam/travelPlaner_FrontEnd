@@ -20,7 +20,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
-async function requestPermission() {
+export async function requestPermission() {
   console.log("알림 권한 요청 중");
 
   const permission = await Notification.requestPermission();
@@ -44,6 +44,5 @@ async function requestPermission() {
   onMessage(messaging, (payload) => {
     console.log("알림 수신", payload);
   });
+  return token;
 }
-
-requestPermission();
