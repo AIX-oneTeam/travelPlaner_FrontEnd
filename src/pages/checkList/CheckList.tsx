@@ -121,7 +121,6 @@ function CheckList() {
             navigate(`/plans/${planId}`);
         } catch (error) {
             console.error("Error saving data:", error);
-            // 에러 처리 (예: 사용자에게 알림)
         }
     };
 
