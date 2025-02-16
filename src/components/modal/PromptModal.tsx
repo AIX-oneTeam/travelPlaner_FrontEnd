@@ -9,6 +9,8 @@ import { CiLocationOn } from "react-icons/ci";
 import ConfirmModal from "./ConfirmModal";
 import AlertModal from "./AlertModal";
 
+import { useParams } from "react-router-dom";
+
 interface spotInterface {
   kor_name: string;
   eng_name: string;
@@ -121,6 +123,7 @@ const PromptModal: React.FC<PromptModalProps> = ({
   onAddSpot,
   isDataLoadedProps,
 }) => {
+  const { planIdFirst } = useParams();
   const [selectedAgent, setSelectedAgent] = useState<string>("");
   const [selectedAgentName, setSelectedAgentName] = useState<string>("");
   const [promptText, setPromptText] = useState<string>("");
@@ -164,6 +167,7 @@ const PromptModal: React.FC<PromptModalProps> = ({
         ...planInfo,
         start_date: new Date(planInfo.start_date),
         end_date: new Date(planInfo.end_date),
+        plan_id: planIdFirst ? parseInt(planIdFirst) : undefined
       };
       console.log("planData: ", planData);
 
