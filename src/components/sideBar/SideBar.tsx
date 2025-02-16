@@ -41,6 +41,7 @@ const SideBar: React.FC<SideBarProps> = ({
       return;
     }
     navigate("/plans/list");
+    closeSideBar();
   };
 
   return (
