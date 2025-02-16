@@ -10,18 +10,15 @@ import ConfirmModal from "./ConfirmModal";
 import AlertModal from "./AlertModal";
 
 interface spotInterface {
-  latitude: number;
-  longitude: number;
   kor_name: string;
   eng_name: string;
   description: string;
   address: string;
-  zip: string;
   url: string;
   image_url: string;
   map_url: string;
-  likes: number;
-  satisfaction: number;
+  latitude: number;
+  longitude: number;
   spot_category: number;
   phone_number: string;
   business_status: boolean;

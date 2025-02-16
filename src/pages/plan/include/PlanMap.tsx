@@ -3,18 +3,15 @@ import LoadKakaoMap from "./LoadPlanMap";
 
 // Plan.tsx 등에서 사용하는 동일한 spotResponse 타입
 interface spotResponse {
-  latitude: number;
-  longitude: number;
   kor_name: string;
   eng_name: string;
   description: string;
   address: string;
-  zip: string;
   url: string;
   image_url: string;
   map_url: string;
-  likes: number;
-  satisfaction: number;
+  latitude: number;
+  longitude: number;
   spot_category: number;
   phone_number: string;
   business_status: boolean;
@@ -24,7 +21,6 @@ interface spotResponse {
   spot_time: string;
   drivingTime?: string;
 }
-
 // PlanMap 컴포넌트 Props
 interface PlanMapProps {
   spots: spotResponse[];
@@ -100,7 +96,7 @@ const PlanMap: React.FC<PlanMapProps> = ({ spots, selectedDay }) => {
 
   // 지도 표시할 div
   return (
-    <div id="kakaomap" style={{ width: "100%", height: "600px" }}>
+    <div id="kakaomap" style={{ width: "100%", height: "500px" }}>
       <div
         ref={mapRef}
         style={{

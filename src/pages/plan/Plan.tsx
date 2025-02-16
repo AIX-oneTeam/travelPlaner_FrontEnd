@@ -14,20 +14,18 @@ import PlanDetail from "./include/PlanDetail";
 import AgentSelectModal from "../../components/modal/AgentSelectModal";
 import { List } from "lucide-react";
 import PlanMap from "./include/PlanMap";
+import TimeBar from "./include/TimeBar";
 
 interface spotResponse {
-  latitude: number;
-  longitude: number;
   kor_name: string;
   eng_name: string;
   description: string;
   address: string;
-  zip: string;
   url: string;
   image_url: string;
   map_url: string;
-  likes: number;
-  satisfaction: number;
+  latitude: number;
+  longitude: number;
   spot_category: number;
   phone_number: string;
   business_status: boolean;
@@ -146,7 +144,6 @@ const Plan: React.FC = () => {
       setIsOpen(true);
     } finally {
       setIsLoading(false);
-      planStore.initPlanInfo();
     }
   };
 
@@ -379,6 +376,9 @@ const Plan: React.FC = () => {
           destination={plan.main_location}
           name={plan.name}
           days={days}
+          companion_count={plan.companion_count}
+          ages={plan.ages}
+          concepts={plan.concepts}
           selectedDay={selectedDay}
           onDayClick={handleDayClick}
           onNameChange={handlePlanName}
@@ -394,18 +394,30 @@ const Plan: React.FC = () => {
             <p>AI가 여행 일정을 생성하고 있습니다...</p>
           </div>
         ) : isDataLoaded ? (
-          currentTab === "detail" ? (
-            <PlanDetail spots={spots} selectedDay={selectedDay} />
-          ) : currentTab === "modify" ? (
-            <PlanModify
-              spots={spots}
-              selectedDay={selectedDay}
-              onSpotsUpdate={handleSpotsUpdate}
-              onAddSpot={handleAddSpot}
-            />
-          ) : currentTab === "map" ? (
-            <PlanMap spots={spots} selectedDay={selectedDay} />
-          ) : null
+          <>
+            {currentTab === "detail" ? (
+              <div className={styles.plan_time_bar_frame}>
+                <TimeBar spots={spots} selectedDay={selectedDay} />
+                <PlanDetail spots={spots} selectedDay={selectedDay} />
+              </div>
+            ) : null}
+
+            {currentTab === "modify" ? (
+              <div className={styles.plan_time_bar_frame}>
+                <TimeBar spots={spots} selectedDay={selectedDay} />
+                <PlanModify
+                  spots={spots}
+                  selectedDay={selectedDay}
+                  onSpotsUpdate={handleSpotsUpdate}
+                  onAddSpot={handleAddSpot}
+                />
+              </div>
+            ) : null}
+
+            {currentTab === "map" ? (
+              <PlanMap spots={spots} selectedDay={selectedDay} />
+            ) : null}
+          </>
         ) : (
           <div className={styles.loading_container}>
             <div className={styles.loading_spinner}></div>

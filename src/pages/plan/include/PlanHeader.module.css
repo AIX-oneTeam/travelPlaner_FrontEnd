@@ -33,9 +33,10 @@
   width: 100%;
   padding: 0px 50px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content:center;
-  gap: 10px;
+  align-items: center;
+  gap: 15px;
 }
 
 .travel_plan_list_destination {
@@ -43,6 +44,23 @@
   font-weight: var(--semibold);
   color: var(--text-main);
   text-align: left;
+}
+
+.travel_plan_list_sub_info_item_value {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+
+  div{
+    padding: 5px;
+    border-radius: 10px;
+    background-color: var(--main-color-2);
+    color: var(--white);
+    font-size: var(--font-size-6);
+    font-weight: var(--semibold);
+    text-align: center;
+  }
 }
 
 .travel_plan_list_content {
@@ -63,10 +81,12 @@
   .travel_plan_list_destination{
     font-size: var(--font-size-5);
   }
+  .travel_plan_list_sub_info_item_value{
+    div{
+      font-size: var(--font-size-7);
+    }
+  }
 }
-
-
-
 
 .travel_plan_list_dates_wrapper {
   width: calc(100% - 60px);

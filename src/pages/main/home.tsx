@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ShortBtn from "../../components/buttons/ShortBtn";
 import MainSlider from "./MainSlider";
 import "./home.css";
+import usePlanStore from "../../stores/PlanStore"
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -24,7 +25,10 @@ const Home: React.FC = () => {
           <div className="travel-plan-button">
             <ShortBtn
               content="텍스트로 시작"
-              onClick={() => navigate("/plan/filter")}
+              onClick={() => {
+                usePlanStore.getState().initPlanInfo();
+                navigate("/plan/filter")
+              }}
             />
           </div>
         </div>
