@@ -14,11 +14,8 @@ import PlanDetail from "./include/PlanDetail";
 import AgentSelectModal from "../../components/modal/AgentSelectModal";
 import { List } from "lucide-react";
 import PlanMap from "./include/PlanMap";
-<<<<<<< HEAD
 import MiniGame from "../minigame/MiniGame";
-=======
 import TimeBar from "./include/TimeBar";
->>>>>>> 71cac6837464dfbd87022f257a3e2ccb6fabf400
 
 interface spotResponse {
   kor_name: string;
