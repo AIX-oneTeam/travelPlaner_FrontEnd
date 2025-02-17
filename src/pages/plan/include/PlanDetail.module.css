@@ -26,9 +26,9 @@
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
+  padding: 50px 120px 10px 100px;
   box-sizing: border-box;
-  gap: 20px;
-  padding: 30px 24px 100px 24px;
+  gap: 50px;
 }
 
 /* 타임라인 인디케이터 */
@@ -36,7 +36,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80px;
+  justify-content: flex-start;
+  padding-top: 10px;
+  gap: 10px;
+  width: 50px;
 }
 
 /* 타임라인: 원 */
@@ -86,7 +89,7 @@
 /* 시간 표시 텍스트 */
 .travel_time {
   text-align: center;
-  font-size: var(--font-size-5);
+  font-size: var(--font-size-6);
   font-weight: var(--semibold);
   color: var(--text-sub);
 }
@@ -124,6 +127,19 @@
 .place_info_container {
   width: 100%;
   text-align: left;
+  margin-top: 10px;
+}
+.place_info_container h2 {
+  font-size: var(--font-size-4);
+  font-weight: var(--bold);
+  color: var(--text-main);
+  margin-bottom: 5px;
+}
+
+.place_info_container h3 {
+  font-size: var(--font-size-5);
+  color: var(--text-sub);
+  line-height: 1.5;
 }
 
 @media (max-width: 768px) {
@@ -135,12 +151,6 @@
   font-size: var(--font-size-7);
   font-weight: var(--semibold);
   color: var(--text-sub);
-}
-
-.place_description {
-  margin-top:10px;
-  font-size: var(--font-size-6);
-  color: var(--text-main);
 }
 
 .place_additional_info {
@@ -165,11 +175,13 @@
 
 .travle_image{
   max-height: 150px;
+  width: 100%;
 }
 
-
 .travel_plan_card_container{
-  padding: 30px 24px 30px 24px;
+  padding: 24px 24px 24px 0;
+  margin-left: 30px;
+  gap: 10px;
 }
 
 }

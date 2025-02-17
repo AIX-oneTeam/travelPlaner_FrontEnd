@@ -10,6 +10,12 @@ interface Day {
 interface PlanHeaderProps {
   days: Day[]; // days 배열
   destination: string;
+  companion_count?: {
+    label: string;
+    count: number;
+  }[];
+  ages?: string;
+  concepts?: string[];
   name: string;
   selectedDay: number;
   onDayClick: (day: number) => void; // DAY 클릭 이벤트 핸들러
@@ -19,6 +25,9 @@ interface PlanHeaderProps {
 const PlanHeader: React.FC<PlanHeaderProps> = ({
   days,
   destination,
+  companion_count,
+  ages,
+  concepts,
   name,
   selectedDay,
   onDayClick,
@@ -88,6 +97,20 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({
 
       <div className={styles.travel_plan_list_sub_info}>
         <div className={styles.travel_plan_list_destination}>{destination}</div>
+        <div className={styles.travel_plan_list_sub_info_item_value}>
+          {companion_count?.map((item) => {
+            return (
+              <div key={item.label}>
+                #{item.label}
+                <span>{item.count}명</span>
+              </div>
+            );
+          })}
+          {ages && <div>#{ages} </div>}
+          {concepts?.map((concept) => {
+            return <div key={concept}>#{concept}</div>;
+          })}
+        </div>
       </div>
       {/* 슬라이더 */}
       <div className={styles.travel_plan_list_content}>

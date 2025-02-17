@@ -89,11 +89,6 @@ const SpotDetail: React.FC<SpotDetailProps> = ({
                   <span>{spot.business_hours}</span>
                 </div>
               )}
-
-              <div className={styles.info_item}>
-                <span className={styles.label}>예상 소요시간</span>
-                <span>{spot.spot_time}</span>
-              </div>
             </div>
 
             {renderButton()}

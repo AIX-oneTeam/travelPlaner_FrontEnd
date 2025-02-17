@@ -11,20 +11,21 @@ import PromptModal from "../../../components/modal/PromptModal";
 import styles from "./PlanModify.module.css";
 import SpotDetail from "../../../components/modal/SpotDetail";
 import AlertModal from "../../../components/modal/AlertModal";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import dayjs from "dayjs";
 
 interface spotResponse {
-  latitude: number;
-  longitude: number;
   kor_name: string;
   eng_name: string;
   description: string;
   address: string;
-  zip: string;
   url: string;
   image_url: string;
   map_url: string;
-  likes: number;
-  satisfaction: number;
+  latitude: number;
+  longitude: number;
   spot_category: number;
   phone_number: string;
   business_status: boolean;
@@ -148,6 +149,24 @@ const PlanModify: React.FC<PlanListProps> = ({
     setPromptVisible(false);
   };
 
+  const handleTimeChange = (spotIndex: number, newTime: dayjs.Dayjs | null) => {
+    if (newTime) {
+      const currentDaySpots = spots.filter(
+        (spot) => spot.day_x === selectedDay
+      );
+      const updatedSpots = spots.map((spot) => {
+        if (spot === currentDaySpots[spotIndex]) {
+          return {
+            ...spot,
+            spot_time: newTime.format("HH:mm"),
+          };
+        }
+        return spot;
+      });
+      onSpotsUpdate(updatedSpots);
+    }
+  };
+
   return (
     <>
       <div
@@ -156,73 +175,98 @@ const PlanModify: React.FC<PlanListProps> = ({
           !isPromptVisible ? styles.with_padding_bottom : ""
         }`}
       >
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="droppable">
-            {(provided: any) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{ width: "100%" }}
-              >
-                {/* 일정 요소 list */}
-                {spots
-                  .filter((spot) => spot.day_x === selectedDay)
-                  .map((spot, index) => (
-                    <Draggable
-                      key={`${spot.order}-${spot.eng_name}`}
-                      draggableId={`${spot.order}-${spot.eng_name}`}
-                      index={index}
-                    >
-                      {(dragProvided: any, snapshot: any) => (
-                        <div
-                          ref={dragProvided.innerRef}
-                          {...dragProvided.draggableProps}
-                          {...dragProvided.dragHandleProps}
-                          className={styles.travel_plan_card_section}
-                          onClick={() => handleSpotClick(spot)}
-                          style={{
-                            ...dragProvided.draggableProps.style,
-                            backgroundColor: snapshot.isDragging
-                              ? "rgba(0, 0, 0, 0.05)"
-                              : "transparent",
-                          }}
-                        >
-                          <div className={styles.travel_plan_card_container}>
-                            <div className={styles.teavel_plan_delete}>
-                              <Trash2
-                                size={30}
-                                className={styles.trash_icon}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDeleteClick(index);
-                                }}
-                              />
-                            </div>
-                            <div className={styles.travel_image_container}>
-                              <div className={styles.travel_image}>
-                                <img src={spot.image_url} alt={spot.eng_name} />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="droppable">
+              {(provided: any) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  style={{ width: "100%" }}
+                >
+                  {/* 일정 요소 list */}
+                  {spots
+                    .filter((spot) => spot.day_x === selectedDay)
+                    .map((spot, index) => (
+                      <Draggable
+                        key={`${spot.order}-${spot.eng_name}`}
+                        draggableId={`${spot.order}-${spot.eng_name}`}
+                        index={index}
+                      >
+                        {(dragProvided: any, snapshot: any) => (
+                          <div
+                            ref={dragProvided.innerRef}
+                            {...dragProvided.draggableProps}
+                            {...dragProvided.dragHandleProps}
+                            className={styles.travel_plan_card_section}
+                            style={{
+                              ...dragProvided.draggableProps.style,
+                              backgroundColor: snapshot.isDragging
+                                ? "rgba(0, 0, 0, 0.05)"
+                                : "transparent",
+                            }}
+                          >
+                            <div className={styles.travel_plan_card_container}>
+                              <div className={styles.timeline_indicator}>
+                                <div className={styles.circle}></div>
+                                <TimePicker
+                                  value={dayjs(`2024-01-01T${spot.spot_time}`)}
+                                  onChange={(newTime) =>
+                                    handleTimeChange(index, newTime)
+                                  }
+                                  minutesStep={30}
+                                  ampm={false}
+                                  slotProps={{
+                                    textField: {
+                                      size: "small",
+                                      className: styles.time_picker,
+                                    },
+                                  }}
+                                  format="HH:mm"
+                                />
+                                <Trash2
+                                  size={30}
+                                  className={styles.trash_icon}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteClick(index);
+                                  }}
+                                />
                               </div>
-                              <div className={styles.place_description}>
-                                <h2>{spot.kor_name}</h2>
+
+                              <div
+                                className={styles.travel_image_container}
+                                onClick={() => handleSpotClick(spot)}
+                              >
+                                <div className={styles.travel_image}>
+                                  <img
+                                    src={spot.image_url}
+                                    alt={spot.eng_name}
+                                  />
+                                </div>
+                                <div className={styles.place_info_container}>
+                                  <h2>{spot.kor_name}</h2>
+                                  <h3>{spot.eng_name}</h3>
+                                  <p className={styles.place_additional_info}>
+                                    {spot.address}
+                                  </p>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+                        )}
+                      </Draggable>
+                    ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </LocalizationProvider>
 
         {/* 모달 열기 */}
         <div
           className={styles.open_modal_cotanier}
-          style={{
-            width: modalWidth,
-          }}
           onClick={handleOpenModalClick}
         >
           <div className={styles.top_btn}>
