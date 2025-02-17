@@ -29,7 +29,7 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: "/logo192.png",
+    icon: "/favicon.ico",
   };
 
   // eslint-disable-next-line no-restricted-globals

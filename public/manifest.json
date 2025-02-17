@@ -3,12 +3,12 @@
   "name": "EasyTravel",
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff",
+  "theme_color": "#76ADEC",
+  "background_color": "#76ADEC",
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "512x512",
+      "sizes": "64x64",
       "type": "image/png"
     }
   ]

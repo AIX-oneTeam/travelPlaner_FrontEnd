@@ -1,7 +1,7 @@
 export function registerServiceWorker() {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
-      .register("/firebase-messaging-sw.js")
+      .register("/firebase-message-sw.js")
       .then((registration) => {
         console.log("서비스 워커 등록 성공:", registration);
       })
