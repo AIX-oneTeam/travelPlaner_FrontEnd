@@ -153,7 +153,9 @@ const Plan: React.FC = () => {
     try {
       //스팟 데이터 초기화
       setSpots([]);
-      const response = await axios.get(`${API_BASE_URL}/plan_spots/${planId}`);
+      const response = await axios.get(`${API_BASE_URL}/plan_spots/${planId}`, {
+        withCredentials: true,
+      });
       // 서버에서 반환한 일정 데이터 중 ages는 int타입임.
 
       // 서버의 pydantic에서는 요청받을때는 string, 저장하는 pydantic에서는 int타입임.
