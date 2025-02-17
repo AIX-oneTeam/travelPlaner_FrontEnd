@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 // 전역 스타일 및 공통 레이아웃 컴포넌트
 import "./assets/css/common/variables.css";
@@ -15,12 +15,16 @@ import PlanFilter from "./pages/plan/PlanFilter";
 import CheckList from "./pages/checkList/CheckList";
 import LoadKakaoMap from "./pages/plan/include/LoadPlanMap";
 import "./firebase-config";
+import AxiosIntercepter from "./components/intercept/AxiosIntercepter";
+import Unauthorized from "./pages/error/Unauthorized";
+import InternalServerError from "./pages/error/InternalServerError";
 
 function App() {
   return (
     <div>
       <LoadKakaoMap />
       <BrowserRouter>
+        <AxiosIntercepter />
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -30,6 +34,8 @@ function App() {
             <Route path="/plans/list" element={<PlanList />} />
             <Route path="/plans/:planIdFirst?" element={<Plan />} />
             <Route path="/checkList/:planId" element={<CheckList />} />
+            <Route path="/error/400" element={<Unauthorized />} />
+            <Route path="/error/500" element={<InternalServerError />} />
             {/* <Route path="/plan/modify" element={<PlanModify />} /> */}
           </Routes>
         </Layout>
