@@ -29,9 +29,15 @@ const LoginForm = () => {
   const fetchFcmToken = async () => {
     if (fcmToken.current) {
       console.log("fetchFcmToken:fcmToken: ", fcmToken.current);
-      axios.post(`${API_BASE_URL}/members/fcmToken`, {
-        fcm_token: fcmToken.current,
-      });
+      axios.post(
+        `${API_BASE_URL}/members/fcmToken`,
+        {
+          fcm_token: fcmToken.current,
+        },
+        {
+          withCredentials: true,
+        }
+      );
     }
   };
 
