@@ -10,6 +10,7 @@ import ConfirmModal from "./ConfirmModal";
 import AlertModal from "./AlertModal";
 
 import { useParams } from "react-router-dom";
+import useMemberStore from "../../stores/MemberStore";
 
 interface spotInterface {
   kor_name: string;
@@ -134,6 +135,7 @@ const PromptModal: React.FC<PromptModalProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
   const planStore = usePlanStore();
+  const memberStore = useMemberStore();
 
   const agents = [
     { id: "cafe", label: "카페", icon: "/icons/cafe_agent.jpg" },
@@ -167,7 +169,8 @@ const PromptModal: React.FC<PromptModalProps> = ({
         ...planInfo,
         start_date: new Date(planInfo.start_date),
         end_date: new Date(planInfo.end_date),
-        plan_id: planIdFirst ? parseInt(planIdFirst) : undefined
+        plan_id: planIdFirst ? parseInt(planIdFirst) : undefined,
+        email: memberStore.getMemberInfo().email,
       };
       console.log("planData: ", planData);
 
