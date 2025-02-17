@@ -133,6 +133,7 @@ const Plan: React.FC = () => {
           params: {
             agent_type: agentType,
           },
+          withCredentials: true,
         }
       );
 
@@ -295,7 +296,7 @@ const Plan: React.FC = () => {
     setSpots((prevSpots) => [...prevSpots, updatedSpot]);
   };
 
-  //체크리스트 이미지 클릭 시 
+  //체크리스트 이미지 클릭 시
   const handleCheckListClick = async () => {
     // planId가 이미 존재하는지 확인
     if (planId) {
@@ -383,8 +384,10 @@ const Plan: React.FC = () => {
           onDayClick={handleDayClick}
           onNameChange={handlePlanName}
         />
-        <div className={styles.travel_plan_list_icon}
-        onClick={handleCheckListClick}>
+        <div
+          className={styles.travel_plan_list_icon}
+          onClick={handleCheckListClick}
+        >
           <img src="/icons/memo.jpg" alt="Icon" />
         </div>
 
