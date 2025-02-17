@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { registerServiceWorker } from "./serviceWorkerRegistration";
 
 const rootElement = document.getElementById("root"); // 'root' 요소 가져오기
 if (rootElement) {
@@ -18,6 +17,3 @@ if (rootElement) {
 
 // 성능 측정 함수 호출
 reportWebVitals();
-
-// 서비스 워커 등록
-registerServiceWorker();
