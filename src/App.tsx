@@ -16,6 +16,7 @@ import CheckList from "./pages/checkList/CheckList";
 import LoadKakaoMap from "./pages/plan/include/LoadPlanMap";
 import MiniGame from "./pages/minigame/MiniGame"; // MiniGame 컴포넌트 임포트
 import "./firebase-config";
+import VoiceChat from "./pages/voice/VoiceChat";
 
 function App() {
   return (
@@ -33,7 +34,7 @@ function App() {
             <Route path="/checkList" element={<CheckList />} />
             <Route path="/minigame" element={<MiniGame />} /> {/* MiniGame 경로 추가 */}
             <Route path="/checkList/:planId" element={<CheckList />} />
-            <Route path="/VoicePlan" element={<VoicePlan />} />
+            {/* <Route path="/voice" element={<VoiceChat />} /> */}
             {/* <Route path="/plan/modify" element={<PlanModify />} /> */}
           </Routes>
         </Layout>

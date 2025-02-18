@@ -116,7 +116,7 @@ const MiniGame: React.FC = () => {
    ? `승리자: ${winResult.winner}` 
    : !squares.includes(null)
    ? "무승부 입니다!"
-   : `${isPlayerTurn ? "사용자 턴..." : "AI 생각중이에요..."}`;
+   : `${isPlayerTurn ? "사용자 턴.." : "AI 생각중이에요..."}`;
 
  const resetGame = () => {
    setSquares(Array(9).fill(null));
@@ -142,7 +142,7 @@ const MiniGame: React.FC = () => {
        {renderSquare(8)}
      </div>
      <button className={styles.minigame_reset_button} onClick={resetGame}>
-       Reset Game
+       다시하기
      </button>
    </div>
  );
