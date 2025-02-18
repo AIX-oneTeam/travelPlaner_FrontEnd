@@ -34,7 +34,7 @@
 }
 
 .checkList_header_close_button_img {
-    width: 30%;
+    width: 40%;
     height: 80%;
 }
 
@@ -92,8 +92,14 @@
     color: black;                     /* 텍스트 색상 설정 (기본값은 검정색) */
     outline: none; 
 
-    width: 85%;
+    width: 80%;
   }
+
+  @media screen and (min-width: 768px) {
+    .checkList_main_content input[type="text"] {
+        width: 80%;
+    }
+}  
 
 .checkList_main_content{
     display: flex;
