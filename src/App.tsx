@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 // 전역 스타일 및 공통 레이아웃 컴포넌트
 import "./assets/css/common/variables.css";
@@ -17,12 +17,16 @@ import LoadKakaoMap from "./pages/plan/include/LoadPlanMap";
 import MiniGame from "./pages/minigame/MiniGame"; // MiniGame 컴포넌트 임포트
 import "./firebase-config";
 import VoiceChat from "./pages/voice/VoiceChat";
+import AxiosIntercepter from "./components/intercept/AxiosIntercepter";
+import Unauthorized from "./pages/error/Unauthorized";
+import InternalServerError from "./pages/error/InternalServerError";
 
 function App() {
   return (
     <div>
       <LoadKakaoMap />
       <BrowserRouter>
+        <AxiosIntercepter />
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -35,6 +39,8 @@ function App() {
             <Route path="/minigame" element={<MiniGame />} /> {/* MiniGame 경로 추가 */}
             <Route path="/checkList/:planId" element={<CheckList />} />
             {/* <Route path="/voice" element={<VoiceChat />} /> */}
+            <Route path="/error/400" element={<Unauthorized />} />
+            <Route path="/error/500" element={<InternalServerError />} />
             {/* <Route path="/plan/modify" element={<PlanModify />} /> */}
           </Routes>
         </Layout>
