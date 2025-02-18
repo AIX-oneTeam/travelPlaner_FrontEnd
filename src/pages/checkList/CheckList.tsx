@@ -6,9 +6,9 @@ import axios from "axios";
 
 interface CheckListItem {
     plan_id: number;
-    id?: number; // ID는 optional로 변경
+    id?: number;
     item: string;
-    checked: number; // 0 또는 1을 사용
+    checked: number;
 }
 
 function CheckList() {
@@ -27,7 +27,6 @@ function CheckList() {
                     if (data && data.length > 0) {
                         setItems(data);
                     } else {
-                        // ID를 지정하지 않음
                         setItems([{ item: "", checked: 0, plan_id: parseInt(planId, 10) }]);
                     }
                 } else {
@@ -35,7 +34,6 @@ function CheckList() {
                 }
             } catch (error) {
                 console.error("Error fetching checklist:", error);
-                // ID를 지정하지 않음
                 setItems([{ item: "", checked: 0, plan_id: planId ? parseInt(planId, 10) : 0 }]);
             }
         };
@@ -44,39 +42,42 @@ function CheckList() {
     }, [planId]);
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
-        if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
-            e.preventDefault();
-            if (!planId) {
-                console.error("Plan ID is missing.");
-                return;
-            }
-            // ID를 지정하지 않음
-            const newItem: Omit<CheckListItem, 'id'> = {
-                plan_id: parseInt(planId, 10),
-                item: "",
-                checked: 0,
-            };
-            const updatedItems = [...items];
-            updatedItems[index].item = e.currentTarget.value.trim();
-            updatedItems.splice(index + 1, 0, newItem as CheckListItem); // newItem을 CheckListItem으로 타입 캐스팅
-            setItems(updatedItems);
-            setTimeout(() => {
-                const nextInput = document.querySelector(
-                    `input[type="text"][data-index="${index + 1}"]`
-                ) as HTMLInputElement;
-                if (nextInput) nextInput.focus();
-            }, 0);
-        } else if (e.key === "Backspace" && items[index].item === "" && items.length > 1) {
-            e.preventDefault();
-            const updatedItems = items.filter((_, i) => i !== index);
-            setItems(updatedItems);
-            if (index > 0) {
+        if (e.key === "Enter") {
+            if (e.currentTarget.value.trim() !== "" && !e.nativeEvent.isComposing) {
+                e.preventDefault();
+                if (!planId) {
+                    console.error("Plan ID is missing.");
+                    return;
+                }
+                const newItem: Omit<CheckListItem, 'id'> = {
+                    plan_id: parseInt(planId, 10),
+                    item: "",
+                    checked: 0,
+                };
+                const updatedItems = [...items];
+                updatedItems[index].item = e.currentTarget.value.trim();
+                updatedItems.splice(index + 1, 0, newItem as CheckListItem);
+                setItems(updatedItems);
                 setTimeout(() => {
-                    const prevInput = document.querySelector(
-                        `input[type="text"][data-index="${index - 1}"]`
+                    const nextInput = document.querySelector(
+                        `input[type="text"][data-index="${index + 1}"]`
                     ) as HTMLInputElement;
-                    if (prevInput) prevInput.focus();
+                    if (nextInput) nextInput.focus();
                 }, 0);
+            }
+        } else if (e.key === "Backspace") {
+            if (items[index].item === "" && items.length > 1) {
+                e.preventDefault();
+                const updatedItems = items.filter((_, i) => i !== index);
+                setItems(updatedItems);
+                if (index > 0) {
+                    setTimeout(() => {
+                        const prevInput = document.querySelector(
+                            `input[type="text"][data-index="${index - 1}"]`
+                        ) as HTMLInputElement;
+                        if (prevInput) prevInput.focus();
+                    }, 0);
+                }
             }
         }
     };
@@ -92,7 +93,6 @@ function CheckList() {
             const updatedItems = items.filter((_, i) => i !== index);
             setItems(updatedItems);
         } else {
-            // ID를 지정하지 않음
             setItems([{ item: "", checked: 0, plan_id: planId ? parseInt(planId, 10) : 0 }]);
         }
     };
@@ -105,7 +105,6 @@ function CheckList() {
 
     const sendItemsToBackend = async () => {
         try {
-            // ID 제거
             const itemsToSend = items.map(({ id, ...rest }) => rest);
             console.log("input data :", JSON.stringify(itemsToSend));
             const response = await axios.post(`${API_BASE_URL}/checklist/${planId}`, itemsToSend);
@@ -146,7 +145,7 @@ function CheckList() {
             <div className={styles.checkList_main_container}>
                 <div className={styles.checkList_main_contents}>
                     {items.map((item, index) => (
-                        <div key={item.id || index} className={styles.checkList_main_content}> {/* item.id가 없을 경우 index를 key로 사용 */}
+                        <div key={item.id || index} className={styles.checkList_main_content}>
                             <input
                                 type="checkbox"
                                 id={`checkbox-${index}`}

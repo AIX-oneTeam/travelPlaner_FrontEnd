@@ -21,6 +21,9 @@ const SideBar: React.FC<SideBarProps> = ({
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
   const [alertModalContent, setAlertModalContent] = useState("");
 
+  const handleLogin =()=> {
+    closeSideBar();
+  }
   //로그아웃 처리
   const handleLogout = () => {
     initMemberInfo();
@@ -58,7 +61,7 @@ const SideBar: React.FC<SideBarProps> = ({
             ></img>
           </div>
           {isAnonymous() ? (
-            <Link className="sideBar-1" to="/loginForm">
+            <Link className="sideBar-1" to="/loginForm" onClick={handleLogin}>
               로그인
               <img src="/icons/arrow_forward.jpg" alt="login"></img>
             </Link>
