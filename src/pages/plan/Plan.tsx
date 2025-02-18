@@ -114,6 +114,13 @@ const Plan: React.FC = () => {
     setIsLoading(true);
     try {
       let planData = planStore.getPlan();
+
+      // email 추가한 새로운 객체 생성
+      const planDataWithEmail = {
+        ...planData, // 기존 데이터 유지
+        email: memberStore.getMemberInfo().email,
+      };
+
       // 화면에 출력하기 위한 형식 변환
       const planDataforPrint = {
         name: planData.name,
@@ -128,7 +135,7 @@ const Plan: React.FC = () => {
       // agentType 포함 API 요청
       const response = await axios.post(
         `${API_BASE_URL}/agents/plan`,
-        planData,
+        planDataWithEmail,
         {
           params: {
             agent_type: agentType,
