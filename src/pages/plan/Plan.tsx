@@ -133,6 +133,7 @@ const Plan: React.FC = () => {
           params: {
             agent_type: agentType,
           },
+          withCredentials: true,
         }
       );
 
@@ -152,7 +153,9 @@ const Plan: React.FC = () => {
     try {
       //스팟 데이터 초기화
       setSpots([]);
-      const response = await axios.get(`${API_BASE_URL}/plan_spots/${planId}`);
+      const response = await axios.get(`${API_BASE_URL}/plan_spots/${planId}`, {
+        withCredentials: true,
+      });
       // 서버에서 반환한 일정 데이터 중 ages는 int타입임.
 
       // 서버의 pydantic에서는 요청받을때는 string, 저장하는 pydantic에서는 int타입임.
@@ -295,7 +298,7 @@ const Plan: React.FC = () => {
     setSpots((prevSpots) => [...prevSpots, updatedSpot]);
   };
 
-  //체크리스트 이미지 클릭 시 
+  //체크리스트 이미지 클릭 시
   const handleCheckListClick = async () => {
     // planId가 이미 존재하는지 확인
     if (planId) {
@@ -383,8 +386,10 @@ const Plan: React.FC = () => {
           onDayClick={handleDayClick}
           onNameChange={handlePlanName}
         />
-        <div className={styles.travel_plan_list_icon}
-        onClick={handleCheckListClick}>
+        <div
+          className={styles.travel_plan_list_icon}
+          onClick={handleCheckListClick}
+        >
           <img src="/icons/memo.jpg" alt="Icon" />
         </div>
 
