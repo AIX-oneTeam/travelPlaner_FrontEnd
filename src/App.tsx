@@ -15,11 +15,11 @@ import PlanFilter from "./pages/plan/PlanFilter";
 import CheckList from "./pages/checkList/CheckList";
 import LoadKakaoMap from "./pages/plan/include/LoadPlanMap";
 import MiniGame from "./pages/minigame/MiniGame"; // MiniGame 컴포넌트 임포트
-import "./firebase-config";
 import VoiceChat from "./pages/voice/VoiceChat";
 import AxiosIntercepter from "./components/intercept/AxiosIntercepter";
 import Unauthorized from "./pages/error/Unauthorized";
 import InternalServerError from "./pages/error/InternalServerError";
+import "./firebase-config";
 
 function App() {
   return (
