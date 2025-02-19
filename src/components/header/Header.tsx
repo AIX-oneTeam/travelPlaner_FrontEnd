@@ -1,31 +1,29 @@
 import React from "react";
 import "./Header.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MemberStore from "../../stores/MemberStore";
 
 interface HeaderProps {
-  openSideBar: () => void;
+  toggleSideBar: () => void;
+  closeSideBar: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ openSideBar }) => {
-  /*---라우터 관련-------------------------------*/
-
-  /*---상태관리 변수들(값이 변화하면 화면 렌더링 )---*/
+const Header: React.FC<HeaderProps> = ({ toggleSideBar, closeSideBar }) => {
+  const navigate = useNavigate();
   const memberInfo = MemberStore((state: any) => state.memberInfo);
 
-  /*---일반 변수--------------------------------*/
-
-  /*---일반 메소드 -----------------------------*/
-
-  /*---훅(useEffect)+이벤트(handle)메소드-------*/
+  const handleMain = () => {
+    navigate("/");
+    closeSideBar()
+  }
 
   return (
     <div id="header-container">
       <div className="header-area">
         <div className="logo-container">
-          <Link to="/">
+          <div onClick={handleMain}>
             <img className="logo" src="/icons/Easy_Travel.png" alt="로고" />
-          </Link>
+          </div>
         </div>
 
         <div className="text-container">
@@ -46,10 +44,8 @@ const Header: React.FC<HeaderProps> = ({ openSideBar }) => {
             className="side-menu-btn"
             src="/icons/hamburger_menu.png"
             alt="메뉴"
-            onClick={openSideBar}
+            onClick={toggleSideBar}
           />
-          {/* <button>로그인</button>
-            <button>로그아웃</button> */}
         </div>
       </div>
     </div>

@@ -14,6 +14,7 @@ import PlanDetail from "./include/PlanDetail";
 import AgentSelectModal from "../../components/modal/AgentSelectModal";
 import { List } from "lucide-react";
 import PlanMap from "./include/PlanMap";
+import MiniGame from "../minigame/minigame";
 import TimeBar from "./include/TimeBar";
 
 interface spotResponse {
@@ -400,9 +401,9 @@ const Plan: React.FC = () => {
           <img src="/icons/memo.jpg" alt="Icon" />
         </div>
 
-        {isLoading ? (
+          {isLoading ? (
           <div className={styles.loading_container}>
-            <div className={styles.loading_spinner}></div>
+            <MiniGame />
             <p>AI가 여행 일정을 생성하고 있습니다...</p>
           </div>
         ) : isDataLoaded ? (
