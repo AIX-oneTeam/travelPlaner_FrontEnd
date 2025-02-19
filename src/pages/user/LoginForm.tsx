@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import axios from "axios";
 import MemberStore from "../../stores/MemberStore";
-
+import { requestPermission } from "../../firebase-config";
 
 // Authorization Code Flow
 // 1. 프론트는 각 인증서버에 API키를 이용해 인증 코드를 받고 이를 백엔드로 전송
@@ -70,8 +70,8 @@ const LoginForm = () => {
           setMemberInfo(response.data);
           navigate("/");
           // fcm 토큰 발급
-
-
+          const token = await requestPermission();
+          fcmToken.current = token;
           fetchFcmToken();
         })
         .catch((error) => {
