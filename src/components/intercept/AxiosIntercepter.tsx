@@ -21,9 +21,9 @@ const AxiosIntercepter: React.FC = () => {
             case 403:
               window.location.href = "/error/400";
               break;
-            //case 500:
-            // window.location.href = "/error/500";
-            //break;
+            // case 500:
+            //   window.location.href = "/error/500";
+            //   break;
           }
         }
         //if (error.message === "Network Error") {

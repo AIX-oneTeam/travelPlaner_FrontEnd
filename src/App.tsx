@@ -20,12 +20,14 @@ import AxiosIntercepter from "./components/intercept/AxiosIntercepter";
 import Unauthorized from "./pages/error/Unauthorized";
 import InternalServerError from "./pages/error/InternalServerError";
 import "./firebase-config";
+import LoginCheck from "./components/intercept/loginCheck";
 
 function App() {
   return (
     <div>
       <LoadKakaoMap />
       <BrowserRouter>
+        <LoginCheck />
         <AxiosIntercepter />
         <Layout>
           <Routes>
@@ -36,7 +38,8 @@ function App() {
             <Route path="/plans/list" element={<PlanList />} />
             <Route path="/plans/:planIdFirst?" element={<Plan />} />
             <Route path="/checkList" element={<CheckList />} />
-            <Route path="/minigame" element={<MiniGame />} /> {/* MiniGame 경로 추가 */}
+            <Route path="/minigame" element={<MiniGame />} />{" "}
+            {/* MiniGame 경로 추가 */}
             <Route path="/checkList/:planId" element={<CheckList />} />
             {/* <Route path="/voice" element={<VoiceChat />} /> */}
             <Route path="/error/400" element={<Unauthorized />} />
