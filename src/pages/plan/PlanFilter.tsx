@@ -3,7 +3,15 @@ import { useNavigate } from "react-router-dom";
 import Calendar, { CalendarProps } from "react-calendar";
 import LongBtn from "../../components/buttons/LongBtn";
 import NormalInput2 from "../../components/input/NormalInput2";
-import { Cloud, Sun, CloudRain, AlertCircle } from "lucide-react";
+import {
+  Cloudy,
+  Cloud,
+  Sun,
+  CloudRain,
+  AlertCircle,
+  Snowflake,
+  Umbrella,
+} from "lucide-react";
 import { API_BASE_URL } from "../../config";
 import axios from "axios";
 import usePlanStore from "../../stores/PlanStore";
@@ -14,7 +22,14 @@ import styles from "./PlanFilter.module.css";
 import AlertModal from "../../components/modal/AlertModal";
 
 // 가능한 날씨 상태
-type WeatherType = "맑음" | "흐림" | "비";
+type WeatherType =
+  | "맑음"
+  | "구름많음"
+  | "흐림"
+  | "비/눈"
+  | "비"
+  | "눈"
+  | "소나기";
 
 // 날씨 상태 인터페이스 (나중에 API 연동 시 사용할 error 옵션 포함)
 interface WeatherState {
@@ -46,7 +61,6 @@ const accomodation_concept = [
   "글램핑",
   "한옥",
   "풀빌라",
-  "리조트",
   "게스트 하우스",
 ];
 
@@ -66,7 +80,7 @@ const site_concept = [
 
 const restaurant_concept = ["낮술", "해산물", "고기", "채식", "브런치"];
 
-const cafe_concept = ["호텔", "모텔", "게스트 하우스", "한옥", "풀빌라"];
+const cafe_concept = ["모던 카페", "야외 카페", "감성 카페", "느좋 카페"];
 
 const purposes = [
   ...accomodation_concept,
@@ -171,7 +185,7 @@ const WeatherAlert: React.FC<{
   start_date: string;
 }> = ({ selectedX, selectedY, start_date }) => {
   const url =
-    "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst";
+    "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
   const WEATHER_API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
   // 기본 날씨 상태 설정 (error, setWeatherState는 API 연동 전까지는 불필요)
   const [weatherState, setWeatherState] = useState<WeatherState>({
@@ -185,7 +199,15 @@ const WeatherAlert: React.FC<{
         return <Sun className={styles.weather_icon} />;
       case "흐림":
         return <Cloud className={styles.weather_icon} />;
+      case "구름많음":
+        return <Cloudy className={styles.weather_icon} />;
       case "비":
+        return <Umbrella className={styles.weather_icon} />;
+      case "눈":
+        return <Snowflake className={styles.weather_icon} />;
+      case "소나기":
+        return <CloudRain className={styles.weather_icon} />;
+      case "비/눈":
         return <CloudRain className={styles.weather_icon} />;
       default:
         return (
@@ -199,18 +221,76 @@ const WeatherAlert: React.FC<{
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
+        const base_date = start_date.split("-").join("");
         const response = await axios.get(url, {
           params: {
             serviceKey: WEATHER_API_KEY,
             pageNo: 1,
-            numOfRows: 10,
+            numOfRows: 11,
             dataType: "JSON",
-            base_date: start_date,
+            base_date: base_date,
             base_time: "1400",
             nx: selectedX,
             ny: selectedY,
           },
         });
+        console.log(response.data.response.body.items.item);
+        if (response.data.response.body.items.item) {
+          const weatherDatas = response.data.response.body.items.item;
+          const skyData = weatherDatas.filter(
+            (data: any) => data.category === "SKY"
+          );
+          const rainData = weatherDatas.filter(
+            (data: any) => data.category === "PTY"
+          );
+          console.log(skyData);
+          console.log(rainData);
+
+          if (rainData && rainData[0].obsrValue === 0) {
+            switch (skyData[0].obsrValue) {
+              case "1":
+                setWeatherState({
+                  type: "맑음",
+                });
+                break;
+              case "3":
+                setWeatherState({
+                  type: "구름많음",
+                });
+                break;
+              case "4":
+                setWeatherState({
+                  type: "흐림",
+                });
+                break;
+            }
+          } else {
+            switch (rainData[0].obsrValue) {
+              case "1":
+                setWeatherState({
+                  type: "비",
+                });
+                break;
+              case "2":
+                setWeatherState({
+                  type: "비/눈",
+                });
+                break;
+              case "3":
+                setWeatherState({
+                  type: "눈",
+                });
+                break;
+              case "4":
+                setWeatherState({
+                  type: "소나기",
+                });
+                break;
+            }
+          }
+        }
+
+        console.log(weatherState);
       } catch (error) {
         console.error("날씨 데이터 가져오기 실패:", error);
       }
@@ -229,7 +309,7 @@ const WeatherAlert: React.FC<{
             예상 날씨 - {weatherState.type}
           </h3>
           <p className={styles.weather_update_time}>
-            3일 전 알람으로 다시 알려드릴게요!
+            {start_date} 기준 날씨 정보입니다.
           </p>
         </div>
       </div>
@@ -257,7 +337,13 @@ const PlanFilterSelector: React.FC = () => {
   const [selectedPurposes, setSelectedPurposes] = useState<string[]>([]); // 목적
   const [selectedX, setSelectedX] = useState<number | null>(60); // 날씨 api x좌표 기본값 서울 특별시
   const [selectedY, setSelectedY] = useState<number | null>(127); // 날씨 api y좌표 기본값 서울 특별시
-  const [start_date, setStart_date] = useState<string>("20250219"); // 날씨 api 시작일
+  const [start_date, setStart_date] = useState<string>(() => {
+    const today = new Date();
+    return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}-${String(today.getDate()).padStart(2, "0")}`;
+  }); // 날씨 api 시작일
 
   // 매핑 테이블
   const provinceMappings: Record<string, string> = {
