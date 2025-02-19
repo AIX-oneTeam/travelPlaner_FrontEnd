@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './minigame.module.css';
+import styles from './MiniGame.module.css';
 
 function calculateWinner(squares: Array<string | null>): { winner: string | null; line: number[] | null } {
  const lines = [
