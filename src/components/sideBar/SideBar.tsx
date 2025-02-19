@@ -28,7 +28,7 @@ const SideBar: React.FC<SideBarProps> = ({
   const handleLogout = () => {
     initMemberInfo();
     axios.get(`${API_BASE_URL}/members/logout`, { withCredentials: true });
-    closeSideBar();
+    navigateAndCloseSideBar("/");
   };
 
   if (!isSideBarVisible) {
