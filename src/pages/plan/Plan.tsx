@@ -14,7 +14,7 @@ import PlanDetail from "./include/PlanDetail";
 import AgentSelectModal from "../../components/modal/AgentSelectModal";
 import { List } from "lucide-react";
 import PlanMap from "./include/PlanMap";
-import MiniGame from "../minigame/minigame";
+import MiniGame from "../minigame/MiniGame";
 import TimeBar from "./include/TimeBar";
 
 interface spotResponse {
