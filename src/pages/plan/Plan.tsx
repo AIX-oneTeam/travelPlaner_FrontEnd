@@ -222,7 +222,6 @@ const Plan: React.FC = () => {
   const navigate = useNavigate();
   const [selectedDay, setSelectedDay] = useState<number>(1);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [savedPlanId, setSavedPlanId] = useState<number>();
 
   // 날짜 헤더 클릭
   const handleDayClick = (day: number) => {
@@ -259,7 +258,9 @@ const Plan: React.FC = () => {
           email: memberStore.getMemberInfo().email,
         });
         console.log("savePlanData", response.data);
+        // 새로운 planId 저장
         setPlanId(response.data.data.plan_id);
+        navigate(`/plans/${response.data.data.plan_id}`);
         setMessage("일정 수정 완료");
         setIsOpen(true);
       }
@@ -278,7 +279,8 @@ const Plan: React.FC = () => {
         console.log("savePlanData", response.data);
         setMessage("일정 저장 완료");
         setIsOpen(true);
-        setSavedPlanId(response.data.data.plan_id);
+        setPlanId(response.data.data.plan_id);
+        navigate(`/plans/${response.data.data.plan_id}`);
       }
     } catch (err) {
       console.error(err);
@@ -401,7 +403,7 @@ const Plan: React.FC = () => {
           <img src="/icons/memo.jpg" alt="Icon" />
         </div>
 
-          {isLoading ? (
+        {isLoading ? (
           <div className={styles.loading_container}>
             <MiniGame />
             <p>AI가 여행 일정을 생성하고 있습니다...</p>
