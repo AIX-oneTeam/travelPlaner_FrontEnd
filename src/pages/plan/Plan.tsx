@@ -118,17 +118,12 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
       //올바른 방식로 접근한게 아니라면 홈으로 이홈
       if (newRequest === false) {
         navigate("/");
+        return;
       }
 
-      // 이전 요청이 있다면 취소
-      if (abortController) {
-        abortController.abort();
+      if (planIdFirst) {
+        return;
       }
-
-      // 새로운 AbortController 생성
-      const controller = new AbortController();
-      setAbortController(controller);
-
       // setShowAgentModal(false);
       setIsLoading(true);
       try {
@@ -161,7 +156,6 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
             //   agent_type: agentType,
             // },
             withCredentials: true,
-            signal: controller.signal, // AbortController의 signal 사용
           }
         );
 
@@ -381,26 +375,6 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
     }
   };
 
-  // 요청 취소 핸들러
-  const handleCancelRequest = () => {
-    if (abortController) {
-      abortController.abort();
-      setIsLoading(false);
-      setMessage("요청이 취소되었습니다.");
-      setIsOpen(true);
-      navigate("/plan/filter");
-    }
-  };
-
-  // 컴포넌트 언마운트 시 요청 취소
-  useEffect(() => {
-    return () => {
-      if (abortController) {
-        abortController.abort();
-      }
-    };
-  }, [abortController]);
-
   return (
     <div className={styles.travel_plan_container}>
       <div className={styles.travel_plan_tab_container}>
@@ -457,12 +431,6 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
             <p>AI가 여행 일정을 생성하고 있습니다...</p>
             <p>일을 마치면 알림으로 알려드려요!</p>
             <MiniGame />
-            <button
-              className={styles.cancel_request_btn}
-              onClick={handleCancelRequest}
-            >
-              요청 취소
-            </button>
           </div>
         ) : isDataLoaded ? (
           <>

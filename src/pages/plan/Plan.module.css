@@ -168,27 +168,3 @@
   padding: 0 12px;
 }
 
-.cancel_request_btn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: var(--black-opacity-50);
-  color: var(--white);
-  border: none;
-  border-radius: var(--border-radius-2);
-  font-size: var(--font-size-5);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.cancel_request_btn:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
-}
-
-@media (max-width: 768px) {
-  .cancel_request_btn {
-    font-size: var(--font-size-6);
-    padding: 8px 16px;
-  }
-}
-
