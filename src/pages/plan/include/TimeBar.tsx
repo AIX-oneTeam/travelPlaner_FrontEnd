@@ -14,8 +14,10 @@ interface TimeBarProps {
 const TimeBar: React.FC<TimeBarProps> = ({ spots, selectedDay }) => {
   // 시간을 분으로 변환하는 함수 (예: "09:30" -> 570)
   const getMinutes = (timeString: string) => {
-    if (!timeString) {
-      return 0;
+    const timeFormat = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
+
+    if (!timeString || !timeFormat.test(timeString)) {
+      return 570;
     }
     const [hours, minutes] = timeString.split(":").map(Number);
     return hours * 60 + minutes;
