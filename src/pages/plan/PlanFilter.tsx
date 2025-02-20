@@ -317,7 +317,9 @@ const WeatherAlert: React.FC<{
   );
 };
 
-const PlanFilterSelector: React.FC = () => {
+const PlanFilterSelector: React.FC<{
+  changeRequestState: (newRequest: boolean) => void;
+}> = ({ changeRequestState }) => {
   const navigate = useNavigate();
   const setPlan = usePlanStore((state) => state.setPlan);
 
@@ -493,6 +495,8 @@ const PlanFilterSelector: React.FC = () => {
       });
 
       // 플랜 페이지로 이동
+      // 올바른 과정임을 알림
+      changeRequestState(true);
       navigate("/plans/");
     } catch (error) {
       console.error("데이터 저장 중 오류 발생:", error);

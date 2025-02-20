@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LongBtn from "../../components/buttons/LongBtn";
 import ConfirmModal from "../../components/modal/ConfirmModal"; // 모달 컴포넌트
@@ -11,7 +11,7 @@ import useMemberStore from "../../stores/MemberStore";
 import { API_BASE_URL } from "../../config";
 import AlertModal from "../../components/modal/AlertModal";
 import PlanDetail from "./include/PlanDetail";
-import AgentSelectModal from "../../components/modal/AgentSelectModal";
+// import AgentSelectModal from "../../components/modal/AgentSelectModal";
 import { List } from "lucide-react";
 import PlanMap from "./include/PlanMap";
 import MiniGame from "../minigame/MiniGame";
@@ -68,7 +68,7 @@ const generateDaysArray = (startDate: Date, endDate: Date) => {
   return daysArray;
 };
 
-const Plan: React.FC = () => {
+const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
   const [currentTab, setCurrentTab] = useState<string>("detail");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
@@ -102,59 +102,88 @@ const Plan: React.FC = () => {
   };
 
   // 에이전트 선택 후 일정 생성 관련 상태
-  const [showAgentModal, setShowAgentModal] = useState<boolean>(true);
+  // const [showAgentModal, setShowAgentModal] = useState<boolean>(true);
+  const [abortController, setAbortController] =
+    useState<AbortController | null>(null);
 
   // 일정 목록 페이지로 이동
   const handleListClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     navigate("/plans/list");
   };
-  // 에이전트 선택 및 요청
-  const handleAgentSelect = async (agentType: string[]) => {
-    setShowAgentModal(false);
-    setIsLoading(true);
-    try {
-      let planData = planStore.getPlan();
+  // 에이전트 선택 및 요청 (인자에 agentType: string[] 포함.)
+  //에이전트 요청
+  useEffect(() => {
+    const handleAgentSelect = async () => {
+      //올바른 방식로 접근한게 아니라면 홈으로 이홈
+      if (newRequest === false) {
+        navigate("/");
+      }
 
-      // email 추가한 새로운 객체 생성
-      const planDataWithEmail = {
-        ...planData, // 기존 데이터 유지
-        email: memberStore.getMemberInfo().email,
-      };
+      // 이전 요청이 있다면 취소
+      if (abortController) {
+        abortController.abort();
+      }
 
-      // 화면에 출력하기 위한 형식 변환
-      const planDataforPrint = {
-        name: planData.name,
-        start_date: new Date(planData.start_date),
-        end_date: new Date(planData.end_date),
-        main_location: planData.main_location,
-        ages: planData.ages,
-        companion_count: planData.companion_count,
-        concepts: planData.concepts,
-      };
-      setPlan(planDataforPrint);
-      // agentType 포함 API 요청
-      const response = await axios.post(
-        `${API_BASE_URL}/agents/plan`,
-        planDataWithEmail,
-        {
-          params: {
-            agent_type: agentType,
-          },
-          withCredentials: true,
+      // 새로운 AbortController 생성
+      const controller = new AbortController();
+      setAbortController(controller);
+
+      // setShowAgentModal(false);
+      setIsLoading(true);
+      try {
+        let planData = planStore.getPlan();
+
+        // email 추가한 새로운 객체 생성
+        const planDataWithEmail = {
+          ...planData, // 기존 데이터 유지
+          email: memberStore.getMemberInfo().email,
+        };
+
+        // 화면에 출력하기 위한 형식 변환
+        const planDataforPrint = {
+          name: planData.name,
+          start_date: new Date(planData.start_date),
+          end_date: new Date(planData.end_date),
+          main_location: planData.main_location,
+          ages: planData.ages,
+          companion_count: planData.companion_count,
+          concepts: planData.concepts,
+        };
+        setPlan(planDataforPrint);
+
+        // agentType 포함 API 요청
+        const response = await axios.post(
+          `${API_BASE_URL}/agents/plan`,
+          planDataWithEmail,
+          {
+            // params: {
+            //   agent_type: agentType,
+            // },
+            withCredentials: true,
+            signal: controller.signal, // AbortController의 signal 사용
+          }
+        );
+
+        const spotInfos = response.data.data.spots.spots;
+        setSpots(spotInfos);
+      } catch (err) {
+        if (axios.isCancel(err)) {
+          console.log("Request aborted:", err.message);
+        } else {
+          console.error("에이전트 요청 중 오류 발생:", err);
+          setMessage(
+            "일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요"
+          );
+          setIsOpen(true);
         }
-      );
-
-      const spotInfos = response.data.data.spots.spots;
-      setSpots(spotInfos);
-    } catch (err) {
-      console.error("에이전트 요청 중 오류 발생:", err);
-      setMessage("일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
-      setIsOpen(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      } finally {
+        setIsLoading(false);
+        setAbortController(null);
+      }
+    };
+    handleAgentSelect();
+  }, []);
 
   // 저장된 일정 조회용
   const fetchPlanData = async () => {
@@ -352,6 +381,26 @@ const Plan: React.FC = () => {
     }
   };
 
+  // 요청 취소 핸들러
+  const handleCancelRequest = () => {
+    if (abortController) {
+      abortController.abort();
+      setIsLoading(false);
+      setMessage("요청이 취소되었습니다.");
+      setIsOpen(true);
+      navigate("/plan/filter");
+    }
+  };
+
+  // 컴포넌트 언마운트 시 요청 취소
+  useEffect(() => {
+    return () => {
+      if (abortController) {
+        abortController.abort();
+      }
+    };
+  }, [abortController]);
+
   return (
     <div className={styles.travel_plan_container}>
       <div className={styles.travel_plan_tab_container}>
@@ -405,8 +454,15 @@ const Plan: React.FC = () => {
 
         {isLoading ? (
           <div className={styles.loading_container}>
-            <MiniGame />
             <p>AI가 여행 일정을 생성하고 있습니다...</p>
+            <p>일을 마치면 알림으로 알려드려요!</p>
+            <MiniGame />
+            <button
+              className={styles.cancel_request_btn}
+              onClick={handleCancelRequest}
+            >
+              요청 취소
+            </button>
           </div>
         ) : isDataLoaded ? (
           <>
@@ -453,10 +509,10 @@ const Plan: React.FC = () => {
         ) : null}
       </div>
 
-      <AgentSelectModal
+      {/* <AgentSelectModal
         isOpen={showAgentModal && !planId}
         onSelect={handleAgentSelect}
-      />
+      /> */}
 
       <ConfirmModal
         isOpen={isModalOpen}
