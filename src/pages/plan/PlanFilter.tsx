@@ -3,7 +3,15 @@ import { useNavigate } from "react-router-dom";
 import Calendar, { CalendarProps } from "react-calendar";
 import LongBtn from "../../components/buttons/LongBtn";
 import NormalInput2 from "../../components/input/NormalInput2";
-import { Cloud, Sun, CloudRain, AlertCircle } from "lucide-react";
+import {
+  Cloudy,
+  Cloud,
+  Sun,
+  CloudRain,
+  AlertCircle,
+  Snowflake,
+  Umbrella,
+} from "lucide-react";
 import { API_BASE_URL } from "../../config";
 import axios from "axios";
 import usePlanStore from "../../stores/PlanStore";
@@ -14,7 +22,14 @@ import styles from "./PlanFilter.module.css";
 import AlertModal from "../../components/modal/AlertModal";
 
 // 가능한 날씨 상태
-type WeatherType = "맑음" | "흐림" | "비";
+type WeatherType =
+  | "맑음"
+  | "구름많음"
+  | "흐림"
+  | "비/눈"
+  | "비"
+  | "눈"
+  | "소나기";
 
 // 날씨 상태 인터페이스 (나중에 API 연동 시 사용할 error 옵션 포함)
 interface WeatherState {
@@ -28,6 +43,7 @@ interface DateSelectorProps {
   setSelectedDateRange: React.Dispatch<
     React.SetStateAction<[Date, Date] | null>
   >;
+  setStart_date: (date: Date) => void;
 }
 
 // 일행 인터페이스
@@ -38,29 +54,46 @@ interface Companion {
 
 const ages = ["10대", "20대", "30대", "40대", "50대", "60대", "70대", "80대"];
 
-const purposes = [
+const accomodation_concept = [
   "호캉스",
-  "수영장",
-  "혼자",
-  "기념일",
   "리조트",
-  "맛집",
+  "캠핑",
+  "글램핑",
+  "한옥",
+  "풀빌라",
+  "게스트 하우스",
+];
+
+const site_concept = [
+  "기념일",
+  "역사",
+  "자연",
+  "예술",
+  "도시",
+  "전통",
   "바다",
-  "낮술",
   "산",
+  "가족",
+  "데이트",
   "힐링",
-  "카페 투어",
-  "장수 잔치",
-  "가족 여행",
-  "해산물 좋아",
-  "고기 좋아",
-  "역사 여행",
+];
+
+const restaurant_concept = ["낮술", "해산물", "고기", "채식", "브런치"];
+
+const cafe_concept = ["모던 카페", "야외 카페", "감성 카페", "느좋 카페"];
+
+const purposes = [
+  ...accomodation_concept,
+  ...site_concept,
+  ...restaurant_concept,
+  ...cafe_concept,
 ];
 
 // 일정(달력) 컴포넌트
 const DateSelector: React.FC<DateSelectorProps> = ({
   selectedDateRange,
   setSelectedDateRange,
+  setStart_date,
 }) => {
   const [activeStartDate, setActiveStartDate] = useState<Date>(new Date()); // 현재 활성화된 달 상태
 
@@ -68,6 +101,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
   const handleDateChange: CalendarProps["onChange"] = (value) => {
     if (Array.isArray(value) && value.length === 2) {
       setSelectedDateRange(value as [Date, Date]);
+      setStart_date(value[0] as Date);
     }
   };
 
@@ -145,7 +179,14 @@ const DateSelector: React.FC<DateSelectorProps> = ({
 };
 
 // 날씨 정보 컴포넌트
-const WeatherAlert = () => {
+const WeatherAlert: React.FC<{
+  selectedX: number | null;
+  selectedY: number | null;
+  start_date: string;
+}> = ({ selectedX, selectedY, start_date }) => {
+  const url =
+    "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
+  const WEATHER_API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
   // 기본 날씨 상태 설정 (error, setWeatherState는 API 연동 전까지는 불필요)
   const [weatherState, setWeatherState] = useState<WeatherState>({
     type: "맑음",
@@ -158,7 +199,15 @@ const WeatherAlert = () => {
         return <Sun className={styles.weather_icon} />;
       case "흐림":
         return <Cloud className={styles.weather_icon} />;
+      case "구름많음":
+        return <Cloudy className={styles.weather_icon} />;
       case "비":
+        return <Umbrella className={styles.weather_icon} />;
+      case "눈":
+        return <Snowflake className={styles.weather_icon} />;
+      case "소나기":
+        return <CloudRain className={styles.weather_icon} />;
+      case "비/눈":
         return <CloudRain className={styles.weather_icon} />;
       default:
         return (
@@ -168,6 +217,86 @@ const WeatherAlert = () => {
         );
     }
   };
+
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        const base_date = start_date.split("-").join("");
+        const response = await axios.get(url, {
+          params: {
+            serviceKey: WEATHER_API_KEY,
+            pageNo: 1,
+            numOfRows: 11,
+            dataType: "JSON",
+            base_date: base_date,
+            base_time: "1400",
+            nx: selectedX,
+            ny: selectedY,
+          },
+        });
+        console.log(response.data.response.body.items.item);
+        if (response.data.response.body.items.item) {
+          const weatherDatas = response.data.response.body.items.item;
+          const skyData = weatherDatas.filter(
+            (data: any) => data.category === "SKY"
+          );
+          const rainData = weatherDatas.filter(
+            (data: any) => data.category === "PTY"
+          );
+          console.log(skyData);
+          console.log(rainData);
+
+          if (rainData && rainData[0].obsrValue === 0) {
+            switch (skyData[0].obsrValue) {
+              case "1":
+                setWeatherState({
+                  type: "맑음",
+                });
+                break;
+              case "3":
+                setWeatherState({
+                  type: "구름많음",
+                });
+                break;
+              case "4":
+                setWeatherState({
+                  type: "흐림",
+                });
+                break;
+            }
+          } else {
+            switch (rainData[0].obsrValue) {
+              case "1":
+                setWeatherState({
+                  type: "비",
+                });
+                break;
+              case "2":
+                setWeatherState({
+                  type: "비/눈",
+                });
+                break;
+              case "3":
+                setWeatherState({
+                  type: "눈",
+                });
+                break;
+              case "4":
+                setWeatherState({
+                  type: "소나기",
+                });
+                break;
+            }
+          }
+        }
+
+        console.log(weatherState);
+      } catch (error) {
+        console.error("날씨 데이터 가져오기 실패:", error);
+      }
+    };
+    fetchWeatherData();
+  }, [selectedX, selectedY, start_date]);
 
   return (
     <div className={styles.weather_container}>
@@ -180,7 +309,7 @@ const WeatherAlert = () => {
             예상 날씨 - {weatherState.type}
           </h3>
           <p className={styles.weather_update_time}>
-            3일 전 알람으로 다시 알려드릴게요!
+            {start_date} 기준 날씨 정보입니다.
           </p>
         </div>
       </div>
@@ -206,6 +335,15 @@ const PlanFilterSelector: React.FC = () => {
   const [filteredRegions, setFilteredRegions] = useState<any[]>([]); // 필터링된 지역 리스트
   const [selectedAge, setSelectedAge] = useState<string | null>(null); // 나이
   const [selectedPurposes, setSelectedPurposes] = useState<string[]>([]); // 목적
+  const [selectedX, setSelectedX] = useState<number | null>(60); // 날씨 api x좌표 기본값 서울 특별시
+  const [selectedY, setSelectedY] = useState<number | null>(127); // 날씨 api y좌표 기본값 서울 특별시
+  const [start_date, setStart_date] = useState<string>(() => {
+    const today = new Date();
+    return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}-${String(today.getDate()).padStart(2, "0")}`;
+  }); // 날씨 api 시작일
 
   // 매핑 테이블
   const provinceMappings: Record<string, string> = {
@@ -230,6 +368,11 @@ const PlanFilterSelector: React.FC = () => {
     }
   };
 
+  // 날짜 변경 이벤트 핸들러
+  const handleStart_date = (date: Date) => {
+    setStart_date(date.toISOString().split("T")[0]);
+  };
+
   // 사용자가 입력한 값에 따라 필터링
   const handleRegionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -251,8 +394,10 @@ const PlanFilterSelector: React.FC = () => {
   };
 
   // 사용자가 리스트에서 지역 선택 시 상태 저장
-  const handleRegionSelect = (selectedRegion: string) => {
+  const handleRegionSelect = (selectedRegion: string, x: number, y: number) => {
     setRegion(selectedRegion);
+    setSelectedX(x);
+    setSelectedY(y);
     setFilteredRegions([]); // 리스트 초기화
   };
 
@@ -394,7 +539,9 @@ const PlanFilterSelector: React.FC = () => {
                   handleRegionSelect(
                     filteredRegion.city_province === filteredRegion.city_county
                       ? filteredRegion.city_province // 광역시는 중복 제거
-                      : `${filteredRegion.city_province} - ${filteredRegion.city_county}`
+                      : `${filteredRegion.city_province} - ${filteredRegion.city_county}`,
+                    filteredRegion.x_position,
+                    filteredRegion.y_position
                   )
                 }
               >
@@ -411,10 +558,15 @@ const PlanFilterSelector: React.FC = () => {
       <DateSelector
         selectedDateRange={selectedDateRange}
         setSelectedDateRange={setSelectedDateRange}
+        setStart_date={handleStart_date}
       />
 
       {/* 날씨 정보 */}
-      <WeatherAlert />
+      <WeatherAlert
+        selectedX={selectedX}
+        selectedY={selectedY}
+        start_date={start_date}
+      />
 
       {/* 나이 선택 */}
       <div className={styles.travel_age_section}>
