@@ -116,14 +116,14 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
   useEffect(() => {
     const handleAgentSelect = async () => {
       //올바른 방식로 접근한게 아니라면 홈으로 이홈
+      if (planIdFirst) {
+        return;
+      }
       if (newRequest === false) {
         navigate("/");
         return;
       }
 
-      if (planIdFirst) {
-        return;
-      }
       // setShowAgentModal(false);
       setIsLoading(true);
       try {
