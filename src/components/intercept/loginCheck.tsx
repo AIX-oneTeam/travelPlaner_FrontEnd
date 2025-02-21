@@ -8,14 +8,18 @@ const LoginCheck: React.FC = () => {
 
   useEffect(() => {
     const loginCheck = async () => {
-      const response = await axios.get(`${API_BASE_URL}/members/loginCheck`, {
-        withCredentials: true,
-      });
+      try {
+        const response = await axios.get(`${API_BASE_URL}/members/loginCheck`, {
+          withCredentials: true,
+        });
 
-      console.log(response.data.data);
+        console.log(response.data.data);
 
-      if (!response.data.data.isLogin) {
-        initMemberInfo();
+        if (!response.data.data.isLogin) {
+          initMemberInfo();
+        }
+      } catch (error) {
+        console.error("로그인 체크 오류:", error);
       }
     };
     loginCheck();
