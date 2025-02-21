@@ -19,24 +19,35 @@ import VoiceChat from "./pages/voice/VoiceChat";
 import AxiosIntercepter from "./components/intercept/AxiosIntercepter";
 import Unauthorized from "./pages/error/Unauthorized";
 import InternalServerError from "./pages/error/InternalServerError";
-
+import "./firebase-config";
+import LoginCheck from "./components/intercept/loginCheck";
+import { useState } from "react";
 
 function App() {
+  const [newRequest, setNewRequest] = useState<boolean>(false);
   return (
     <div>
       <LoadKakaoMap />
       <BrowserRouter>
+        <LoginCheck />
         <AxiosIntercepter />
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/loginform" element={<LoginForm />} />
             <Route path="/hj" element={<HjWebTest />} />
-            <Route path="/plan/filter/" element={<PlanFilter />} />
+            <Route
+              path="/plan/filter/"
+              element={<PlanFilter changeRequestState={setNewRequest} />}
+            />
             <Route path="/plans/list" element={<PlanList />} />
-            <Route path="/plans/:planIdFirst?" element={<Plan />} />
+            <Route
+              path="/plans/:planIdFirst?"
+              element={<Plan newRequest={newRequest} />}
+            />
             <Route path="/checkList" element={<CheckList />} />
-            <Route path="/minigame" element={<MiniGame />} /> {/* MiniGame 경로 추가 */}
+            <Route path="/minigame" element={<MiniGame />} />{" "}
+            {/* MiniGame 경로 추가 */}
             <Route path="/checkList/:planId" element={<CheckList />} />
             {/* <Route path="/voice" element={<VoiceChat />} /> */}
             <Route path="/error/400" element={<Unauthorized />} />

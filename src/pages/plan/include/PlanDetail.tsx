@@ -45,7 +45,7 @@ const PlanDetail: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
               <div className={styles.timeline_indicator}>
                 <div className={styles.circle}></div>
                 <div className={styles.travel_time}>
-                  {spot.spot_time.slice(0, 5)}
+                  {spot.spot_time ? spot.spot_time.slice(0, 5) : "09:30"}
                 </div>
               </div>
               <div

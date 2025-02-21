@@ -42,7 +42,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: var(--black-opacity-25);
+  background-color: var(--black-opacity-50);
   display: flex;
   flex-direction: column;
   justify-content: center;
