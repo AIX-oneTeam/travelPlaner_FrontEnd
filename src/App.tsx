@@ -19,7 +19,7 @@ import VoiceChat from "./pages/voice/VoiceChat";
 import AxiosIntercepter from "./components/intercept/AxiosIntercepter";
 import Unauthorized from "./pages/error/Unauthorized";
 import InternalServerError from "./pages/error/InternalServerError";
-import "./firebase-config";
+
 
 function App() {
   return (
