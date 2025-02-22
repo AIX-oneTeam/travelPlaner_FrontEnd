@@ -21,6 +21,7 @@ import Unauthorized from "./pages/error/Unauthorized";
 import InternalServerError from "./pages/error/InternalServerError";
 import "./firebase-config";
 import LoginCheck from "./components/intercept/loginCheck";
+import Question from "./pages/question/Question";
 import { useState } from "react";
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
             <Route path="/error/400" element={<Unauthorized />} />
             <Route path="/error/500" element={<InternalServerError />} />
             {/* <Route path="/plan/modify" element={<PlanModify />} /> */}
+            <Route path="/question" element={<Question />} />
           </Routes>
         </Layout>
       </BrowserRouter>
