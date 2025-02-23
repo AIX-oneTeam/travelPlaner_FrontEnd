@@ -1,6 +1,6 @@
 //로컬 환경(테스트 용)
-// export const API_BASE_URL = "http://127.0.0.1:8000"; // 로컬 주소
-// export const CLIENT_CALLBACK_URL = "http://localhost:3000/loginForm"; // 클라이언트 콜백 주소
+//export const API_BASE_URL = "http://127.0.0.1:8000"; // 로컬 주소
+//export const CLIENT_CALLBACK_URL = "http://localhost:3000/loginForm"; // 클라이언트 콜백 주소
 
 //EC2 환경(배포용)
 export const API_BASE_URL = "https://api-easytravel.jomalang.com"; // EC2 주소
