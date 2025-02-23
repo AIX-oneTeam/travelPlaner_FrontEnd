@@ -15,8 +15,6 @@ function Question() {
       content: content,
     };
 
-    console.log(`[inquiryData] : ${JSON.stringify(inquiryData, null, 2)}`);
-
     try {
       const response = await axios.post(
         `${API_BASE_URL}/inquiries`,
