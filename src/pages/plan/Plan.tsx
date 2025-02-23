@@ -11,11 +11,11 @@ import useMemberStore from "../../stores/MemberStore";
 import { API_BASE_URL } from "../../config";
 import AlertModal from "../../components/modal/AlertModal";
 import PlanDetail from "./include/PlanDetail";
-// import AgentSelectModal from "../../components/modal/AgentSelectModal";
 import { List } from "lucide-react";
 import PlanMap from "./include/PlanMap";
 import MiniGame from "../minigame/MiniGame";
 import TimeBar from "./include/TimeBar";
+import SurveyModal from "../../components/modal/SurveyModal";
 
 interface spotResponse {
   kor_name: string;
@@ -75,6 +75,8 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [planId, setPlanId] = useState<number>();
+  // **설문 모달 상태 추가**
+  const [isSurveyModalOpen, setSurveyModalOpen] = useState<boolean>(false);
 
   const memberStore = useMemberStore();
   const { planIdFirst } = useParams();
@@ -101,21 +103,22 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
     setPlan({ ...plan, name: newName });
   };
 
-  // 에이전트 선택 후 일정 생성 관련 상태
-  // const [showAgentModal, setShowAgentModal] = useState<boolean>(true);
-  const [abortController, setAbortController] =
-    useState<AbortController | null>(null);
+  const [abortController, setAbortController] = useState<AbortController | null>(
+    null
+  );
+
+  const navigate = useNavigate();
 
   // 일정 목록 페이지로 이동
   const handleListClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     navigate("/plans/list");
   };
-  // 에이전트 선택 및 요청 (인자에 agentType: string[] 포함.)
-  //에이전트 요청
+
+  // AI 에이전트 요청 (최초 일정 생성)
   useEffect(() => {
     const handleAgentSelect = async () => {
-      //올바른 방식로 접근한게 아니라면 홈으로 이홈
+      // 올바르지 않은 접근 시 홈으로
       if (planIdFirst) {
         return;
       }
@@ -124,18 +127,17 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
         return;
       }
 
-      // setShowAgentModal(false);
       setIsLoading(true);
       try {
-        let planData = planStore.getPlan();
+        const planData = planStore.getPlan();
 
-        // email 추가한 새로운 객체 생성
+        // email 추가
         const planDataWithEmail = {
-          ...planData, // 기존 데이터 유지
+          ...planData,
           email: memberStore.getMemberInfo().email,
         };
 
-        // 화면에 출력하기 위한 형식 변환
+        // 화면 표시에 맞게 변환
         const planDataforPrint = {
           name: planData.name,
           start_date: new Date(planData.start_date),
@@ -147,14 +149,11 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
         };
         setPlan(planDataforPrint);
 
-        // agentType 포함 API 요청
+        // 백엔드로 요청
         const response = await axios.post(
           `${API_BASE_URL}/agents/plan`,
           planDataWithEmail,
           {
-            // params: {
-            //   agent_type: agentType,
-            // },
             withCredentials: true,
           }
         );
@@ -166,9 +165,7 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
           console.log("Request aborted:", err.message);
         } else {
           console.error("에이전트 요청 중 오류 발생:", err);
-          setMessage(
-            "일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요"
-          );
+          setMessage("일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
           setIsOpen(true);
         }
       } finally {
@@ -179,18 +176,14 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
     handleAgentSelect();
   }, []);
 
-  // 저장된 일정 조회용
+  // 기존 일정 조회
   const fetchPlanData = async () => {
     try {
-      //스팟 데이터 초기화
       setSpots([]);
       const response = await axios.get(`${API_BASE_URL}/plan_spots/${planId}`, {
         withCredentials: true,
       });
-      // 서버에서 반환한 일정 데이터 중 ages는 int타입임.
 
-      // 서버의 pydantic에서는 요청받을때는 string, 저장하는 pydantic에서는 int타입임.
-      // 프론트의 PlanStore(상태 관리)에서는 string으로 사용중임.
       const planResponse = response.data.data.plan;
       const planDataforStore = {
         name: planResponse.name,
@@ -242,7 +235,6 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
     plan.end_date
   );
 
-  const navigate = useNavigate();
   const [selectedDay, setSelectedDay] = useState<number>(1);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -251,12 +243,32 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
     setSelectedDay(day);
   };
 
-  // 저장 모달 열기
+  // **일정 저장하기 버튼 → 설문 모달 열기**
   const handleSaveClick = async () => {
-    setModalOpen(true);
+    setSurveyModalOpen(true);
   };
 
-  // 모달에서 저장 버튼 클릭 시
+  // **설문 모달에서 제출 시 설문 저장 + 일정 저장**
+  const handleSurveySubmit = async (rating: number, comment: string) => {
+    setSurveyModalOpen(false);
+    try {
+      // 1) 설문 API 호출 (예시)
+      await axios.post(
+        `${API_BASE_URL}/survey`,
+        { rating, comment },
+        { withCredentials: true }
+      );
+
+      // 2) 일정 저장 모달(ConfirmModal) 열기
+      setModalOpen(true);
+    } catch (error) {
+      console.error(error);
+      setMessage("설문 저장 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
+      setIsOpen(true);
+    }
+  };
+
+  // ConfirmModal에서 "저장" 버튼 클릭 시 실제 일정 저장
   const handleModalConfirm = async () => {
     setModalOpen(false);
     let concepts =
@@ -281,14 +293,12 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
           email: memberStore.getMemberInfo().email,
         });
         console.log("savePlanData", response.data);
-        // 새로운 planId 저장
         setPlanId(response.data.data.plan_id);
         navigate(`/plans/${response.data.data.plan_id}`);
         setMessage("일정 수정 완료");
         setIsOpen(true);
-      }
-      // 일정 생성
-      else {
+      } else {
+        // 일정 생성
         const response = await axios.post(`${API_BASE_URL}/plans`, {
           plan: {
             ...plan,
@@ -331,19 +341,15 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
     setSpots((prevSpots) => [...prevSpots, updatedSpot]);
   };
 
-  //체크리스트 이미지 클릭 시
+  // 체크리스트 아이콘 클릭 시
   const handleCheckListClick = async () => {
-    // planId가 이미 존재하는지 확인
     if (planId) {
-      // planId가 존재하면 해당 ID를 사용하여 체크리스트 페이지로 이동
       navigate(`/checkList/${planId}`);
     } else {
-      // planId가 존재하지 않으면 새로운 일정 저장 로직 실행
       let concepts =
         typeof plan.concepts !== "string"
           ? JSON.stringify(plan.concepts)
           : plan.concepts;
-
       let companion_count =
         typeof plan.companion_count !== "string"
           ? JSON.stringify(plan.companion_count)
@@ -361,16 +367,11 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
         });
         console.log("savePlanData", response.data);
         setMessage("일정 저장 완료");
-        //setSavedPlanId(response.data.data.plan_id);
-        //navigate(`/checkList/${response.data.data.plan_id}`);
-        // 저장 후 planId를 업데이트하고 체크리스트 페이지로 이동
         setPlanId(response.data.data.plan_id);
         navigate(`/checkList/${response.data.data.plan_id}`);
       } catch (err) {
         console.error(err);
-        setMessage(
-          "일정 저장 중 오류가 발생했습니다. 잠시후 다시 시도해주세요"
-        );
+        setMessage("일정 저장 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
       }
     }
   };
@@ -434,14 +435,14 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
           </div>
         ) : isDataLoaded ? (
           <>
-            {currentTab === "detail" ? (
+            {currentTab === "detail" && (
               <div className={styles.plan_time_bar_frame}>
                 <TimeBar spots={spots} selectedDay={selectedDay} />
                 <PlanDetail spots={spots} selectedDay={selectedDay} />
               </div>
-            ) : null}
+            )}
 
-            {currentTab === "modify" ? (
+            {currentTab === "modify" && (
               <div className={styles.plan_time_bar_frame}>
                 <TimeBar spots={spots} selectedDay={selectedDay} />
                 <PlanModify
@@ -451,11 +452,11 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
                   onAddSpot={handleAddSpot}
                 />
               </div>
-            ) : null}
+            )}
 
-            {currentTab === "map" ? (
+            {currentTab === "map" && (
               <PlanMap spots={spots} selectedDay={selectedDay} />
-            ) : null}
+            )}
           </>
         ) : (
           <div className={styles.loading_container}>
@@ -464,7 +465,7 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
           </div>
         )}
 
-        {!isLoading && isDataLoaded && currentTab !== "map" ? (
+        {!isLoading && isDataLoaded && currentTab !== "map" && (
           <div className={styles.form_actions_btns}>
             <div className={styles.travle_save_btn}>
               <LongBtn
@@ -474,13 +475,15 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
               />
             </div>
           </div>
-        ) : null}
+        )}
       </div>
 
-      {/* <AgentSelectModal
-        isOpen={showAgentModal && !planId}
-        onSelect={handleAgentSelect}
-      /> */}
+      {/* 설문 모달 (SurveyModal) */}
+      <SurveyModal
+        isOpen={isSurveyModalOpen}
+        onClose={() => setSurveyModalOpen(false)}
+        onSubmit={handleSurveySubmit}
+      />
 
       <ConfirmModal
         isOpen={isModalOpen}
