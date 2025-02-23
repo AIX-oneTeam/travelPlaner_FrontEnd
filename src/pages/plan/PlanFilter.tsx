@@ -55,7 +55,7 @@ interface Companion {
 const ages = ["10대", "20대", "30대", "40대", "50대", "60대", "70대", "80대"];
 
 const accomodation_concept = [
-  "호캉스",
+  "호텔",
   "리조트",
   "캠핑",
   "글램핑",
