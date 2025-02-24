@@ -4,13 +4,12 @@ import SearchTextArea from "../input/SearchTextArea";
 import axios from "axios";
 import usePlanStore from "../../stores/PlanStore";
 import { API_BASE_URL } from "../../config";
-import { CiPhone } from "react-icons/ci";
-import { CiLocationOn } from "react-icons/ci";
 import ConfirmModal from "./ConfirmModal";
 import AlertModal from "./AlertModal";
 
 import { useParams } from "react-router-dom";
 import useMemberStore from "../../stores/MemberStore";
+import { MapPin, Phone } from "lucide-react";
 
 interface spotInterface {
   kor_name: string;
@@ -69,11 +68,11 @@ const SpotList: React.FC<{
                 <p className="spot-description">{spot.description}</p>
                 <div className="spot-details">
                   <p className="spot-address">
-                    <CiLocationOn /> {spot.address}
+                    <MapPin /> {spot.address}
                   </p>
                   {spot.phone_number && (
                     <p className="spot-phone">
-                      <CiPhone />
+                      <Phone />
                       {spot.phone_number}
                     </p>
                   )}

@@ -1,7 +1,6 @@
 import React from "react";
 import "./ConfirmModal.css";
-import { MdOutlineSaveAlt } from "react-icons/md"; // 저장 아이콘
-import { RiDeleteBinLine } from "react-icons/ri"; // 삭제 아이콘
+import { Save, Trash2 } from "lucide-react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -27,10 +26,10 @@ const ConfirmModal: React.FC<ModalProps> = ({
   // 텍스트에 따라 아이콘 렌더링
   const renderIcon = () => {
     if (content.includes("저장")) {
-      return <MdOutlineSaveAlt className="confirm-modal-save-icon" />;
+      return <Save className="confirm-modal-save-icon" />;
     }
     if (content.includes("삭제")) {
-      return <RiDeleteBinLine className="confirm-modal-delete-icon" />;
+      return <Trash2 className="confirm-modal-delete-icon" />;
     }
     return null;
   };

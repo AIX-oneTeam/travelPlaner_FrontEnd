@@ -1,6 +1,6 @@
 import React from "react";
 import "./AlertModal.css";
-import { MdOutlineSaveAlt } from "react-icons/md"; // 저장 아이콘
+import { Save } from "lucide-react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -22,7 +22,7 @@ const ConfirmModal: React.FC<ModalProps> = ({
   // 텍스트에 따라 아이콘 렌더링
   const renderIcon = () => {
     if (content.includes("확인")) {
-      return <MdOutlineSaveAlt className="confirm-modal-save-icon" />;
+      return <Save className="confirm-modal-save-icon" />;
     }
     return null;
   };
