@@ -103,9 +103,8 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
     setPlan({ ...plan, name: newName });
   };
 
-  const [abortController, setAbortController] = useState<AbortController | null>(
-    null
-  );
+  const [abortController, setAbortController] =
+    useState<AbortController | null>(null);
 
   const navigate = useNavigate();
 
@@ -159,13 +158,21 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
         );
 
         const spotInfos = response.data.data.spots.spots;
-        setSpots(spotInfos);
+
+        // 장소에 spot_time이 없을 경우 기본값(10:00)으로 설정
+        const updatedSpots = spotInfos.map((spot: any) => ({
+          ...spot,
+          spot_time: spot.spot_time || "10:00",
+        }));
+        setSpots(updatedSpots);
       } catch (err) {
         if (axios.isCancel(err)) {
           console.log("Request aborted:", err.message);
         } else {
           console.error("에이전트 요청 중 오류 발생:", err);
-          setMessage("일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
+          setMessage(
+            "일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요"
+          );
           setIsOpen(true);
         }
       } finally {
@@ -371,7 +378,9 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
         navigate(`/checkList/${response.data.data.plan_id}`);
       } catch (err) {
         console.error(err);
-        setMessage("일정 저장 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
+        setMessage(
+          "일정 저장 중 오류가 발생했습니다. 잠시후 다시 시도해주세요"
+        );
       }
     }
   };
