@@ -245,8 +245,14 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
 
   // **일정 저장하기 버튼 → 설문 모달 열기**
   const handleSaveClick = async () => {
-    setSurveyModalOpen(true);
+    if (!planId) {
+      setSurveyModalOpen(true);}
+    else{
+      setModalOpen(true);
+    } 
+    
   };
+
 
   // **설문 모달에서 제출 시 설문 저장 + 일정 저장**
   const handleSurveySubmit = async (rating: number, comment: string) => {
@@ -255,7 +261,7 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
       // 1) 설문 API 호출 (예시)
       await axios.post(
         `${API_BASE_URL}/survey`,
-        { rating, comment },
+        { rating, comment,plan_id:planId },
         { withCredentials: true }
       );
 
