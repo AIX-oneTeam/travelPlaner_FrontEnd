@@ -103,9 +103,6 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
     setPlan({ ...plan, name: newName });
   };
 
-  const [abortController, setAbortController] =
-    useState<AbortController | null>(null);
-
   const navigate = useNavigate();
 
   // 일정 목록 페이지로 이동
@@ -177,7 +174,6 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
         }
       } finally {
         setIsLoading(false);
-        setAbortController(null);
       }
     };
     handleAgentSelect();
@@ -253,13 +249,11 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
   // **일정 저장하기 버튼 → 설문 모달 열기**
   const handleSaveClick = async () => {
     if (!planId) {
-      setSurveyModalOpen(true);}
-    else{
+      setSurveyModalOpen(true);
+    } else {
       setModalOpen(true);
-    } 
-    
+    }
   };
-
 
   // **설문 모달에서 제출 시 설문 저장 + 일정 저장**
   const handleSurveySubmit = async (rating: number, comment: string) => {
@@ -268,7 +262,7 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
       // 1) 설문 API 호출 (예시)
       await axios.post(
         `${API_BASE_URL}/survey`,
-        { rating, comment,plan_id:planId },
+        { rating, comment, plan_id: planId },
         { withCredentials: true }
       );
 
