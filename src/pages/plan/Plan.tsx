@@ -103,10 +103,6 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
     setPlan({ ...plan, name: newName });
   };
 
-  const [abortController, setAbortController] = useState<AbortController | null>(
-    null
-  );
-
   const navigate = useNavigate();
 
   // 일정 목록 페이지로 이동
@@ -159,18 +155,25 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
         );
 
         const spotInfos = response.data.data.spots.spots;
-        setSpots(spotInfos);
+
+        // 장소에 spot_time이 없을 경우 기본값(10:00)으로 설정
+        const updatedSpots = spotInfos.map((spot: any) => ({
+          ...spot,
+          spot_time: spot.spot_time || "10:00",
+        }));
+        setSpots(updatedSpots);
       } catch (err) {
         if (axios.isCancel(err)) {
           console.log("Request aborted:", err.message);
         } else {
           console.error("에이전트 요청 중 오류 발생:", err);
-          setMessage("일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
+          setMessage(
+            "일정 생성 중 오류가 발생했습니다. 잠시후 다시 시도해주세요"
+          );
           setIsOpen(true);
         }
       } finally {
         setIsLoading(false);
-        setAbortController(null);
       }
     };
     handleAgentSelect();
@@ -246,13 +249,11 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
   // **일정 저장하기 버튼 → 설문 모달 열기**
   const handleSaveClick = async () => {
     if (!planId) {
-      setSurveyModalOpen(true);}
-    else{
+      setSurveyModalOpen(true);
+    } else {
       setModalOpen(true);
-    } 
-    
+    }
   };
-
 
   // **설문 모달에서 제출 시 설문 저장 + 일정 저장**
   const handleSurveySubmit = async (rating: number, comment: string) => {
@@ -261,7 +262,7 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
       // 1) 설문 API 호출 (예시)
       await axios.post(
         `${API_BASE_URL}/survey`,
-        { rating, comment,plan_id:planId },
+        { rating, comment, plan_id: planId },
         { withCredentials: true }
       );
 
@@ -377,7 +378,9 @@ const Plan: React.FC<{ newRequest: boolean }> = ({ newRequest }) => {
         navigate(`/checkList/${response.data.data.plan_id}`);
       } catch (err) {
         console.error(err);
-        setMessage("일정 저장 중 오류가 발생했습니다. 잠시후 다시 시도해주세요");
+        setMessage(
+          "일정 저장 중 오류가 발생했습니다. 잠시후 다시 시도해주세요"
+        );
       }
     }
   };
