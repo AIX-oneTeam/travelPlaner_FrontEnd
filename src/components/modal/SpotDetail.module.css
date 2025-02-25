@@ -155,3 +155,17 @@
     font-size: var(--font-size-6);
   }
 } 
+
+.default_image_container {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.default_image {
+  width: 25%;
+  height: 25%;
+  object-fit:contain;
+}
+
