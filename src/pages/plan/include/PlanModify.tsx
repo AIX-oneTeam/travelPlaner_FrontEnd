@@ -241,7 +241,9 @@ const PlanModify: React.FC<PlanListProps> = ({
                                 <div className={styles.travel_image}>
                                   {spot.image_url.includes(
                                     "https://example.com"
-                                  ) || spot.image_url.includes("정보없음") ? (
+                                  ) ||
+                                  spot.image_url.includes("정보없음") ||
+                                  spot.image_url.includes("http") ? (
                                     <div
                                       className={styles.default_image_container}
                                     >

@@ -54,7 +54,8 @@ const PlanDetail: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
               >
                 <div className={styles.travle_image}>
                   {spot.image_url.includes("https://example.com") ||
-                  spot.image_url.includes("정보없음") ? (
+                  spot.image_url.includes("정보없음") ||
+                  spot.image_url.includes("http") ? (
                     <div className={styles.default_image_container}>
                       <img
                         className={styles.default_image}
