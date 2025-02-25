@@ -53,7 +53,20 @@ const PlanDetail: React.FC<PlanListProps> = ({ spots, selectedDay }) => {
                 onClick={() => handleSpotClick(spot)}
               >
                 <div className={styles.travle_image}>
-                  <img src={spot.image_url} alt={spot.eng_name} />
+                  {spot.image_url.includes("https://example.com") ||
+                  spot.image_url.includes("정보없음") ? (
+                    <div className={styles.default_image_container}>
+                      <img
+                        className={styles.default_image}
+                        src="/images/default_spot_image.png"
+                        alt={spot.kor_name}
+                      />
+                    </div>
+                  ) : (
+                    <div className={styles.image_container}>
+                      <img src={spot.image_url} alt={spot.kor_name} />
+                    </div>
+                  )}
                 </div>
                 <div className={styles.place_info_container}>
                   <h2>{spot.kor_name}</h2>
