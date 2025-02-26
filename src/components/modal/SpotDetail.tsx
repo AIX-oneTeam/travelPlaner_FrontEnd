@@ -59,9 +59,21 @@ const SpotDetail: React.FC<SpotDetailProps> = ({
           <img src="/icons/close.jpg" alt="닫기" />
         </div>
 
-        <div className={styles.image_container}>
-          <img src={spot.image_url} alt={spot.kor_name} />
-        </div>
+        {spot.image_url.includes("https://example.com") ||
+        spot.image_url.includes("정보없음") ||
+        spot.image_url.includes("http://") ? (
+          <div className={styles.default_image_container}>
+            <img
+              className={styles.default_image}
+              src="/images/default_spot_image.png"
+              alt={spot.kor_name}
+            />
+          </div>
+        ) : (
+          <div className={styles.image_container}>
+            <img src={spot.image_url} alt={spot.kor_name} />
+          </div>
+        )}
 
         <div className={styles.content_container}>
           <h2 className={styles.title}>{spot.kor_name}</h2>
