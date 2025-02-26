@@ -2,11 +2,8 @@ import React, { useEffect } from 'react';
 import "./SideBar.css";
 import { Link } from "react-router-dom";
 import MemberStore from "../../stores/MemberStore";
-import { API_BASE_URL } from "../../config";
+import { API_BASE_URL, ADMIN_URL } from "../../config";
 import axios from "axios";
-import {
-  ADMIN_URL
-} from "../../config"; // config.ts에서 API_BASE_URL을 임포트
 
 interface SideBarProps {
   closeSideBar: () => void;
@@ -108,10 +105,10 @@ const SideBar: React.FC<SideBarProps> = ({
   <li>
     <div className="sideBar-2">
       관리자
-      <Link className="sideBar-3" to={`${ADMIN_URL}/admin/chart/agent`} onClick={closeSideBar}>
+      <a className="sideBar-3" href={`${ADMIN_URL}/admin/chart/agent`} onClick={closeSideBar}>
         관리자 페이지
         <img src="/icons/arrow_forward.jpg" alt="admin" />
-      </Link>
+      </a>
     </div>
   </li>
 )}
