@@ -26,9 +26,13 @@ const SideBar: React.FC<SideBarProps> = ({
   };
 
   const handleLogout = () => {
-    initMemberInfo();
-    axios.get(`${API_BASE_URL}/members/logout`, { withCredentials: true });
-    navigateAndCloseSideBar("/");
+    try {
+      initMemberInfo();
+      axios.get(`${API_BASE_URL}/members/logout`, { withCredentials: true });
+      navigateAndCloseSideBar("/");
+    } catch (error) {
+      console.error("로그아웃 오류:", error);
+    }
   };
 
   if (!isSideBarVisible) {
