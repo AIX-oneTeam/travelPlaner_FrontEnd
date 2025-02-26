@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import MemberStore from "../../stores/MemberStore";
 import { API_BASE_URL } from "../../config";
 import axios from "axios";
+import {
+  ADMIN_URL
+} from "../../config"; // config.ts에서 API_BASE_URL을 임포트
 
 interface SideBarProps {
   closeSideBar: () => void;
@@ -105,7 +108,7 @@ const SideBar: React.FC<SideBarProps> = ({
   <li>
     <div className="sideBar-2">
       관리자
-      <Link className="sideBar-3" to="http://localhost:3001/admin/chart/agent" onClick={closeSideBar}>
+      <Link className="sideBar-3" to={`${ADMIN_URL}/admin/chart/agent`} onClick={closeSideBar}>
         관리자 페이지
         <img src="/icons/arrow_forward.jpg" alt="admin" />
       </Link>
