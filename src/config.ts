@@ -6,7 +6,7 @@
 // EC2 환경(배포용)
 export const API_BASE_URL = "https://api-easytravel.jomalang.com"; // EC2 주소
 export const CLIENT_CALLBACK_URL = "https://easytravel.jomalang.com/loginForm"; // EC2 클라이언트 콜백 주소
-export const ADMIN_URL = "https://admin-easytravel.jomalang.com";
+export const ADMIN_URL = "http://admin-easytravel.jomalang.com";
 
 export const GOOGLE_CLIENT_ID =
   "638525891124-pphosnugos63hd2khdrrf96tjjh9r4q3.apps.googleusercontent.com";
