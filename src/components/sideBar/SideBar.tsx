@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from 'react';
 import "./SideBar.css";
 import { Link } from "react-router-dom";
 import MemberStore from "../../stores/MemberStore";
@@ -20,6 +20,12 @@ const SideBar: React.FC<SideBarProps> = ({
 }) => {
   const isAnonymous = MemberStore((state: any) => state.isAnonymous);
   const initMemberInfo = MemberStore((state: any) => state.initMemberInfo);
+  const isAdmin = MemberStore((state: any) => state.isAdmin);
+
+  useEffect(() => {
+    console.log("관리자 여부:", isAdmin());
+    console.log("회원 정보:", MemberStore.getState().memberInfo);
+  }, []);
 
   const handleLogin = () => {
     navigateAndCloseSideBar("/loginForm");
@@ -91,6 +97,18 @@ const SideBar: React.FC<SideBarProps> = ({
             </Link>
           </div>
         </li>
+        {isAdmin() && (
+  <li>
+    <div className="sideBar-2">
+      관리자
+      <Link className="sideBar-3" to="http://localhost:3001/admin/chart/agent" onClick={closeSideBar}>
+        관리자 페이지
+        <img src="/icons/arrow_forward.jpg" alt="admin" />
+      </Link>
+    </div>
+  </li>
+)}
+        
       </ul>
     </aside>
   );
