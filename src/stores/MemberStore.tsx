@@ -48,12 +48,18 @@ const useMemberStore: any = create(
 
       isAnonymous: () => {
         const state = get();
-        return state.memberInfo?.nickname === "익명의 사용자" || false;
+        const isAnon = state.memberInfo?.nickname === "익명의 사용자" || false;
+        if (!isAnon) {
+          console.log("회원 정보:", state.memberInfo);
+        }
+        return isAnon;
       },
 
       isAdmin: () => {
         const state = get();
-        return state.memberInfo?.roles?.includes("ROLE_ADMIN") || false;
+  console.log("역할:", state.memberInfo?.roles);
+  return state.memberInfo?.roles?.includes("ROLE_ADMIN") || false;
+        
       },
     }),
     {
