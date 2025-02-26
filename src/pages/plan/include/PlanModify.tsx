@@ -243,7 +243,7 @@ const PlanModify: React.FC<PlanListProps> = ({
                                     "https://example.com"
                                   ) ||
                                   spot.image_url.includes("정보없음") ||
-                                  spot.image_url.includes("http") ? (
+                                  spot.image_url.includes("http://") ? (
                                     <div
                                       className={styles.default_image_container}
                                     >
